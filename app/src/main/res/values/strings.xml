@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Bedu_Proyecto_Wallet</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_receive">Receive</string>
+    <string name="balance"> Balance goes here</string>
+    <string name="btn_asset"> Assets</string>
+    <string name="btn_activity">Activity </string>
+    <string name="login_hint">Enter seed phrase</string>
+    <string name="btn_login"> Enter</string>
+</resources>
