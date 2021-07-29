@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner_asset"
+        android:id="@+id/spinner_asset_receive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -83,11 +83,49 @@
         app:layout_constraintStart_toEndOf="@+id/textView_Amount"
         app:layout_constraintTop_toBottomOf="@+id/editTextAmount" />
 
+    <TextView
+        android:id="@+id/network_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textView_address"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:text="@string/network_fee"/>
+    <TextView
+        android:id="@+id/network_fee_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textView_address"
+        app:layout_constraintStart_toEndOf="@+id/network_fee"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:text="@string/networ_fee_amount"/>
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/network_fee"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:text="@string/total_send"/>
+
+    <TextView
+        android:id="@+id/total_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/network_fee"
+        app:layout_constraintStart_toEndOf="@+id/total"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:text="@string/total_send_amount"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/textView_address">
+        app:layout_constraintTop_toBottomOf="@+id/total">
 
         <Button
             android:id="@+id/button_cancel"

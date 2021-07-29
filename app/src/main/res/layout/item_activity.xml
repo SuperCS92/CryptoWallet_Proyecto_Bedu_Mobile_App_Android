@@ -11,7 +11,7 @@
         android:id="@+id/userImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/btc_symbol"
+        android:src="@drawable/btc"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline" />

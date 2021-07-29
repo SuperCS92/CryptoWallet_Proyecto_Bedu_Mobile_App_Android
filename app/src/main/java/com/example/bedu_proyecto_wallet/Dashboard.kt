@@ -1,6 +1,7 @@
 package com.example.bedu_proyecto_wallet
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -21,6 +22,8 @@ class Dashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+        btn_send = findViewById(R.id.send)
+        btn_receive = findViewById(R.id.btn_receive)
         btn_assets = findViewById(R.id.button3)
         btn_activity = findViewById(R.id.button4)
 
@@ -42,6 +45,16 @@ class Dashboard : AppCompatActivity() {
             btn_assets.setTextColor(R.color.black)
         }
 
+        btn_send.setOnClickListener {
+            val intent = Intent(this, SendActivity::class.java)
+            startActivity(intent)
+        }
+
+        btn_receive.setOnClickListener {
+            val intent = Intent(this, ReceiveActivity::class.java)
+            startActivity(intent)
+        }
+
         recyclerContacts = findViewById(R.id.recyclerContacts)
 
         btn_assets.isSelected = true
@@ -51,11 +64,11 @@ class Dashboard : AppCompatActivity() {
     private fun getContacts(): MutableList<Asset>{
         var assets:MutableList<Asset> = ArrayList()
 
-        assets.add(Asset("Bitcoin", 0.5, 38000.0,19000.0,R.drawable.btc_symbol))
-        assets.add(Asset("Ether", 3.0, 2000.0,6000.0,R.drawable.ethereum_symbol))
+        assets.add(Asset("Bitcoin", 0.5, 38000.0,19000.0,R.drawable.btc))
+        assets.add(Asset("Ether", 3.0, 2000.0,6000.0,R.drawable.eth))
         assets.add(Asset("Cardano", 500.0, 1.33,665.0,R.drawable.cardano_symbol))
         assets.add(Asset("Tether", 50.0, 1.0,50.0,R.drawable.tether_symbol))
-        assets.add(Asset("Binance", 7.0, 300.0,2100.0,R.drawable.bnb_symbol))
+        assets.add(Asset("Binance", 7.0, 300.0,2100.0,R.drawable.bnb))
         assets.add(Asset("xDai", 17.0, 1.0,17.0,R.drawable.xdai_symbol))
         assets.add(Asset("ChainLink", 35.0, 18.35,642.25,R.drawable.chainlink_symbol))
         assets.add(Asset("AXS", 40.5, 38.48,1558.44,R.drawable.axs_symbol))

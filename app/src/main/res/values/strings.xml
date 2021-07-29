@@ -7,4 +7,18 @@
     <string name="btn_activity">Activity </string>
     <string name="login_hint">Enter seed phrase</string>
     <string name="btn_login"> Enter</string>
+    <string name="send_page"> Send </string>
+    <string name="text_view_asset"> Asset:</string>
+    <string name="text_view_amount"> Amount:</string>
+    <string name="amount_hint"> Enter amount</string>
+    <string name="btn_cancel"> Cancel</string>
+    <string name="btn_next"> Next </string>
+    <string name="text_view_address"> Address:</string>
+    <string name="address_hint"> Enter address</string>
+    <string name="network_fee">Network fee:</string>
+    <string name="total_send">Total:</string>
+    <string name="total_send_amount">0.304</string>
+    <string name="networ_fee_amount">0.00034</string>
+    <string name="address_text">0x385DbEaf4F1373742d35760eb7c72d4Ac879ab92</string>
+
 </resources>

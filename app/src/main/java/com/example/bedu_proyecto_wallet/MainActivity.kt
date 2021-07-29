@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Dashboard::class.java).apply {
                 putExtras(bundle)
             }
-
             startActivity(intent)
         }
 

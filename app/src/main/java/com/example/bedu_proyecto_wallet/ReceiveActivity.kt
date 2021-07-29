@@ -6,15 +6,14 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 
+class ReceiveActivity : AppCompatActivity() {
 
-class SendActivity : AppCompatActivity() {
-
-    private lateinit var spinner:Spinner
+    private lateinit var spinner: Spinner
     val assets = listOf("BTC", "ETH", "BNB") //List{"BTC", "ETH", "BNB"}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_send)
+        setContentView(R.layout.activity_receive)
         spinner = findViewById(R.id.spinner_asset_receive)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -30,8 +29,6 @@ class SendActivity : AppCompatActivity() {
         val adapter = SpinnerAdapter(this, assets)
         adapter.setDropDownViewResource(R.layout.asset_item_short)
         spinner.adapter = adapter
-
-
     }
 
     //generamos datos dummy con este método
