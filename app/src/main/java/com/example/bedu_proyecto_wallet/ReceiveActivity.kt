@@ -13,7 +13,7 @@ class ReceiveActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_receive)
+        setContentView(R.layout.activity_receive2)
         spinner = findViewById(R.id.spinner_asset_receive)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{

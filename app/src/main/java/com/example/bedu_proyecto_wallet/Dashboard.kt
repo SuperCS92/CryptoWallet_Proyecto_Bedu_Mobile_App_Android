@@ -21,7 +21,7 @@ class Dashboard : AppCompatActivity() {
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
+        setContentView(R.layout.activity_dashboard2)
         btn_send = findViewById(R.id.send)
         btn_receive = findViewById(R.id.btn_receive)
         btn_assets = findViewById(R.id.button3)
