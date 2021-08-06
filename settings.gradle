@@ -1,0 +1,2 @@
+rootProject.name = "Wallet2"
+include ':app'

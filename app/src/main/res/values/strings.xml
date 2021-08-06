@@ -1,0 +1,51 @@
+<resources>
+    <string name="astr_app_name">Astronaut</string>
+
+    <!-- Strings related to dashboard -->
+    <string name="astr_hint_username">Username</string>
+    <string name="astr_hint_password">Password</string>
+    <string name="astr_button_login">Log in</string>
+    <string name="astr_button_cancel">Cancel</string>
+    <string name="astr_error_password">Password must contain at least 8 characters.</string>
+    <string name="astr_helper_password">Password must contain at least 8 characters.</string>
+    <string name="astr_forgotpass"> Forgot password?</string>
+
+    <string name="astr_search_title">Search</string>
+    <string name="astr_filter_title">Filter</string>
+
+    <!-- Strings related to dashboard -->
+    <string name="astr_balance"> $200 </string>
+    <string name="astr_send_button">Send</string>
+    <string name="astr_receive_button">Receive</string>
+    <string name="astr_asset_button"> Assets</string>
+    <string name="astr_activity_button"> Activity</string>
+
+
+
+
+    <!-- Strings related to SendFragment -->
+    <string name="astr_text_view_asset"> Asset:</string>
+    <string name="astr_text_view_amount"> Amount:</string>
+    <string name="astr_text_view_address"> Address:</string>
+    <string name="astr_network_fee">Network fee:</string>
+    <string name="astr_networ_fee_amount">0.00034</string>
+    <string name="astr_total_send">Total:</string>
+    <string name="astr_total_send_amount">0.304</string>
+    <string name="astr_amount_hint"> Enter amount</string>
+    <string name="astr_address_hint"> Enter address</string>
+    <string name="astr_asset_hint"> Select asset</string>
+    <string name="astr_btn_cancel"> Cancel</string>
+    <string name="astr_btn_next"> Next </string>
+    <string name="astr_amount_error"> Select a criptocurrency</string>
+
+    <!-- Strings related to ReceiveFragment -->
+    <string name="astr_address_text">0x385DbEaf4F1373742d35760eb7c72d4Ac879ab92</string>
+    <string name="astr_text_view_asset_receive"> Asset:</string>
+
+
+
+    <string name="astr_logo_content_description">Astronaut Logo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
