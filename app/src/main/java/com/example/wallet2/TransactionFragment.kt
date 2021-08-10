@@ -11,21 +11,22 @@ import androidx.fragment.app.Fragment
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
 /**
  * A simple [Fragment] subclass.
- * Use the [ReceiveFragment.newInstance] factory method to
+ * Use the [TransactionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ReceiveFragment : Fragment() {
+class TransactionFragment(val position: Int) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var toolbar: Toolbar
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -36,10 +37,8 @@ class ReceiveFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_receive, container, false)
 
-        //toolbar
-        //(activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
+        val view = inflater.inflate(R.layout.fragment_transaction, container, false)
         toolbar = view.findViewById(R.id.app_bar)
         toolbar.setNavigationOnClickListener {
             val dashboardFragment = DashboardFragment()
@@ -48,6 +47,9 @@ class ReceiveFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, dashboardFragment)
             transaction.commit() }
+
+        //toolbar
+       // (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
 
         // Inflate the layout for this fragment
         return view
@@ -65,16 +67,27 @@ class ReceiveFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ReceiveFragment.
+         * @return A new instance of fragment TransactionFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ReceiveFragment().apply {
+        fun newInstance(param1: String, param2: String, position: Int) =
+            TransactionFragment(position).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
             }
     }
+
+    var assets  = mutableListOf(
+        Asset_Activity("Receive", 0.5, "Juan","June 25",R.drawable.astr_receive_icon, "BNB"),
+        Asset_Activity("Transfer", 1.5, "Gustavo","June 25",R.drawable.astr_send_icon, "BTC"),
+        Asset_Activity("Transfer", 0.5, "Carlos","June 25",R.drawable.astr_send_icon,"BTC"),
+        Asset_Activity("Transfer", 1.5, "David","June 24",R.drawable.astr_send_icon, "BNB"),
+        Asset_Activity("Receive", 0.5, "Victor","June 24",R.drawable.astr_receive_icon," ETH"),
+        Asset_Activity("Receive", 3.6, "Andrea","June 23",R.drawable.astr_receive_icon, "BTC"),
+        Asset_Activity("Transfer", 2.5, "David","June 22",R.drawable.astr_send_icon,"ETH"),
+        Asset_Activity("Receive", 0.3, "David","June 22",R.drawable.astr_receive_icon, "BNB")
+    )
 }

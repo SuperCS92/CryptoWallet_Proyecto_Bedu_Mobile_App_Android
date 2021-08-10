@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+
 
 class RecyclerAdapter(
     var context: Context?,
@@ -29,6 +31,9 @@ class RecyclerAdapter(
         return assets.size
     }
 
+
+
+
     //El ViewHolder ata los datos del RecyclerView a la Vista para desplegar la información
     //También se encarga de gestionar los eventos de la View, como los clickListeners
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,6 +44,19 @@ class RecyclerAdapter(
         val fiat_balance = view.findViewById(R.id.fiat_balance) as TextView
         val image = view.findViewById(R.id.userImage) as ImageView
 
+        init {
+            itemView.setOnClickListener {
+                val position: Int = adapterPosition
+
+
+                val assetfragment = AssetFragment(position)
+
+                val fragmentManager = (itemView.context as FragmentActivity).supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, assetfragment)
+                transaction.commit()            }
+        }
+
         //"atando" los datos a las Views
         fun bind(asset: Asset, context: Context) {
             asset_name.text = asset.name
@@ -47,10 +65,8 @@ class RecyclerAdapter(
             fiat_balance.text = "$" + asset.balance_fiat.toString()
             image.setImageResource(asset.idImage)
 
-            //Gestionando los eventos e interacciones con la vista
-            itemView.setOnClickListener {
-                Toast.makeText(context, "Llamando a ${asset.name}", Toast.LENGTH_SHORT).show()
-            }
         }
     }
+
+
 }

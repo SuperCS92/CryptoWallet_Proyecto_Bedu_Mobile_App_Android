@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter_AssetActivity(
@@ -54,7 +55,15 @@ class RecyclerAdapter_AssetActivity(
 
             //Gestionando los eventos e interacciones con la vista
             itemView.setOnClickListener{
-                Toast.makeText(context, "Abriendo activity con detalles", Toast.LENGTH_SHORT).show()
+                val position: Int = adapterPosition
+
+
+                val transactionFragment = TransactionFragment(position)
+
+                val fragmentManager = (itemView.context as FragmentActivity).supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, transactionFragment)
+                transaction.commit()
             }
         }
     }

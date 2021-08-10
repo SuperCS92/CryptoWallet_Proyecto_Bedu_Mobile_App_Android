@@ -3,6 +3,7 @@ package com.example.wallet2
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class DashboardFragment : Fragment() {
 
+    private lateinit var balance:TextView
     private lateinit var send_button:Button
     private lateinit var receive_button:Button
     private lateinit var asset_button:Button
@@ -57,7 +59,8 @@ class DashboardFragment : Fragment() {
         //toolbar
         (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
 
-        //Setting up buttons
+        //Setting up buttons and textviews
+        balance = view.findViewById(R.id.balance)
         send_button = view.findViewById(R.id.send)
         receive_button = view.findViewById(R.id.receive)
         asset_button = view.findViewById(R.id.button3)
@@ -66,6 +69,8 @@ class DashboardFragment : Fragment() {
         recyclerContacts = view.findViewById(R.id.recyclerContacts)
 
         setUpRecyclerView()
+
+        balance.text = "$" + getTotalBalance(getContacts()).toString()
 
         send_button.setOnClickListener {
             val sendFragment = SendFragment()
@@ -141,7 +146,7 @@ class DashboardFragment : Fragment() {
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
         //seteando el Adapter
-        mAdapter_activity = RecyclerAdapter_AssetActivity( context,getAssets_Activities())
+        mAdapter_activity = RecyclerAdapter_AssetActivity( context,assets)
         //asignando el Adapter al RecyclerView
         recyclerContacts.adapter = mAdapter_activity
     }
@@ -150,14 +155,14 @@ class DashboardFragment : Fragment() {
     private fun getContacts(): MutableList<Asset>{
         var assets:MutableList<Asset> = ArrayList()
 
-        assets.add(Asset("Bitcoin", 0.5, 38000.0,19000.0,R.drawable.astr_btc_symbol))
-        assets.add(Asset("Ether", 3.0, 2000.0,6000.0,R.drawable.astr_eth_symbol))
-        assets.add(Asset("Cardano", 500.0, 1.33,665.0,R.drawable.astr_cardano_symbol))
-        assets.add(Asset("Tether", 50.0, 1.0,50.0,R.drawable.astr_tether_symbol))
-        assets.add(Asset("Binance", 7.0, 300.0,2100.0,R.drawable.astr_bnb_symbol))
-        assets.add(Asset("xDai", 17.0, 1.0,17.0,R.drawable.astr_xdai_symbol))
-        assets.add(Asset("ChainLink", 35.0, 18.35,642.25,R.drawable.astr_chainlink_symbol))
-        assets.add(Asset("AXS", 40.5, 38.48,1558.44,R.drawable.astr_axs_symbol))
+        assets.add(Asset("Bitcoin", 0.5, 38000.0,19000.0,R.drawable.astr_btc_symbol, "BTC"))
+        assets.add(Asset("Ether", 3.0, 2000.0,6000.0,R.drawable.astr_eth_symbol, "ETH"))
+        assets.add(Asset("Cardano", 500.0, 1.33,665.0,R.drawable.astr_cardano_symbol,"ADA"))
+        assets.add(Asset("Tether", 50.0, 1.0,50.0,R.drawable.astr_tether_symbol, "USDT"))
+        assets.add(Asset("Binance", 7.0, 300.0,2100.0,R.drawable.astr_bnb_symbol,"BNB"))
+        assets.add(Asset("xDai", 17.0, 1.0,17.0,R.drawable.astr_xdai_symbol, "xDai"))
+        assets.add(Asset("ChainLink", 35.0, 18.35,642.25,R.drawable.astr_chainlink_symbol,"Link"))
+        assets.add(Asset("AXS", 40.5, 38.48,1558.44,R.drawable.astr_axs_symbol, "AXS"))
 
         return assets
     }
@@ -177,4 +182,25 @@ class DashboardFragment : Fragment() {
 
         return assets
     }
+
+    var assets  = mutableListOf(
+        Asset_Activity("Receive", 0.5, "Juan","June 25",R.drawable.astr_receive_icon, "BNB"),
+        Asset_Activity("Transfer", 1.5, "Gustavo","June 25",R.drawable.astr_send_icon, "BTC"),
+        Asset_Activity("Transfer", 0.5, "Carlos","June 25",R.drawable.astr_send_icon,"BTC"),
+        Asset_Activity("Transfer", 1.5, "David","June 24",R.drawable.astr_send_icon, "BNB"),
+        Asset_Activity("Receive", 0.5, "Victor","June 24",R.drawable.astr_receive_icon," ETH"),
+        Asset_Activity("Receive", 3.6, "Andrea","June 23",R.drawable.astr_receive_icon, "BTC"),
+        Asset_Activity("Transfer", 2.5, "David","June 22",R.drawable.astr_send_icon,"ETH"),
+        Asset_Activity("Receive", 0.3, "David","June 22",R.drawable.astr_receive_icon, "BNB")
+    )
+
+    fun getTotalBalance(list: MutableList<Asset>): Double {
+        var total: Double = 0.0
+
+        list.forEach { total += it.balance_fiat}
+
+        return total
+    }
+
+
 }

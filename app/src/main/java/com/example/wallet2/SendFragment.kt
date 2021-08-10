@@ -28,10 +28,15 @@ class SendFragment : Fragment() {
 
     val items= listOf("BTC", "ETH", "BNB")
     val itemsprice= listOf(39249.40, 2681.89, 330.14)
+
+
     private lateinit var amount_textField: TextInputLayout
     private lateinit var amount_value: EditText
+    private lateinit var address_textField: TextInputLayout
+    private lateinit var address_value: EditText
     private lateinit var total : TextView
     private lateinit var cance_button: MaterialButton
+    private lateinit var next_button: MaterialButton
 
     //This boolean is used to check wether the amount should be displaced
     //on criptocurrency or in fiat currency {true= crypto / false= fiat}
@@ -64,10 +69,12 @@ class SendFragment : Fragment() {
         val assetText = view.findViewById<AutoCompleteTextView>(R.id.assetText)
         amount_value = view.findViewById(R.id.amount_value)            //--------EdiText
         amount_textField = view.findViewById(R.id.amount_textField)
+        address_textField = view.findViewById(R.id.address_input_Layout)
+        address_value = view.findViewById(R.id.address_editText)
         total = view.findViewById(R.id.textView11)                     //---------TextView
         cance_button = view.findViewById(R.id.button2)
+        next_button = view.findViewById(R.id.button5)
 
-        
         val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
         (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
@@ -109,6 +116,43 @@ class SendFragment : Fragment() {
                 }
                 false
         })
+
+        address_value.setOnFocusChangeListener { v, hasFocus ->
+
+                if(hasFocus) {
+                    address_textField.helperText = "Paste the address and double check it's correct"
+
+                } else {
+
+                    val textamount = address_value.text
+
+                    if (textamount.isNotEmpty() && textamount.length > 2) {
+
+                        val address = textamount.toString()
+                        val crypto = assetText.text.toString()
+
+                        if (crypto == "BTC") {
+
+                            when {
+                                address.startsWith("1") -> address_textField.helperText =
+                                    "P2PKH address entered"
+                                address.startsWith("3") -> address_textField.helperText =
+                                    "P2SH address entered"
+                                address.startsWith("bc1") -> address_textField.helperText =
+                                    "Bech32 address entered"
+                                else -> address_textField.error = "This address should begin 1, 3 or bc1"
+                            }
+
+                        } else {
+                            if (address.startsWith("0x")) address_textField.helperText =
+                                "hex address entered"
+                            else address_textField.error = "This address should begin 0x"
+
+                        }
+                    }
+                    else address_textField.error = "Address too short or empty"
+                }
+        }
 
 
         //toolbar
@@ -183,9 +227,23 @@ class SendFragment : Fragment() {
             transaction.commit()
         }
 
+        next_button.setOnClickListener {
+
+            if(assetText.text.isNotEmpty() && amount_value.text.isNotEmpty() && address_value.text.isNotEmpty()) {
+                val _asset = assetText.text.toString()
+                val _amount = amount_value.text.toString().toDouble()
+                val _address = address_value.text.toString()
+
+                openConfirmationDialog(_asset, _amount, _address)
+            }
+        }
+
         // Inflate the layout for this fragment
         return view
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.astr_toolbar_menu, menu)
@@ -222,6 +280,10 @@ class SendFragment : Fragment() {
         assets.add(Asset_Short("BNB",R.drawable.astr_bnb_symbol))
 
         return assets
+    }
+
+    fun openConfirmationDialog(asset:String, amount: Double, address: String){
+       val confirmationDialog = ConfirmationDialog(asset, amount, address).show(parentFragmentManager, "Confirmation Dialog")
     }
 
 }

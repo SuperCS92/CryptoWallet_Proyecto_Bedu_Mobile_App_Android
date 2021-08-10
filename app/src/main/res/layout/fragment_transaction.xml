@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/astr_back_icon"
+            app:title="@string/astr_app_name" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="@string/astr_details"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/astr_transaction_copy_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:icon="@drawable/astr_copy_icon"
+            app:cornerRadius="4dp"
+
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/astr_transaction_share_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cornerRadius="4dp"
+            app:icon="@drawable/astr_share_icon"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/text_from_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/astr_from"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/text_direction_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"
+            android:text="@string/astr_direction"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/text_to_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginHorizontal="8dp"
+            android:text="@string/astr_to_transaction"
+            android:textSize="16sp"
+           />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="@string/astr_transaction"/>
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_nonce_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_nonce"/>
+
+        <TextView
+            android:id="@+id/astr_transaction_nonce_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_nonce_value"/>
+
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_amount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_amount"/>
+
+        <TextView
+            android:id="@+id/astr_transaction_amount_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_amount_value"/>
+
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_gasLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_gasLimit"/>
+
+        <TextView
+            android:id="@+id/astr_transaction_gasLimit_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_gasLimit_value"/>
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_gasUsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_gasUsed"/>
+
+        <TextView
+            android:id="@+id/astr_transaction_gasUsed_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_gasUsed_value"/>
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_gasPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_gasPrice"/>
+
+        <TextView
+            android:id="@+id/astr_transaction_gasPrice_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_gasPrice_value"/>
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp">
+        <TextView
+            android:id="@+id/astr_transaction_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_total"/>
+
+        <TextView
+            android:id="@+id/astr_transaction_total_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".1"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/astr_total_value"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginHorizontal="24dp">
+
+        <TextView
+            android:id="@+id/astr_activityLog_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="top"
+            android:layout_marginTop="16dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="@string/astr_activityLog"/>
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="12dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/astr_added_icon"/>
+
+        <TextView
+            android:id="@+id/astr_transactionCreated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/astr_transactionCreated"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="12dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/astr_send_transactionicon"/>
+
+        <TextView
+            android:id="@+id/astr_transactionSubmited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/astr_transactionSubmiteed"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="12dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/astr_approved_icon"/>
+        <TextView
+            android:id="@+id/astr_transactionConfirmed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/astr_transactionConfirmed"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+</ScrollView>

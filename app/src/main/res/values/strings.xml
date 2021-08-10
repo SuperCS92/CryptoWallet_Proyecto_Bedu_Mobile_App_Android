@@ -21,8 +21,6 @@
     <string name="astr_activity_button"> Activity</string>
 
 
-
-
     <!-- Strings related to SendFragment -->
     <string name="astr_text_view_asset"> Asset:</string>
     <string name="astr_text_view_amount"> Amount:</string>
@@ -41,6 +39,32 @@
     <!-- Strings related to ReceiveFragment -->
     <string name="astr_address_text">0x385DbEaf4F1373742d35760eb7c72d4Ac879ab92</string>
     <string name="astr_text_view_asset_receive"> Asset:</string>
+
+    <!-- Strings related to AssetFragment -->
+    <string name="astr_no_activities"> No activities yet</string>
+
+    <!-- Strings related to TransactionFragment -->
+    <string name="astr_details"> Details</string>
+    <string name="astr_from"> from: 0xa234bf52232</string>
+    <string name="astr_direction"> > </string>
+    <string name="astr_to_transaction"> to: 0xdda434b133</string>
+    <string name="astr_transaction"> Transaction</string>
+    <string name="astr_nonce"> Nonce</string>
+    <string name="astr_nonce_value"> 237</string>
+    <string name="astr_amount"> Amount</string>
+    <string name="astr_amount_value"> 32 BNB</string>
+    <string name="astr_gasLimit"> Gas Limit (Units)</string>
+    <string name="astr_gasLimit_value"> 50000</string>
+    <string name="astr_gasUsed"> Gas Used (Units)</string>
+    <string name="astr_gasUsed_value"> 32456</string>
+    <string name="astr_gasPrice"> Gas Price (Gwei)</string>
+    <string name="astr_gasPrice_value"> 5</string>
+    <string name="astr_total"> Total</string>
+    <string name="astr_total_value"> 32.003454 BNB</string>
+    <string name="astr_activityLog"> Activity Log</string>
+    <string name="astr_transactionCreated"> Transaction created with a value of 32 BNB at 10:03 8/9/2021.</string>
+    <string name="astr_transactionSubmiteed"> Transaction submitted with a gas fee of 0.002 BNB at 10:03 8/9/2021.</string>
+    <string name="astr_transactionConfirmed"> Transaction confirmed with a  at 10:03 8/9/2021.</string>
 
 
 

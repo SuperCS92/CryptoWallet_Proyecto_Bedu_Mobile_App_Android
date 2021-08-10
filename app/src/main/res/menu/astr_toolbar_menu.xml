@@ -10,4 +10,5 @@
         android:icon="@drawable/astr_filter"
         android:title="@string/astr_filter_title"
         app:showAsAction="always" />
+    
 </menu>

@@ -203,7 +203,7 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/astr_menu"
+            app:navigationIcon="@drawable/astr_back_icon"
             app:title="@string/astr_app_name" />
     </com.google.android.material.appbar.AppBarLayout>
 
