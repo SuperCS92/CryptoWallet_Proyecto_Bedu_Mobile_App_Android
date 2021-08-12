@@ -2,9 +2,11 @@ package com.example.wallet2
 
 import android.os.Bundle
 import android.view.*
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputLayout
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +19,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ReceiveFragment : Fragment() {
+
+    val items= listOf("BTC", "ETH", "BNB")
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -37,6 +42,12 @@ class ReceiveFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_receive, container, false)
+
+        val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_transaction)
+        val assetText = view.findViewById<AutoCompleteTextView>(R.id.assetText_transaction)
+
+        val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
+        (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         //toolbar
         //(activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
@@ -76,5 +87,16 @@ class ReceiveFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    //generamos datos dummy con este método
+    private fun getAssets_Short(): MutableList<Asset_Short>{
+        var assets:MutableList<Asset_Short> = ArrayList()
+
+        assets.add(Asset_Short("BTC",R.drawable.astr_btc_symbol))
+        assets.add(Asset_Short("ETH", R.drawable.astr_eth_symbol))
+        assets.add(Asset_Short("BNB",R.drawable.astr_bnb_symbol))
+
+        return assets
     }
 }

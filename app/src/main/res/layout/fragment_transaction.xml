@@ -45,7 +45,6 @@
             android:layout_height="48dp"
             app:icon="@drawable/astr_copy_icon"
             app:cornerRadius="4dp"
-
             style="@style/Widget.App.Button.OutlinedButton.IconOnly"
             />
         <com.google.android.material.button.MaterialButton

@@ -230,35 +230,31 @@
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="@+id/guideline19" />
 
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline22"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="@+id/guideline1"
-        app:layout_constraintTop_toTopOf="@+id/guideline21"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
 
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/astr_transaction_copy_btn"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cornerRadius="4dp"
+        app:icon="@drawable/astr_copy_icon"
         app:layout_constraintBottom_toTopOf="@+id/guideline22"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline21"
-        app:srcCompat="?attr/actionModeCopyDrawable" />
+        app:layout_constraintTop_toTopOf="@+id/guideline21" />
 
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/astr_transaction_share_btn"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cornerRadius="4dp"
+        app:icon="@drawable/astr_share_icon"
         app:layout_constraintBottom_toTopOf="@+id/guideline22"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@+id/guideline21"
-        app:srcCompat="@android:drawable/ic_menu_share" />
+        app:layout_constraintTop_toTopOf="@+id/guideline21" />
 
     <TextView
         android:id="@+id/textView5"
@@ -266,20 +262,31 @@
         android:layout_height="0dp"
         android:gravity="right|center_vertical"
         android:text="@string/astr_text_view_asset_receive"
-        android:textSize="16sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline24"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="@+id/guideline23" />
 
-    <Spinner
-        android:id="@+id/spinner_asset_receive"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/asset_transaction"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="@string/astr_asset_hint"
         app:layout_constraintBottom_toTopOf="@+id/guideline24"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@+id/guideline23" />
+        app:layout_constraintTop_toTopOf="@+id/guideline23">
+
+        <AutoCompleteTextView
+            android:id="@+id/assetText_transaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

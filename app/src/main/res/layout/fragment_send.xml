@@ -281,7 +281,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/guideline20"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/purple_200"
+        android:background="@color/primaryLightColor"
         >
 
     <TextView
@@ -294,7 +294,9 @@
         android:text="@string/astr_network_fee"
         android:layout_gravity="left"
         android:textSize="16sp"
-         />
+        android:textColor="@color/white"
+
+        />
 
     <TextView
         android:id="@+id/textView10"
@@ -305,6 +307,7 @@
         android:gravity="right|center_vertical"
         android:text="@string/astr_networ_fee_amount"
         android:textSize="16sp"
+        android:textColor="@color/white"
         />
 
     </LinearLayout>
@@ -318,7 +321,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/guideline22"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/purple_500"
+        android:background="@color/primaryDarkColor"
+        android:textColor="@color/white"
+
         >
     <TextView
         android:id="@+id/textView9"
@@ -330,7 +335,9 @@
         android:text="@string/astr_total_send"
         android:textSize="16sp"
         android:textStyle="bold"
-         />
+        android:textColor="@color/white"
+
+        />
 
 
     <TextView

@@ -21,7 +21,6 @@
             android:layout_marginTop="48dp"
             android:layout_marginBottom="16dp"
             app:srcCompat="@drawable/astr_logo"
-            android:tint="?android:attr/textColorPrimary"
             android:contentDescription="@string/astr_logo_content_description"  />
 
 
