@@ -1,6 +1,7 @@
 package com.example.wallet2
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,9 @@ class RecyclerAdapter(
 
                 val fragmentManager = (itemView.context as FragmentActivity).supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
+                // animation
+                transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
+                fragmentManager.popBackStack()
                 transaction.replace(R.id.fragment_container, assetfragment)
                 transaction.commit()            }
         }
