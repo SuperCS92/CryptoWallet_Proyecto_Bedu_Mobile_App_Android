@@ -66,6 +66,8 @@
     <string name="astr_transactionSubmiteed"> Transaction submitted with a gas fee of 0.002 BNB at 10:03 8/9/2021.</string>
     <string name="astr_transactionConfirmed"> Transaction confirmed with a  at 10:03 8/9/2021.</string>
 
+<!--    Strings related to splash screen-->
+    <string name="astr_splash_copyright"> Made by Team 7 \nBedu</string>
 
 
     <string name="astr_logo_content_description">Astronaut Logo</string>
