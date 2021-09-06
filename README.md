@@ -25,7 +25,7 @@ CryptoWallet es desarrollada usando tecnologías como:
 - :bulb: **Figma**: Vistas siguiendo las especificaciones para obtener una UI amigable para el usuario.
 
 ## ¿Cómo fué construído CryptoWallet?
-Para la construcción de esta aplicación se implementaron todos los temas vistos en el Modulo de Kotlin Intermedio, se siguieron las buenas prácticas y se realizaron los diseños correspondientes
+Para la construcción de esta aplicación se implementaron todos los temas vistos en el Modulo de Kotlin Intermedio, y parte de Kotlin Avanzado, se siguieron las buenas prácticas y se realizaron los diseños correspondientes
 a cada una de las pantallas en Figma, siguiendo los consejos y especificaciones del modulo de UI Fundamentals asi como los conocimientos adquiridos a lo largo del modulo de Kotlin fundamentals.
 Este proyecto contiene temas como:
 - Views (Constraint, LinearLayout, RelativeLayout, FrameLayout, etc)
