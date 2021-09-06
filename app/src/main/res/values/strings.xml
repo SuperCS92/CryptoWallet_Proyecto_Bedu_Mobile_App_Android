@@ -1,6 +1,19 @@
 <resources>
     <string name="astr_app_name">Astronaut</string>
 
+    <!-- Strings related to Login & Register -->
+    <string name="login">Welcome</string>
+    <string name="signuphere"><u>Dont have an account? Sign up here</u></string>
+    <string name="loginButton">Log In</string>
+    <string name="fullname">Full Name</string>
+    <string name="email">E-mail</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="createAccount">Create Account</string>
+    <string name="signup">Sign Up</string>
+    <string name="loginhere"><u>Already have an account? Log in here</u></string>
+
     <!-- Strings related to dashboard -->
     <string name="astr_hint_username">Username</string>
     <string name="astr_hint_password">Password</string>
@@ -65,7 +78,6 @@
     <string name="astr_transactionCreated"> Transaction created with a value of 32 BNB at 10:03 8/9/2021.</string>
     <string name="astr_transactionSubmiteed"> Transaction submitted with a gas fee of 0.002 BNB at 10:03 8/9/2021.</string>
     <string name="astr_transactionConfirmed"> Transaction confirmed with a  at 10:03 8/9/2021.</string>
-
 
 
     <string name="astr_logo_content_description">Astronaut Logo</string>
