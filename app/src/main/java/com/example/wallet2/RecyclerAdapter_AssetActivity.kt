@@ -1,14 +1,18 @@
 package com.example.wallet2
 
+import android.app.Dialog
 import android.content.Context
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import java.util.logging.Handler
 
 class RecyclerAdapter_AssetActivity(
     var context: Context?,
@@ -31,6 +35,7 @@ class RecyclerAdapter_AssetActivity(
         return assets.size
     }
 
+
     //El ViewHolder ata los datos del RecyclerView a la Vista para desplegar la información
     //También se encarga de gestionar los eventos de la View, como los clickListeners
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,6 +45,16 @@ class RecyclerAdapter_AssetActivity(
         val from_to = view.findViewById(R.id.price_fiat) as TextView
         val date = view.findViewById(R.id.fiat_balance) as TextView
         val image = view.findViewById(R.id.userImage) as ImageView
+        private var loadingDialog: Dialog? = null
+
+        private fun hideLoading() {
+            loadingDialog?.let { if(it.isShowing)it.cancel() }
+        }
+
+        private fun showLoading() {
+            hideLoading()
+            loadingDialog = CommonUtils.showLoadingDialog(itemView.context)
+        }
 
         //"atando" los datos a las Views
         fun bind(asset: Asset_Activity, context: Context){
@@ -56,6 +71,9 @@ class RecyclerAdapter_AssetActivity(
             //Gestionando los eventos e interacciones con la vista
             itemView.setOnClickListener{
                 val position: Int = adapterPosition
+                Log.d("hey", "tocaste $position")
+                showLoading()
+                android.os.Handler().postDelayed({hideLoading()},3000)
 
 
                 val transactionFragment = TransactionFragment(position)
@@ -66,6 +84,8 @@ class RecyclerAdapter_AssetActivity(
                 transaction.commit()
             }
         }
+
+
     }
 
 
