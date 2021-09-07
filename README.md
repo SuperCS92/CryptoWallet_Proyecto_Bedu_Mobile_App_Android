@@ -4,6 +4,9 @@
 
 Wallet de criptomonedas: Permite al usuario revisar su balance de diferentes criptomonedas en tiempo real además de enviar y recibir activos a través de las diferentes blockchains. También ofrece un registro en tiempo real de todas las transacciones realizadas con la cartera, tanto pagos como transferencias, donde puede ver información referente a la misma, como dirección a la que envía o recibe, blockchain a la que pertenece, fecha, y cantidad. Se planea que la cartera pueda conectarse con la blockchain de Bitcoin, Cardano, Ethereum y Binance Smart Chain. Asimismo se pretende que la cartera pueda comunicarse con los tokens ERC20, desplegados dentro de Ethereum y Binance Smart Chain, como por ejemplo ChainLink y Tether.
 
+## ¡¡IMPORTANTE!!
+
+Para poder usar esta aplicación es necesario registrarse con unas credenciales validas y contraseña MAYOR A 8 CARACTERES para despues poder usar ese usuario para iniciar sesion
 
 ## ¿Cual es el flujo normal de CryptoWallet?
 

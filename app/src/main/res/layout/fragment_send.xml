@@ -227,6 +227,17 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/qrScanBtn"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:cornerRadius="4dp"
+        app:icon="@drawable/ic_qr_code_scanner_24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline12"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="@+id/guideline11"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amount_textField"
