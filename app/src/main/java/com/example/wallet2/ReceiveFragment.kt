@@ -1,12 +1,29 @@
 package com.example.wallet2
 
+import android.app.ProgressDialog
+import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +43,9 @@ class ReceiveFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var toolbar: Toolbar
-
+    private lateinit var amount_value: EditText
+    private lateinit var qrImage: ImageView
+    private lateinit var assetText: AutoCompleteTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +63,13 @@ class ReceiveFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_receive, container, false)
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_transaction)
-        val assetText = view.findViewById<AutoCompleteTextView>(R.id.assetText_transaction)
+        assetText = view.findViewById(R.id.assetText_transaction)
+        val qrgenerate_button = view.findViewById<MaterialButton>(R.id.qrGenerateBtn)
+        val copy_button = view.findViewById<MaterialButton>(R.id.astr_transaction_copy_btn)
+        val share_button = view.findViewById<MaterialButton>(R.id.astr_transaction_share_btn)
+        amount_value = view.findViewById(R.id.amountToSend_value)
+        qrImage = view.findViewById(R.id.imageView2)
+
 
         val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
         (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
@@ -59,6 +84,22 @@ class ReceiveFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, dashboardFragment)
             transaction.commit() }
+
+        // Generate QR Code
+        qrgenerate_button.setOnClickListener{
+            if(amount_value.text.toString().isEmpty() || assetText.text.toString().isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter all required information.\n" +
+                        "Amount / Asset field is empty", Toast.LENGTH_LONG).show()
+            }else{
+                createQR()
+                qrgenerate_button.isVisible = false
+                copy_button.isVisible = true
+                share_button.isVisible = true
+                amount_value.isEnabled = false
+                textInputLayout.isEnabled = false
+                Toast.makeText(requireContext(), "QR code has been created successfully", Toast.LENGTH_LONG).show()
+            }
+        }
 
         // Inflate the layout for this fragment
         return view
@@ -99,4 +140,43 @@ class ReceiveFragment : Fragment() {
 
         return assets
     }
+
+    private fun createQR(){
+        //val amount = amount_value.text.toString()
+        //var crypto = assetText.text.toString()
+        val text = amount_value.text.toString() + '\n' + assetText.text.toString() + '\n' + "DesarrolloMovil@bedu.org"
+        if (text.isNotBlank()){
+            val width = 500
+            val height = 500
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val codeWriter = MultiFormatWriter()
+            try{
+                val bitMatrix = codeWriter.encode(text, BarcodeFormat.QR_CODE, width, height)
+                for(x in 0 until width){
+                    for (y in 0 until height){
+                        bitmap.setPixel(x, y, if(bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+                    }
+                }
+                qrImage.setImageBitmap(bitmap)
+                /*
+                // Creacion del archivo
+                try {
+                    val filename = "pippo.jpg"
+                    //val sd = Environment.getExternalStorageDirectory()
+                    val file = File(externalMediaDirs.first(), filename)
+                    val out = FileOutputStream(file)
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
+                    out.flush()
+                    out.close()
+                    Toast.makeText(context, "¡Imagen guardada!: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                Toast.makeText(this, "QR generado exitosamente", Toast.LENGTH_LONG).show()*/
+            } catch (e: WriterException) {
+                Toast.makeText(requireContext(), "Error al escribir el QR", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
 }

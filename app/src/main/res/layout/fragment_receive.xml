@@ -217,7 +217,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="@+id/guideline11"
-        app:srcCompat="@drawable/astr_qr" />
+        app:srcCompat="@drawable/striped_square" />
 
     <TextView
         android:id="@+id/textView2"
@@ -239,6 +239,7 @@
         android:layout_height="48dp"
         app:cornerRadius="4dp"
         app:icon="@drawable/astr_copy_icon"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline22"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -251,6 +252,7 @@
         android:layout_height="48dp"
         app:cornerRadius="4dp"
         app:icon="@drawable/astr_share_icon"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline22"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -264,10 +266,10 @@
         android:text="@string/astr_text_view_asset_receive"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline26"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
-        app:layout_constraintTop_toTopOf="@+id/guideline23" />
+        app:layout_constraintTop_toTopOf="@+id/guideline25" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/asset_transaction"
@@ -275,10 +277,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/astr_asset_hint"
-        app:layout_constraintBottom_toTopOf="@+id/guideline24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline26"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toTopOf="@+id/guideline23">
+        app:layout_constraintTop_toTopOf="@+id/guideline25">
 
         <AutoCompleteTextView
             android:id="@+id/assetText_transaction"
@@ -288,5 +290,43 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amountToSend_textField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/astr_amount_hint"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/astr_compare_icon"
+        app:helperTextEnabled="true"
+        app:errorEnabled="true"
+        android:autofillHints="false"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintBottom_toTopOf="@+id/guideline24"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="@+id/guideline1"
+        app:layout_constraintTop_toTopOf="@+id/guideline23"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/amountToSend_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/qrGenerateBtn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Generate QR"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline22"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline21" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
