@@ -112,7 +112,7 @@ class LoginFragment : Fragment() {
                 val query = dataBaseInstance.personDataDao().getUser(usuario, pass)
 
                 if (query == null || query.equals(null)){
-                    Toast.makeText(requireContext(), "Wrong credentials", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(requireContext(), "Wrong credentials", Toast.LENGTH_LONG).show()
                 }else{
                     val dashboardFragment = DashboardFragment()
 
