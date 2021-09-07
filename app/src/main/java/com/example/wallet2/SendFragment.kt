@@ -1,17 +1,27 @@
 package com.example.wallet2
 
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import com.example.wallet2.databinding.FragmentSendBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.NotFoundException
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.integration.android.IntentIntegrator
+import java.io.FileNotFoundException
+import java.io.InputStream
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +35,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class SendFragment : Fragment() {
 
+    //private lateinit var binding: FragmentSendBinding
 
     val items= listOf("BTC", "ETH", "BNB")
     val itemsprice= listOf(39249.40, 2681.89, 330.14)
@@ -37,6 +48,7 @@ class SendFragment : Fragment() {
     private lateinit var total : TextView
     private lateinit var cance_button: MaterialButton
     private lateinit var next_button: MaterialButton
+    private lateinit var qrscan_button: MaterialButton
 
     //This boolean is used to check wether the amount should be displaced
     //on criptocurrency or in fiat currency {true= crypto / false= fiat}
@@ -74,10 +86,14 @@ class SendFragment : Fragment() {
         total = view.findViewById(R.id.textView11)                     //---------TextView
         cance_button = view.findViewById(R.id.button2)
         next_button = view.findViewById(R.id.button5)
+        qrscan_button = view.findViewById(R.id.qrScanBtn)
 
         val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
         (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
+        qrscan_button.setOnClickListener{
+            setUpQRCode()
+        }
 
         amount_value.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
                 if (keyCode >=7 && keyCode <= 16 && event.action == KeyEvent.ACTION_UP) {
@@ -244,7 +260,6 @@ class SendFragment : Fragment() {
 
 
 
-
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.astr_toolbar_menu, menu)
         super.onCreateOptionsMenu(menu, menuInflater)
@@ -284,6 +299,76 @@ class SendFragment : Fragment() {
 
     fun openConfirmationDialog(asset:String, amount: Double, address: String){
        val confirmationDialog = ConfirmationDialog(asset, amount, address).show(parentFragmentManager, "Confirmation Dialog")
+    }
+
+    private fun setUpQRCode(){
+        IntentIntegrator(requireActivity())
+            .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE) //Selección del tipo de código a scanear
+            .setTorchEnabled(false) //flash
+            .setBeepEnabled(true)   //sonido al escanear
+            .setPrompt("Scan QR Code")  //Mensaje que aparece al abrir el scaner
+            .initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            111 -> {}
+                /*if (data == null || data.data == null) {
+                    Log.e(
+                        "TAG",
+                        "The uri is null, probably the user cancelled the image selection process using the back button."
+                    )
+                    return
+                }
+                val uri: Uri = data.data!!
+                try {
+                    val inputStream: InputStream? = openInputStream(uri)
+                    var bitmap = BitmapFactory.decodeStream(inputStream)
+                    if (bitmap == null) {
+                        Log.e("TAG", "uri is not a bitmap," + uri.toString())
+                        return
+                    }
+                    val width = bitmap.width
+                    val height = bitmap.height
+                    val pixels = IntArray(width * height)
+                    bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+                    bitmap.recycle()
+                    val source = RGBLuminanceSource(width, height, pixels)
+                    val bBitmap = BinaryBitmap(HybridBinarizer(source))
+                    val reader = MultiFormatReader()
+                    try {
+                        //val result = reader.decode(bBitmap)
+                        //Toast.makeText(this, "The content of the QR image is: " + result.getText(), Toast.LENGTH_SHORT).show()
+                        //val output: List<String> = result.getText().split("\n")
+                        Toast.makeText(requireActivity(), "Lectura realizada con éxito", Toast.LENGTH_SHORT).show()
+                        //name.text = output[0]
+                        //password.text = output[1]
+                    } catch (e: NotFoundException) {
+                        Log.e("TAG", "decode exception", e)
+                    }
+                } catch (e: FileNotFoundException) {
+                    Log.e("TAG", "can not open file" + uri.toString(), e)
+                }
+            }*/
+            else -> {
+                val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+
+                if (result != null){
+                    if (result.contents == null) {
+                        Toast.makeText(requireContext(), "Escaneo cancelado", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(requireContext(), "El escaneo se ha realizado con éxito", Toast.LENGTH_LONG).show()
+                        //val resultado = result.contents
+                        //val output: List<String> = resultado.split("\n")
+                        //name.text = output[0]
+                        //password.text = output[1]
+                    }
+                }else{
+                    super.onActivityResult(requestCode, resultCode, data)
+                }
+            }
+        }
     }
 
 }
