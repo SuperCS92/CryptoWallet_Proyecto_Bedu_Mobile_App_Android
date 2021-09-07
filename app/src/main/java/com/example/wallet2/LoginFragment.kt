@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.models.User
 import com.example.wallet2.data.userDb
@@ -82,8 +83,20 @@ class LoginFragment : Fragment() {
             if (!isPasswordValid(password_text.text)) {
                 password_layout.error = getString(R.string.astr_error_password)
             } else {
-                log()
-                Toast.makeText(requireContext(), "Welcome", Toast.LENGTH_LONG).show()
+                val init = log()
+                //Toast.makeText(requireContext(), "Welcome", Toast.LENGTH_LONG).show()
+
+                if(init == true){
+                    Toast.makeText(requireContext(), "Welcome", Toast.LENGTH_LONG).show()
+                    val dashboardFragment = DashboardFragment()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragment_container, dashboardFragment)
+                    transaction.commit()
+                }else{
+                    Toast.makeText(requireContext(), "Try again", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -98,7 +111,9 @@ class LoginFragment : Fragment() {
         return view
     }
 
-    private fun log() {
+    private fun log(): Boolean {
+
+        var flag = false
 
         var usuario = username.text.trim().toString()
         var pass = password_text.text.trim().toString()
@@ -112,17 +127,14 @@ class LoginFragment : Fragment() {
                 val query = dataBaseInstance.personDataDao().getUser(usuario, pass)
 
                 if (query == null || query.equals(null)){
-                    Toast.makeText(requireContext(), "Wrong credentials", Toast.LENGTH_LONG).show()
+                    flag = false
                 }else{
-                    val dashboardFragment = DashboardFragment()
-
-                    val fragmentManager = parentFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.replace(R.id.fragment_container, dashboardFragment)
-                    transaction.commit()
+                    flag = true
                 }
             }
         }
+        Thread.sleep(1500)
+        return flag
     }
 
     /*
