@@ -47,6 +47,7 @@ class TransactionFragment(val position: Int) : Fragment() {
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, dashboardFragment)
             transaction.commit() }
 

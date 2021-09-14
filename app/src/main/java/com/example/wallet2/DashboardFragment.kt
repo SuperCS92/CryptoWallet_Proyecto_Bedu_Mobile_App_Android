@@ -77,6 +77,7 @@ class DashboardFragment : Fragment() {
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, sendFragment)
             transaction.commit()
         }
@@ -87,6 +88,7 @@ class DashboardFragment : Fragment() {
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, receiveFragment)
             transaction.commit()
         }
