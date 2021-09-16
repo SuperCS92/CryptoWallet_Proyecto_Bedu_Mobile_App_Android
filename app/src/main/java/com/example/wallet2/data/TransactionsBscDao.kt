@@ -1,11 +1,9 @@
 package com.example.wallet2.data
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.wallet2.data.models.TransactionsBsc
 
+@Dao
 interface TransactionsBscDao {
     @Insert
     fun insertTransaction(transactionBsc: TransactionsBsc)

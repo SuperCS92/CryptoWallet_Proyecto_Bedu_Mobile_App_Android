@@ -146,6 +146,29 @@
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                app:boxBackgroundColor="@color/white"
+                android:id="@+id/textInputSeedPhrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="@string/seedPhrase"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
+                tools:layout_editor_absoluteX="0dp"
+                app:helperTextEnabled="true"
+                app:helperText="@string/helper_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/seedphrase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_seed"
+                    android:drawableRight="@drawable/ic_seed"
+                    tools:targetApi="jelly_bean"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <ProgressBar
                 android:id="@+id/progress"
@@ -154,24 +177,36 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputSeedPhrase" />
+
+
+            <Button
+                android:id="@+id/buttongenerateSeed"
+                style="?attr/materialButtonOutlinedStyle"
+                app:icon="@drawable/ic_seed"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/generateSeed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progress" />
 
             <Button
                 android:id="@+id/buttonSignUp"
                 android:backgroundTint="@color/primaryColor"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:text="@string/signup"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progress" />
+                app:layout_constraintTop_toBottomOf="@+id/buttongenerateSeed" />
 
             <TextView
                 android:id="@+id/loginText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/loginhere"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

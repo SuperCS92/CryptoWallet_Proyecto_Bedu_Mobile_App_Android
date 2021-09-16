@@ -22,6 +22,19 @@
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_index.xml" value="0.16302083333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_index_round.xml" value="0.16302083333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.14635416666666667" />
+        <entry key="app/src/main/res/drawable/ic_password.xml" value="0.2484375" />
+        <entry key="app/src/main/res/drawable/ic_qr_code_scanner_24.xml" value="0.2484375" />
+        <entry key="app/src/main/res/drawable/ic_seed.xml" value="0.2484375" />
+        <entry key="app/src/main/res/drawable/ic_user.xml" value="0.2484375" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.23229166666666667" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.23229166666666667" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.12545289855072464" />
+        <entry key="app/src/main/res/layout/fragment_receive.xml" value="0.1286231884057971" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_seed_phrase.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/nav_header.xml" value="0.23229166666666667" />
+        <entry key="app/src/main/res/menu/astr_toolbar_menu.xml" value="0.21822916666666667" />
+        <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.335" />
       </map>
     </option>
   </component>

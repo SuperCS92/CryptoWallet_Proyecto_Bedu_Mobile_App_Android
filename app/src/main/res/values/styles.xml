@@ -38,4 +38,9 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
 
     </style>
+    
+    <style name="Theme.Astr.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

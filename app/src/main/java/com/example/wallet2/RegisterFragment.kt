@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.app.Application
+import android.text.Editable
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,11 +37,13 @@ class RegisterFragment : Fragment() {
 
     private lateinit var logInBtn: TextView
     private lateinit var registerBtn: Button
+    private lateinit var generateSeedBtn: Button
 
     private lateinit var fullname: EditText
     private lateinit var email: EditText
     private lateinit var username: EditText
     private lateinit var password: EditText
+    private lateinit var seed: EditText
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -68,9 +71,15 @@ class RegisterFragment : Fragment() {
         email = view.findViewById(R.id.email)
         username = view.findViewById(R.id.username)
         password = view.findViewById(R.id.password)
+        seed = view.findViewById(R.id.seedphrase)
 
         logInBtn = view.findViewById(R.id.loginText)
         registerBtn = view.findViewById(R.id.buttonSignUp)
+        generateSeedBtn = view.findViewById(R.id.buttongenerateSeed)
+
+        generateSeedBtn.setOnClickListener {
+            seed.setText(generateSeed())
+        }
 
         registerBtn.setOnClickListener {
             saveData()
@@ -103,15 +112,24 @@ class RegisterFragment : Fragment() {
         var correo = email.text.trim().toString()
         var usuario = username.text.trim().toString()
         var pass = password.text.trim().toString()
+        var seed = seed.text.trim().toString()
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pass)) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(seed)) {
             Toast.makeText(requireContext(), "Please enter valid details", Toast.LENGTH_LONG).show()
         } else {
 
-            var person = User(0, fullname = name, email = correo, username = usuario, password = pass)
+            var person = User(0, fullname = name, email = correo, username = usuario, password = pass, seed = seed)
             viewModel?.saveDataIntoDb(person)
             Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun generateSeed(): String{
+        var seed:String = ""
+
+        seed = "This is a seed test"
+
+        return seed
     }
 
 

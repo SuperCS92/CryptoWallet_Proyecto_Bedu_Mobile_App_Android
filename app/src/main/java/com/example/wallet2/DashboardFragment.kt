@@ -1,13 +1,17 @@
 package com.example.wallet2
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +25,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class DashboardFragment : Fragment() {
 
+    private lateinit var navigation_view: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
     private lateinit var balance:TextView
     private lateinit var send_button:Button
     private lateinit var receive_button:Button
@@ -58,6 +64,9 @@ class DashboardFragment : Fragment() {
 
         //toolbar
         (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
+
+        drawerLayout = view.findViewById(R.id.drawer_layout)
+        navigation_view = view.findViewById(R.id.nav_view)
 
         //Setting up buttons and textviews
         balance = view.findViewById(R.id.balance)
@@ -101,10 +110,25 @@ class DashboardFragment : Fragment() {
             setUpRecyclerView()
         }
 
+        navigation_view.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_seed -> { val SeedPhraseFragment = SeedPhraseFragment()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
+                    transaction.replace(R.id.fragment_container, SeedPhraseFragment)
+                    transaction.commit()
+                }
+            }
+            true
+        }
 
 
         return view
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.astr_toolbar_menu, menu)

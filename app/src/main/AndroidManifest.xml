@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity" />
+            android:name=".MainActivity"
+            android:theme="@style/Theme.Astr.NoActionBar"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
