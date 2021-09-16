@@ -1,13 +1,16 @@
 package com.example.wallet2
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +46,7 @@ class DashboardFragment : Fragment() {
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
 
         //MDC-102
@@ -63,9 +67,12 @@ class DashboardFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
         //toolbar
-        (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
+//        (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
 
         drawerLayout = view.findViewById(R.id.drawer_layout)
+        val toolbar: Toolbar = view.findViewById(R.id.app_bar) as Toolbar
+        (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
+        ActionBarDrawerToggle(view.context as Activity?,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
         navigation_view = view.findViewById(R.id.nav_view)
 
         //Setting up buttons and textviews

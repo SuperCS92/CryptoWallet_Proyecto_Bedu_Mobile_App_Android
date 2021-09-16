@@ -90,6 +90,10 @@
     <string name="astr_show_false"> Hide</string>
 
 
+    <string name="open_drawer"> Abrir</string>
+    <string name="close_drawer"> Cerrar</string>
+
+
     <!--    Strings related to splash screen-->
     <string name="astr_splash_copyright"> Made by Team 7 \nBedu</string>
 
