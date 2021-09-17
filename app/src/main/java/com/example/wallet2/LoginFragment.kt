@@ -1,5 +1,7 @@
 package com.example.wallet2
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -12,9 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.example.wallet2.data.UserViewModel
-import com.example.wallet2.data.models.User
 import com.example.wallet2.data.userDb
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +39,7 @@ class LoginFragment : Fragment() {
     private lateinit var password_text: EditText
     private lateinit var password_layout: TextInputLayout
     private lateinit var signUpBtn: TextView
+    private lateinit var preferences: SharedPreferences
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -50,6 +51,7 @@ class LoginFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        preferences = requireActivity().getSharedPreferences("pref", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -125,7 +127,8 @@ class LoginFragment : Fragment() {
             CoroutineScope(IO).launch {
                 val dataBaseInstance = userDb.getDatabasenIstance(requireContext())
                 val query = dataBaseInstance.personDataDao().getUser(usuario, pass)
-
+                setValues()
+                saveValues(query.username, query.email)
                 if (query == null || query.equals(null)){
                     flag = false
                 }else{
@@ -163,5 +166,18 @@ class LoginFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun saveValues(username: String, email: String) {
+
+        preferences.edit()
+            .putString("USERNAME", username)
+            .putString("EMAIL", email)
+            .apply()
+    }
+
+    private fun setValues() {
+        preferences.getString("USERNAME", "")
+        preferences.getString("EMAIL", "")
     }
 }
