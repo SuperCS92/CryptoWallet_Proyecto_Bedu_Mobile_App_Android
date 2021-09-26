@@ -3,8 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/activity_splash.xml" value="0.1358695652173913" />
+        <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_asset.xml" value="0.20520833333333333" />
+        <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_dashboard.xml" value="0.20520833333333333" />
         <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_login.xml" value="0.2604166666666667" />
         <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_register.xml" value="0.25" />
+        <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/nav_header.xml" value="0.20520833333333333" />
+        <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/menu/astr_toolbar_menu.xml" value="0.20520833333333333" />
+        <entry key="..\:/Crypto/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/menu/drawer_menu.xml" value="0.20520833333333333" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/drawable/gradient.xml" value="0.16302083333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/drawable/splash_background.xml" value="0.16302083333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/activity_main.xml" value="0.13020833333333334" />

@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,6 +85,9 @@ class DashboardFragment : Fragment() {
         usernameAppbar = header.findViewById(R.id.userNameAppbar)
         emailAppbar = header.findViewById(R.id.emailAppbar)
 
+        val user = FirebaseAuth.getInstance().currentUser
+        val mAuth = FirebaseAuth.getInstance()
+
         //Setting up buttons and textviews
         balance = view.findViewById(R.id.balance)
         send_button = view.findViewById(R.id.send)
@@ -97,7 +101,7 @@ class DashboardFragment : Fragment() {
 
         balance.text = "$" + getTotalBalance(getContacts()).toString()
         usernameAppbar.text = preferences.getString("USERNAME", "")
-        emailAppbar.text = preferences.getString("EMAIL", "")
+        emailAppbar.text = user?.email.toString()
 
         send_button.setOnClickListener {
             val sendFragment = SendFragment()
@@ -136,6 +140,15 @@ class DashboardFragment : Fragment() {
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
+                    transaction.commit()
+                }
+                R.id.logout -> {
+                    mAuth!!.signOut()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
+                    transaction.replace(R.id.fragment_container, LoginFragment())
                     transaction.commit()
                 }
             }

@@ -9,5 +9,10 @@
             android:title="Seedphrase"
             android:iconTint="@color/darkgrey"
             />
+        <item android:id="@+id/logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout"
+            android:iconTint="@color/darkgrey"
+            />
     </group>
 </menu>
