@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.userDb
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class LoginFragment : Fragment() {
+
     private var viewModel: UserViewModel? = null
 
     private lateinit var next_button: Button
@@ -46,6 +48,7 @@ class LoginFragment : Fragment() {
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
