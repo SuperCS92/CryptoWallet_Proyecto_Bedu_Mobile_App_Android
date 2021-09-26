@@ -25,6 +25,10 @@ import kotlinx.coroutines.launch
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+const val PREF_NAME = "PREF_NAME"
+const val USERNAME = "USERNAME"
+const val EMAIL = "EMAIL"
+const val IS_LOGGED = "IS_LOGGED"
 
 /**
  * A simple [Fragment] subclass.
@@ -51,7 +55,7 @@ class LoginFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        preferences = requireActivity().getSharedPreferences("pref", Context.MODE_PRIVATE)
+        preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -128,12 +132,12 @@ class LoginFragment : Fragment() {
                 val dataBaseInstance = userDb.getDatabasenIstance(requireContext())
                 val query = dataBaseInstance.personDataDao().getUser(usuario, pass)
                 setValues()
-                saveValues(query.username, query.email)
                 if (query == null || query.equals(null)){
                     flag = false
                 }else{
                     flag = true
                 }
+                saveValues(query.username, query.email, flag)
             }
         }
         Thread.sleep(1500)
@@ -168,16 +172,17 @@ class LoginFragment : Fragment() {
             }
     }
 
-    private fun saveValues(username: String, email: String) {
+    private fun saveValues(username: String, email: String, flag: Boolean) {
 
         preferences.edit()
-            .putString("USERNAME", username)
-            .putString("EMAIL", email)
+            .putString(USERNAME, username)
+            .putString(EMAIL, email)
+            .putBoolean(IS_LOGGED, flag)
             .apply()
     }
 
     private fun setValues() {
-        preferences.getString("USERNAME", "")
-        preferences.getString("EMAIL", "")
+        preferences.getString(USERNAME, "")
+        preferences.getString(EMAIL, "")
     }
 }

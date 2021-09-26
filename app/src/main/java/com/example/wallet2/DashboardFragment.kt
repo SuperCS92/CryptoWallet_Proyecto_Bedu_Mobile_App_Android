@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -61,7 +62,7 @@ class DashboardFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        preferences = requireActivity().getSharedPreferences("pref", Context.MODE_PRIVATE)
+        preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -96,8 +97,8 @@ class DashboardFragment : Fragment() {
         setUpRecyclerView()
 
         balance.text = "$" + getTotalBalance(getContacts()).toString()
-        usernameAppbar.text = preferences.getString("USERNAME", "")
-        emailAppbar.text = preferences.getString("EMAIL", "")
+        usernameAppbar.text = preferences.getString(USERNAME, "")
+        emailAppbar.text = preferences.getString(EMAIL, "")
 
         send_button.setOnClickListener {
             val sendFragment = SendFragment()
@@ -136,6 +137,17 @@ class DashboardFragment : Fragment() {
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
+                    transaction.commit()
+                }
+                R.id.log_out -> {
+                    preferences.edit()
+                        .putBoolean(IS_LOGGED, false)
+                        .apply()
+                    val loginFragment = LoginFragment()
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.setCustomAnimations(R.animator.slide_up, 0, 0, R.animator.slide_down)
+                    transaction.replace(R.id.fragment_container, loginFragment)
                     transaction.commit()
                 }
             }

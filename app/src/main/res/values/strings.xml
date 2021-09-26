@@ -90,8 +90,12 @@
     <string name="astr_show_false"> Hide</string>
 
 
-    <string name="open_drawer"> Abrir</string>
-    <string name="close_drawer"> Cerrar</string>
+    <!--    Appbar options-->
+    <string name="open_drawer">Abrir</string>
+    <string name="close_drawer">Cerrar</string>
+
+
+    <string name="log_out_txt">Log Out</string>
 
 
     <!--    Strings related to splash screen-->
