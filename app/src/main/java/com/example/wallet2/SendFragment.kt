@@ -1,6 +1,9 @@
 package com.example.wallet2
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -9,10 +12,14 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.wallet2.databinding.FragmentSendBinding
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
@@ -50,6 +57,13 @@ class SendFragment : Fragment() {
     private lateinit var next_button: MaterialButton
     private lateinit var qrscan_button: MaterialButton
 
+    private lateinit var header: View
+    private lateinit var navigation_view: NavigationView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var usernameAppbar: TextView
+    private lateinit var emailAppbar: TextView
+    private lateinit var preferences: SharedPreferences
+
     //This boolean is used to check wether the amount should be displaced
     //on criptocurrency or in fiat currency {true= crypto / false= fiat}
     var amount_currency = true
@@ -69,6 +83,7 @@ class SendFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -76,6 +91,43 @@ class SendFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_send, container, false)
+
+        drawerLayout = view.findViewById(R.id.drawer_layout)
+        val toolbar: Toolbar = view.findViewById(R.id.app_bar) as Toolbar
+        (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
+        ActionBarDrawerToggle(view.context as Activity?,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
+        navigation_view = view.findViewById(R.id.nav_view)
+        header = navigation_view.getHeaderView(0)
+        usernameAppbar = header.findViewById(R.id.userNameAppbar)
+        emailAppbar = header.findViewById(R.id.emailAppbar)
+
+        usernameAppbar.text = preferences.getString(USERNAME, "")
+        emailAppbar.text = preferences.getString(EMAIL, "")
+
+        navigation_view.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_seed -> { val SeedPhraseFragment = SeedPhraseFragment()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
+                    transaction.replace(R.id.fragment_container, SeedPhraseFragment)
+                    transaction.commit()
+                }
+                R.id.log_out -> {
+                    preferences.edit()
+                        .putBoolean(IS_LOGGED, false)
+                        .apply()
+                    val loginFragment = LoginFragment()
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.setCustomAnimations(R.animator.slide_up, 0, 0, R.animator.slide_down)
+                    transaction.replace(R.id.fragment_container, loginFragment)
+                    transaction.commit()
+                }
+            }
+            true
+        }
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_send)
         val assetText = view.findViewById<AutoCompleteTextView>(R.id.assetText)
@@ -172,7 +224,7 @@ class SendFragment : Fragment() {
 
 
         //toolbar
-        (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
+//        (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
 
         //Logic to convert value entered in amount text field from cripto to fiat and viceversa
         amount_textField.setEndIconOnClickListener{
