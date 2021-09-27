@@ -7,7 +7,7 @@
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="120dp"
         android:layout_height="120dp"
-        app:lottie_fileName="av_loading.json"
+        app:lottie_fileName="67013-astronaut.json"
         app:lottie_loop="true"
         app:lottie_autoPlay="true"
         app:layout_constraintStart_toStartOf="parent"

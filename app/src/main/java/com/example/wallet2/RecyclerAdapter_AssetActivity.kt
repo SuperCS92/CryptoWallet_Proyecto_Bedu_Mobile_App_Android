@@ -71,7 +71,6 @@ class RecyclerAdapter_AssetActivity(
             //Gestionando los eventos e interacciones con la vista
             itemView.setOnClickListener{
                 val position: Int = adapterPosition
-                Log.d("hey", "tocaste $position")
                 showLoading()
                 android.os.Handler().postDelayed({hideLoading()},3000)
 

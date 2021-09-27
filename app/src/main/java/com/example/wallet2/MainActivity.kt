@@ -4,19 +4,60 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.widget.Toolbar
+import android.widget.Toast
+
+
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+
+    var handler: Handler? = null
+    var r: Runnable? = null
 
     private lateinit var preferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        handler = Handler()
+        r = Runnable {
+            Toast.makeText(
+                this@MainActivity,
+                "Logging out because of inactivity of the user",
+                Toast.LENGTH_SHORT
+            ).show()
+            preferences.edit()
+                .putBoolean(IS_LOGGED, false)
+                .apply()
+            val loginFragment = LoginFragment()
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, loginFragment)
+                .commit()
+        }
+        startHandler()
 
 
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        stopHandler() //stop first and then start
+        startHandler()
+    }
+
+    fun stopHandler() {
+        handler!!.removeCallbacks(r!!)
+    }
+
+    fun startHandler() {
+        // After 20 minutes of inactivity the app is going to close
+        handler!!.postDelayed(r!!, (20 * 60 * 1000).toLong()) //for 20 minutes
     }
 
     private fun goToLogin() {
