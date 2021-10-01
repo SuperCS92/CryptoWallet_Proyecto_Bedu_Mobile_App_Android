@@ -1,34 +1,25 @@
 package com.example.wallet2
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
+import android.os.Handler
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.wallet2.databinding.FragmentSendBinding
+import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
-import com.google.zxing.BinaryBitmap
-import com.google.zxing.MultiFormatReader
-import com.google.zxing.NotFoundException
-import com.google.zxing.RGBLuminanceSource
-import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.integration.android.IntentIntegrator
-import java.io.FileNotFoundException
-import java.io.InputStream
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,6 +39,8 @@ class SendFragment : Fragment() {
     val itemsprice= listOf(39249.40, 2681.89, 330.14)
 
 
+    private lateinit var textInputLayout: TextInputLayout
+    private lateinit var assetText: AutoCompleteTextView
     private lateinit var amount_textField: TextInputLayout
     private lateinit var amount_value: EditText
     private lateinit var address_textField: TextInputLayout
@@ -129,8 +122,8 @@ class SendFragment : Fragment() {
             true
         }
 
-        val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_send)
-        val assetText = view.findViewById<AutoCompleteTextView>(R.id.assetText)
+        textInputLayout = view.findViewById(R.id.asset_send)
+        assetText = view.findViewById(R.id.assetText)
         amount_value = view.findViewById(R.id.amount_value)            //--------EdiText
         amount_textField = view.findViewById(R.id.amount_textField)
         address_textField = view.findViewById(R.id.address_input_Layout)
@@ -144,7 +137,18 @@ class SendFragment : Fragment() {
         (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         qrscan_button.setOnClickListener{
-            setUpQRCode()
+            val builder = AlertDialog.Builder(requireActivity())
+            builder.setTitle("Import data from a QR code")
+            builder.setMessage("Choose an option to scan the QR code")
+            // Read QR from camera
+            builder.setPositiveButton("Camera", { dialogInterface: DialogInterface, i: Int ->
+                setUpQRCode()
+            })
+            //Read QR from gallery
+            builder.setNegativeButton("Gallery", { dialogInterface: DialogInterface, i: Int ->
+
+            })
+            builder.show()
         }
 
         amount_value.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -354,12 +358,13 @@ class SendFragment : Fragment() {
        val confirmationDialog = ConfirmationDialog(asset, amount, address).show(parentFragmentManager, "Confirmation Dialog")
     }
 
+    // Scanner settings
     private fun setUpQRCode(){
         IntentIntegrator(requireActivity())
-            .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE) //Selección del tipo de código a scanear
-            .setTorchEnabled(false) //flash
-            .setBeepEnabled(true)   //sonido al escanear
-            .setPrompt("Scan QR Code")  //Mensaje que aparece al abrir el scaner
+            .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE) // Selecting the type of code to scan
+            .setTorchEnabled(false) // Flash enabled / disabled
+            .setBeepEnabled(true)   // Sound activated when scanning
+            .setPrompt("Scan the QR Code please")  // Message that appears when scanning
             .initiateScan()
     }
 
@@ -409,13 +414,15 @@ class SendFragment : Fragment() {
 
                 if (result != null){
                     if (result.contents == null) {
-                        Toast.makeText(requireContext(), "Escaneo cancelado", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Scan Canceled", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(requireContext(), "El escaneo se ha realizado con éxito", Toast.LENGTH_LONG).show()
-                        //val resultado = result.contents
-                        //val output: List<String> = resultado.split("\n")
-                        //name.text = output[0]
-                        //password.text = output[1]
+                        Toast.makeText(requireContext(), "Scan Successful", Toast.LENGTH_LONG).show()
+                        // We write the scan results in the text fields
+                        val resultado = result.contents
+                        val output: List<String> = resultado.split("\n")
+                        amount_value.setText(output[0])
+                        assetText.setText(output[1])
+                        address_value.setText(output[2])
                     }
                 }else{
                     super.onActivityResult(requestCode, resultCode, data)

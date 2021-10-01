@@ -1,15 +1,12 @@
 package com.example.wallet2
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import android.widget.Toolbar
 import android.widget.Toast
-
-
+import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //goToDashboard()
         preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         handler = Handler()
         r = Runnable {
@@ -91,5 +89,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun isLogged(): Boolean {
         return preferences.getBoolean(IS_LOGGED, false)
+    }
+
+    // Overwrite this method in order to get the context of each fragment (used in QR scanner)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        for (fragment in supportFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
     }
 }
