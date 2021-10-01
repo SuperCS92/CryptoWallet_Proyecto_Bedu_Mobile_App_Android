@@ -5,6 +5,8 @@ import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
 import android.os.Handler
 import android.view.*
 import android.widget.AutoCompleteTextView
@@ -48,6 +50,10 @@ class ReceiveFragment : Fragment() {
     private lateinit var qrImage: ImageView
     private lateinit var assetText: AutoCompleteTextView
 
+    private val width = 1000
+    private val height = 1000
+    private val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -68,6 +74,7 @@ class ReceiveFragment : Fragment() {
         val qrgenerate_button = view.findViewById<MaterialButton>(R.id.qrGenerateBtn)
         val copy_button = view.findViewById<MaterialButton>(R.id.astr_transaction_copy_btn)
         val share_button = view.findViewById<MaterialButton>(R.id.astr_transaction_share_btn)
+        val download_button = view.findViewById<MaterialButton>(R.id.astr_transaction_download_btn)
         amount_value = view.findViewById(R.id.amountToSend_value)
         qrImage = view.findViewById(R.id.imageView2)
 
@@ -97,10 +104,15 @@ class ReceiveFragment : Fragment() {
                 qrgenerate_button.isVisible = false
                 copy_button.isVisible = true
                 share_button.isVisible = true
+                download_button.isVisible = true
                 amount_value.isEnabled = false
                 textInputLayout.isEnabled = false
-                Toast.makeText(requireContext(), "QR code has been created successfully", Toast.LENGTH_LONG).show()
             }
+        }
+
+        // Download the QR Code
+        download_button.setOnClickListener{
+            downloadQR()
         }
 
         // Inflate the layout for this fragment
@@ -144,13 +156,8 @@ class ReceiveFragment : Fragment() {
     }
 
     private fun createQR(){
-        //val amount = amount_value.text.toString()
-        //var crypto = assetText.text.toString()
         val text = amount_value.text.toString() + '\n' + assetText.text.toString() + '\n' + "DesarrolloMovil@bedu.org"
         if (text.isNotBlank()){
-            val width = 500
-            val height = 500
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val codeWriter = MultiFormatWriter()
             try{
                 val bitMatrix = codeWriter.encode(text, BarcodeFormat.QR_CODE, width, height)
@@ -160,24 +167,26 @@ class ReceiveFragment : Fragment() {
                     }
                 }
                 qrImage.setImageBitmap(bitmap)
-                /*
-                // Creacion del archivo
-                try {
-                    val filename = "pippo.jpg"
-                    //val sd = Environment.getExternalStorageDirectory()
-                    val file = File(externalMediaDirs.first(), filename)
-                    val out = FileOutputStream(file)
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
-                    out.flush()
-                    out.close()
-                    Toast.makeText(context, "¡Imagen guardada!: ${file.absolutePath}", Toast.LENGTH_LONG).show()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                Toast.makeText(this, "QR generado exitosamente", Toast.LENGTH_LONG).show()*/
+                Toast.makeText(requireContext(), "QR code has been created successfully", Toast.LENGTH_LONG).show()
             } catch (e: WriterException) {
-                Toast.makeText(requireContext(), "Error al escribir el QR", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Error writing the QR code", Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun downloadQR(){
+        // Download the QR code in Gallery
+        try {
+            val filename = "QR_wallet.jpg"
+            val file = File(requireContext().externalMediaDirs.first(), filename)
+            val out = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
+            out.flush()
+            out.close()
+            Toast.makeText(requireContext(), "Image saved in gallery!: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "Error saving the image in gallery", Toast.LENGTH_LONG).show()
         }
     }
 

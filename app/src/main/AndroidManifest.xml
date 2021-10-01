@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.wallet2">
-
-    // Permisos para acceso a la Cámara, lectura y escritura del QR y
-    // escribir en el almacenamiento externo
+    // Permissions for access to the Camera, reading and writing QR codes and
+    // write to external storage
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
