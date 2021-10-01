@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.ui.dashboard
 
 import android.app.Activity
 import android.content.Context
@@ -13,8 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wallet2.*
+import com.example.wallet2.ui.SeedPhraseFragment
 import com.google.android.material.navigation.NavigationView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,6 +48,8 @@ class DashboardFragment : Fragment() {
     private lateinit var usernameAppbar: TextView
     private lateinit var emailAppbar: TextView
     private lateinit var preferences: SharedPreferences
+
+    private val viewModel = DashboardViewModel()
 
 
     // TODO: Rename and change types of parameters
@@ -154,6 +159,18 @@ class DashboardFragment : Fragment() {
             true
         }
 
+        viewModel.assets.observe(viewLifecycleOwner, Observer {
+            if(asset_button.isActivated){
+                setUpRecyclerView()
+            }
+        })
+
+        viewModel.activities.observe(viewLifecycleOwner, Observer {
+            if(activity_button.isActivated){
+                setUpRecyclerView_Activity()
+            }
+        })
+
 
         return view
     }
@@ -191,7 +208,7 @@ class DashboardFragment : Fragment() {
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
         //seteando el Adapter
-        mAdapter = RecyclerAdapter(context,getContacts())
+        mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
         //asignando el Adapter al RecyclerView
         recyclerContacts.adapter = mAdapter
     }
@@ -202,7 +219,7 @@ class DashboardFragment : Fragment() {
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
         //seteando el Adapter
-        mAdapter_activity = RecyclerAdapter_AssetActivity( context,assets)
+        mAdapter_activity = RecyclerAdapter_AssetActivity( context, viewModel.activities.value!!)
         //asignando el Adapter al RecyclerView
         recyclerContacts.adapter = mAdapter_activity
     }

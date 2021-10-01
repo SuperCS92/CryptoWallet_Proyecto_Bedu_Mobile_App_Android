@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.example.wallet2.R
+import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.google.android.material.button.MaterialButton
 
 // TODO: Rename parameter arguments, choose names that match
