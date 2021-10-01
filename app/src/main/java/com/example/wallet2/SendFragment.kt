@@ -6,8 +6,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -19,7 +23,14 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.NotFoundException
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.integration.android.IntentIntegrator
+import java.io.FileNotFoundException
+import java.io.InputStream
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -146,7 +157,7 @@ class SendFragment : Fragment() {
             })
             //Read QR from gallery
             builder.setNegativeButton("Gallery", { dialogInterface: DialogInterface, i: Int ->
-
+                readImage()
             })
             builder.show()
         }
@@ -368,23 +379,27 @@ class SendFragment : Fragment() {
             .initiateScan()
     }
 
+    private fun readImage(){
+        val pickIntent = Intent(Intent.ACTION_PICK)
+        pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        //SendFragment().startActivityForResult(pickIntent, 111)
+        startActivityForResult(pickIntent, 111)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         //super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            111 -> {}
-                /*if (data == null || data.data == null) {
-                    Log.e(
-                        "TAG",
-                        "The uri is null, probably the user cancelled the image selection process using the back button."
-                    )
+            111 -> {
+                if (data == null || data.data == null) {
+                    Toast.makeText(requireContext(), "Data import was canceled", Toast.LENGTH_SHORT).show()
                     return
                 }
                 val uri: Uri = data.data!!
                 try {
-                    val inputStream: InputStream? = openInputStream(uri)
+                    val inputStream: InputStream? = activity?.contentResolver?.openInputStream(uri)
                     var bitmap = BitmapFactory.decodeStream(inputStream)
                     if (bitmap == null) {
-                        Log.e("TAG", "uri is not a bitmap," + uri.toString())
+                        Toast.makeText(requireContext(), "Image format is not supported", Toast.LENGTH_SHORT).show()
                         return
                     }
                     val width = bitmap.width
@@ -396,27 +411,30 @@ class SendFragment : Fragment() {
                     val bBitmap = BinaryBitmap(HybridBinarizer(source))
                     val reader = MultiFormatReader()
                     try {
-                        //val result = reader.decode(bBitmap)
-                        //Toast.makeText(this, "The content of the QR image is: " + result.getText(), Toast.LENGTH_SHORT).show()
-                        //val output: List<String> = result.getText().split("\n")
-                        Toast.makeText(requireActivity(), "Lectura realizada con éxito", Toast.LENGTH_SHORT).show()
-                        //name.text = output[0]
-                        //password.text = output[1]
+                        val result = reader.decode(bBitmap)
+                        val output: List<String> = result.getText().split("\n")
+                        // We write the scan results in the text fields
+                        amount_value.setText(output[0])
+                        assetText.setText(output[1])
+                        address_value.setText(output[2])
+                        Toast.makeText(requireContext(), "Data import was successful", Toast.LENGTH_SHORT).show()
                     } catch (e: NotFoundException) {
                         Log.e("TAG", "decode exception", e)
+                        Toast.makeText(requireContext(), "Data import was not successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Please verify you are reading a QR code", Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: FileNotFoundException) {
                     Log.e("TAG", "can not open file" + uri.toString(), e)
                 }
-            }*/
+            }
             else -> {
                 val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
                 if (result != null){
                     if (result.contents == null) {
-                        Toast.makeText(requireContext(), "Scan Canceled", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Scan was canceled", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(requireContext(), "Scan Successful", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Scan was successful", Toast.LENGTH_LONG).show()
                         // We write the scan results in the text fields
                         val resultado = result.contents
                         val output: List<String> = resultado.split("\n")
