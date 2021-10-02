@@ -120,6 +120,7 @@ class SendFragment : Fragment() {
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
                     transaction.commit()
                 }
+                /*
                 R.id.log_out -> {
                     preferences.edit()
                         .putBoolean(IS_LOGGED, false)
@@ -131,6 +132,7 @@ class SendFragment : Fragment() {
                     transaction.replace(R.id.fragment_container, loginFragment)
                     transaction.commit()
                 }
+                 */
             }
             true
         }

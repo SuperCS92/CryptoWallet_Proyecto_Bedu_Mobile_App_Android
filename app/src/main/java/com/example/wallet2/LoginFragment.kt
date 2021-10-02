@@ -1,10 +1,13 @@
 package com.example.wallet2
 
+import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +21,7 @@ import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.userDb
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -37,10 +41,13 @@ const val IS_LOGGED = "IS_LOGGED"
  * create an instance of this fragment.
  */
 class LoginFragment : Fragment() {
+
+    private lateinit var auth: FirebaseAuth
+
     private var viewModel: UserViewModel? = null
 
     private lateinit var next_button: Button
-    private lateinit var username: EditText
+    private lateinit var email: EditText
     private lateinit var password_text: EditText
     private lateinit var password_layout: TextInputLayout
     private lateinit var signUpBtn: TextView
@@ -51,6 +58,7 @@ class LoginFragment : Fragment() {
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -66,12 +74,15 @@ class LoginFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        var dataBaseInstance = userDb.getDatabasenIstance(requireContext())
+        val dataBaseInstance = userDb.getDatabasenIstance(requireContext())
         viewModel?.setInstanceOfDb(dataBaseInstance)
+
+        //Firebase
+        auth = FirebaseAuth.getInstance()
 
         next_button = view.findViewById(R.id.next_button)
         password_text = view.findViewById(R.id.password_edit_text)
-        username = view.findViewById(R.id.username)
+        email = view.findViewById(R.id.email)
         password_layout = view.findViewById(R.id.password_text_input)
         signUpBtn = view.findViewById(R.id.signUpText)
 
@@ -90,10 +101,13 @@ class LoginFragment : Fragment() {
             if (!isPasswordValid(password_text.text)) {
                 password_layout.error = getString(R.string.astr_error_password)
             } else {
-                val init = log()
+                signInUser(email.text.trim().toString(), password_text.text.trim().toString())
+
+                //val init = log()
                 //Toast.makeText(requireContext(), "Welcome", Toast.LENGTH_LONG).show()
 
-                if(init == true){
+                    /*
+                if(init){
                     Toast.makeText(requireContext(), "Welcome", Toast.LENGTH_LONG).show()
                     val dashboardFragment = DashboardFragment()
 
@@ -104,6 +118,7 @@ class LoginFragment : Fragment() {
                 }else{
                     Toast.makeText(requireContext(), "Try again", Toast.LENGTH_LONG).show()
                 }
+                     */
             }
         }
 
@@ -118,12 +133,52 @@ class LoginFragment : Fragment() {
         return view
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            val dashboardFragment = DashboardFragment()
+
+            val fragmentManager = parentFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, dashboardFragment)
+            transaction.commit()
+        }
+    }
+
+    fun signInUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener((context as Activity?)!!) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+                    //val user = auth.currentUser
+
+                    val dashboardFragment = DashboardFragment()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragment_container, dashboardFragment)
+                    transaction.commit()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        requireContext(), "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+
     private fun log(): Boolean {
 
         var flag = false
 
-        var usuario = username.text.trim().toString()
-        var pass = password_text.text.trim().toString()
+        val usuario = email.text.trim().toString()
+        val pass = password_text.text.trim().toString()
 
         if (TextUtils.isEmpty(usuario) || TextUtils.isEmpty(pass)) {
             Toast.makeText(requireContext(), "Please enter valid details", Toast.LENGTH_LONG).show()
@@ -132,13 +187,12 @@ class LoginFragment : Fragment() {
             CoroutineScope(IO).launch {
                 val dataBaseInstance = userDb.getDatabasenIstance(requireContext())
                 val query = dataBaseInstance.personDataDao().getUser(usuario, pass)
-                setValues()
-                if (query == null || query.equals(null)){
-                    flag = false
-                }else{
+                //setValues()
+                //saveValues(query.username, query.email)
+                if (query != null || !query.equals(null)){
                     flag = true
                 }
-                saveValues(query.username, query.email, flag)
+                //saveValues(query.username)
             }
         }
         Thread.sleep(1500)
@@ -150,7 +204,7 @@ class LoginFragment : Fragment() {
        authentication of the username and password.
     */
     private fun isPasswordValid(text: Editable?): Boolean {
-        return text != null && text.length >= 8
+        return text != null && text.length >= 1
     }
 
     companion object {
@@ -173,17 +227,17 @@ class LoginFragment : Fragment() {
             }
     }
 
-    private fun saveValues(username: String, email: String, flag: Boolean) {
+    /*
+    private fun saveValues(username: String) {
 
         preferences.edit()
-            .putString(USERNAME, username)
-            .putString(EMAIL, email)
-            .putBoolean(IS_LOGGED, flag)
+            .putString("USERNAME", username)
             .apply()
     }
 
     private fun setValues() {
-        preferences.getString(USERNAME, "")
-        preferences.getString(EMAIL, "")
+        preferences.getString("USERNAME", "")
     }
+     */
+
 }

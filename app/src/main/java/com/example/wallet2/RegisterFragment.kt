@@ -1,26 +1,24 @@
 package com.example.wallet2
 
+import android.app.Activity
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.app.Application
-import android.text.Editable
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.models.User
 import com.example.wallet2.data.userDb
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +31,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class RegisterFragment : Fragment() {
+
+    private lateinit var auth: FirebaseAuth
+
     private var viewModel: UserViewModel? = null
 
     private lateinit var logInBtn: TextView
@@ -50,6 +51,10 @@ class RegisterFragment : Fragment() {
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
+
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -82,7 +87,11 @@ class RegisterFragment : Fragment() {
         }
 
         registerBtn.setOnClickListener {
-            saveData()
+            //saveData()
+
+            createUser(email.text.trim().toString(), password.text.trim().toString())
+            Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
+
 
             val logInFragment = LoginFragment()
 
@@ -90,6 +99,7 @@ class RegisterFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, logInFragment)
             transaction.commit()
+
         }
 
 
@@ -105,6 +115,22 @@ class RegisterFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return view
+    }
+
+    private fun createUser(email: String, password: String){
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener((context as Activity?)!!) { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(TAG, "signInWithEmail:success")
+                val user = auth.currentUser
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInWithEmail:failure", task.exception)
+                Toast.makeText(requireContext(), "Authentication failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun saveData() {

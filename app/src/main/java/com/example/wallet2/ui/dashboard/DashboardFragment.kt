@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.*
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,7 +68,7 @@ class DashboardFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        //preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -90,6 +91,9 @@ class DashboardFragment : Fragment() {
         usernameAppbar = header.findViewById(R.id.userNameAppbar)
         emailAppbar = header.findViewById(R.id.emailAppbar)
 
+        val user = FirebaseAuth.getInstance().currentUser
+        val mAuth = FirebaseAuth.getInstance()
+
         //Setting up buttons and textviews
         balance = view.findViewById(R.id.balance)
         send_button = view.findViewById(R.id.send)
@@ -103,9 +107,8 @@ class DashboardFragment : Fragment() {
         setUpRecyclerView()
 
         //balance.text = "$" + getTotalBalance(getContacts()).toString()
-        balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
-        usernameAppbar.text = preferences.getString(USERNAME, "")
-        emailAppbar.text = preferences.getString(EMAIL, "")
+        //usernameAppbar.text = preferences.getString(USERNAME, "")
+        emailAppbar.text = user?.email.toString()
 
         send_button.setOnClickListener {
             val sendFragment = SendFragment()
@@ -147,15 +150,13 @@ class DashboardFragment : Fragment() {
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
                     transaction.commit()
                 }
-                R.id.log_out -> {
-                    preferences.edit()
-                        .putBoolean(IS_LOGGED, false)
-                        .apply()
-                    val loginFragment = LoginFragment()
+                R.id.logout -> {
+                    mAuth!!.signOut()
+
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-                    transaction.setCustomAnimations(R.animator.slide_up, 0, 0, R.animator.slide_down)
-                    transaction.replace(R.id.fragment_container, loginFragment)
+                    transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
+                    transaction.replace(R.id.fragment_container, LoginFragment())
                     transaction.commit()
                 }
             }
@@ -211,9 +212,9 @@ class DashboardFragment : Fragment() {
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
         //seteando el Adapter
-        mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
+        //mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
         //asignando el Adapter al RecyclerView
-        recyclerContacts.adapter = mAdapter
+        //recyclerContacts.adapter = mAdapter
     }
 
     //configuramos lo necesario para desplegar el RecyclerView

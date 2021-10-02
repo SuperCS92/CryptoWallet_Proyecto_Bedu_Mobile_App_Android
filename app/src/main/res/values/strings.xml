@@ -22,7 +22,7 @@
     <string name="astr_hint_password">Password</string>
     <string name="astr_button_login">Log in</string>
     <string name="astr_button_cancel">Cancel</string>
-    <string name="astr_error_password">Password must contain at least 8 characters.</string>
+    <string name="astr_error_password">Missing Password.</string>
     <string name="astr_helper_password">Password must contain at least 8 characters.</string>
     <string name="astr_forgotpass"> Forgot password?</string>
 
