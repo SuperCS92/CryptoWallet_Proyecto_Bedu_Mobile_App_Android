@@ -5,6 +5,7 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
+import com.example.wallet2.ui.dashboard.DashboardFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
