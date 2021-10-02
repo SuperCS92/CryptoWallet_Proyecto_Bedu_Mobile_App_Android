@@ -1,28 +1,20 @@
 package com.example.wallet2
 
-import android.app.ProgressDialog
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Environment
-import android.os.Environment.getExternalStorageDirectory
-import android.os.Handler
+import android.util.Log
 import android.view.*
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.wallet2.data.ReceivedTranDb
-import com.example.wallet2.data.ReceivedTranRepository
-import com.example.wallet2.data.ReceivedTranViewModel
+import androidx.lifecycle.ViewModelProviders
+import com.example.wallet2.data.*
 import com.example.wallet2.data.models.ReceivedTran
-import com.example.wallet2.data.userDb
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat
@@ -31,6 +23,9 @@ import com.google.zxing.WriterException
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,8 +71,12 @@ class ReceiveFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_receive, container, false)
 
-//        val receivedTranRepository = ReceivedTranRepository(ReceivedTranDb.getInstance(requireContext()))
-//        viewModel = ReceivedTranViewModel()
+//        val receivedTranRepository = ReceivedTranRepository(ReceivedTranDb.getDatabase(requireContext()).receivedTranDao())
+//        viewModel = ReceivedTranViewModel(receivedTranRepository)
+
+        viewModel = ViewModelProviders.of(this).get(ReceivedTranViewModel::class.java)
+        var dataBaseInstance = ReceivedTranDb.getDatabase(requireContext())
+        viewModel?.setInstanceOfDb(dataBaseInstance)
 
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_transaction)
@@ -111,7 +110,7 @@ class ReceiveFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please enter all required information.\n" +
                         "Amount / Asset field is empty", Toast.LENGTH_LONG).show()
             }else{
-                createQR()
+                createQR(amount_value.text.toString(), assetText.text.toString())
                 qrgenerate_button.isVisible = false
                 copy_button.isVisible = true
                 share_button.isVisible = true
@@ -168,20 +167,23 @@ class ReceiveFragment : Fragment() {
     }
 
     fun saveObject() {
+        val date = getCurrentDateTime()
+        val dateInString = date.toString("yyyy/MM/dd HH:mm:ss")
         val receivedTranInstance = ReceivedTran(
             0,
             amount_value.text.toString().toFloat(),
             1,
             assetText.text.toString(),
-            "",
+            dateInString,
             "",
             "generated"
         )
-        viewModel?.saveReceivedTran(receivedTranInstance)
+//        viewModel?.saveReceivedTran(receivedTranInstance)
+        viewModel?.saveDataIntoDb(receivedTranInstance)
     }
 
-    private fun createQR(){
-        val text = amount_value.text.toString() + '\n' + assetText.text.toString() + '\n' + "DesarrolloMovil@bedu.org"
+    fun createQR(amount: String, asset:String): Boolean {
+        val text = amount + '\n' + asset + '\n' + "DesarrolloMovil@bedu.org"
         if (text.isNotBlank()){
             val codeWriter = MultiFormatWriter()
             try{
@@ -193,10 +195,13 @@ class ReceiveFragment : Fragment() {
                 }
                 qrImage.setImageBitmap(bitmap)
                 Toast.makeText(requireContext(), "QR code has been created successfully", Toast.LENGTH_LONG).show()
+                return true
             } catch (e: WriterException) {
                 Toast.makeText(requireContext(), "Error writing the QR code", Toast.LENGTH_LONG).show()
+                return false
             }
         }
+        return true
     }
 
     private fun downloadQR(){
@@ -213,6 +218,15 @@ class ReceiveFragment : Fragment() {
             e.printStackTrace()
             Toast.makeText(requireContext(), "Error saving the image in gallery", Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
+    }
+
+    fun getCurrentDateTime(): Date {
+        return Calendar.getInstance().time
     }
 
 }

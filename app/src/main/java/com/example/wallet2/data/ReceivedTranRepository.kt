@@ -7,11 +7,6 @@ import kotlinx.coroutines.*
 class ReceivedTranRepository(
     private val receivedTranDao: ReceivedTranDao
 ) {
-
-    fun getReceivedTrans(): LiveData<List<ReceivedTran>> {
-        return receivedTranDao.getReceivedTrans()
-    }
-
     suspend fun addReceivedTran(receivedTran: ReceivedTran) {
         coroutineScope {
             launch{receivedTranDao.insertReceivedTran(receivedTran)}

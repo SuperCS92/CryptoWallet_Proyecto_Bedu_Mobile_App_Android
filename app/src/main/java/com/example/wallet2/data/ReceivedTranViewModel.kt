@@ -1,28 +1,56 @@
 package com.example.wallet2.data
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.room.RoomDatabase
 import com.example.wallet2.data.models.ReceivedTran
-import kotlinx.coroutines.launch
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
-class ReceivedTranViewModel(application: Application): AndroidViewModel(application) {
-    private val repository: ReceivedTranRepository
-    init {
-        val receivedTranDB = ReceivedTranDb.getDatabase(application).receivedTranDao()
-        repository = ReceivedTranRepository(receivedTranDB)
+
+class ReceivedTranViewModel:ViewModel() {
+
+
+    protected val compositeDisposable = CompositeDisposable()
+
+    private var dataBaseInstance: ReceivedTranDb ?= null
+
+    fun setInstanceOfDb(dataBaseInstance: ReceivedTranDb) {
+        this.dataBaseInstance = dataBaseInstance
+    }
+
+    fun saveDataIntoDb(data: ReceivedTran){
+
+        dataBaseInstance?.receivedTranDao()?.insertReceivedTran(data)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe ({
+            },{
+
+            })?.let {
+                compositeDisposable.add(it)
+            }
+    }
+
+    fun updateDataIntoDb(data: ReceivedTran){
+
+        dataBaseInstance?.receivedTranDao()?.updateReceivedTran(data)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe ({
+            },{
+
+            })?.let {
+                compositeDisposable.add(it)
+            }
     }
 
 
-    fun saveReceivedTran(receivedTran: ReceivedTran) =viewModelScope.launch {
-        repository.addReceivedTran(receivedTran)
-//        receivedTranRepository.addReceivedTran(receivedTran)
+    override fun onCleared() {
+        compositeDisposable.dispose()
+        compositeDisposable.clear()
+        super.onCleared()
     }
 
-    fun updateReceivedTran(receivedTran: ReceivedTran) =viewModelScope.launch {
-        repository.updateReceivedTran(receivedTran)
-//        receivedTranRepository.addReceivedTran(receivedTran)
-    }
+
+
 }

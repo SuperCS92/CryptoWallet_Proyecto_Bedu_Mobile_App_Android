@@ -23,7 +23,9 @@ abstract class ReceivedTranDb: RoomDatabase() {
                     context.applicationContext,
                     ReceivedTranDb::class.java,
                     DB_NAME_RTRAN
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 // return instance
                 instance
