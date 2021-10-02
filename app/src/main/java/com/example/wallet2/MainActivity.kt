@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
         startHandler()
-
+        sesionStarted()
 
     }
 
@@ -76,16 +76,13 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-
-    override fun onStart() {
-        super.onStart()
+    private fun sesionStarted(){
         if(isLogged()){
             goToDashboard()
         }
         else{
             goToLogin()
         }
-
     }
 
     private fun isLogged(): Boolean {
