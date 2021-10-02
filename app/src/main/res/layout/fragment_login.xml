@@ -52,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_email"
                 android:drawableRight="@drawable/ic_email"
-                tools:targetApi="jelly_bean" />
+                tools:targetApi="jelly_bean"
+                android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

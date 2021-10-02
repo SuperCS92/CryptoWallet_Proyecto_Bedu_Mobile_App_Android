@@ -204,7 +204,7 @@ class LoginFragment : Fragment() {
        authentication of the username and password.
     */
     private fun isPasswordValid(text: Editable?): Boolean {
-        return text != null && text.length >= 8
+        return text != null && text.length >= 1
     }
 
     companion object {
