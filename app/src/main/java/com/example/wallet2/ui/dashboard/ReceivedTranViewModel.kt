@@ -1,6 +1,7 @@
-package com.example.wallet2.data
+package com.example.wallet2.ui.dashboard
 
 import androidx.lifecycle.ViewModel
+import com.example.wallet2.data.ReceivedTranDb
 import com.example.wallet2.data.models.ReceivedTran
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -12,7 +13,7 @@ class ReceivedTranViewModel:ViewModel() {
 
     protected val compositeDisposable = CompositeDisposable()
 
-    private var dataBaseInstance: ReceivedTranDb ?= null
+    private var dataBaseInstance: ReceivedTranDb?= null
 
     fun setInstanceOfDb(dataBaseInstance: ReceivedTranDb) {
         this.dataBaseInstance = dataBaseInstance

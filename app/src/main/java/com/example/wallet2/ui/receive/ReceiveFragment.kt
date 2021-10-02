@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.ui.receive
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -13,8 +13,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import androidx.lifecycle.ViewModelProviders
+import com.example.wallet2.Asset_Short
+import com.example.wallet2.R
+import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.*
 import com.example.wallet2.data.models.ReceivedTran
+import com.example.wallet2.ui.dashboard.ReceivedTranViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat

@@ -95,4 +95,7 @@ dependencies {
     // Zxing QR Reader and Writer
     implementation('com.journeyapps:zxing-android-embedded:4.2.0') { transitive = false }
     implementation 'com.google.zxing:core:3.3.0'
+
+    // Tests
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
 }

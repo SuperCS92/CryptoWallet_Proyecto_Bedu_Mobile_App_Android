@@ -1,6 +1,6 @@
-package com.example.wallet2.data
+package com.example.wallet2.Repository
 
-import androidx.lifecycle.LiveData
+import com.example.wallet2.data.ReceivedTranDao
 import com.example.wallet2.data.models.ReceivedTran
 import kotlinx.coroutines.*
 
