@@ -7,29 +7,17 @@ import com.example.wallet2.data.models.ReceivedTran
 @Dao
 interface ReceivedTranDao {
     @Insert
-    suspend fun insertReceivedTran(vehicle: ReceivedTran)
-
-    @Insert
-    suspend fun insertAll(vehicles: List<ReceivedTran>)
+    fun insertReceivedTran(receivedTran: ReceivedTran)
 
     @Update
-    suspend fun updateReceivedTran(vehicle: ReceivedTran)
+    fun updateReceivedTran(receivedTran: ReceivedTran)
 
-    @Delete
-    suspend fun removeReceivedTran(vehicle: ReceivedTran)
-
-    @Query("DELETE FROM ReceivedTran WHERE id=:id")
-    suspend fun removeReceivedTranById(id: Int)
-
-    @Delete
-    suspend fun removeReceivedTrans(vararg receivedTrans: ReceivedTran)
-
-    @Query("SELECT * FROM ReceivedTran")
+    @Query("SELECT * FROM received_trs")
     fun getReceivedTrans(): LiveData<List<ReceivedTran>>
 
-    @Query("SELECT * FROM ReceivedTran WHERE id = :id")
-    suspend fun getReceivedTranById(id: Int): ReceivedTran
+    @Query("SELECT * FROM received_trs WHERE id = :id")
+    fun getReceivedTranById(id: Int): ReceivedTran
 
-    @Query("SELECT * FROM ReceivedTran WHERE origin = :userIdOrigin")
-    suspend fun getReceivedTranByOrigin(userIdOrigin: String) : ReceivedTran
+    @Query("SELECT * FROM received_trs WHERE origin = :userIdOrigin")
+    fun getReceivedTranByOrigin(userIdOrigin: String) : ReceivedTran
 }

@@ -18,6 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.wallet2.data.ReceivedTranDb
+import com.example.wallet2.data.ReceivedTranRepository
+import com.example.wallet2.data.ReceivedTranViewModel
+import com.example.wallet2.data.models.ReceivedTran
+import com.example.wallet2.data.userDb
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat
@@ -50,6 +55,8 @@ class ReceiveFragment : Fragment() {
     private lateinit var qrImage: ImageView
     private lateinit var assetText: AutoCompleteTextView
 
+    private var viewModel: ReceivedTranViewModel? = null
+
     private val width = 1000
     private val height = 1000
     private val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -68,6 +75,10 @@ class ReceiveFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_receive, container, false)
+
+//        val receivedTranRepository = ReceivedTranRepository(ReceivedTranDb.getInstance(requireContext()))
+//        viewModel = ReceivedTranViewModel()
+
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_transaction)
         assetText = view.findViewById(R.id.assetText_transaction)
@@ -107,6 +118,7 @@ class ReceiveFragment : Fragment() {
                 download_button.isVisible = true
                 amount_value.isEnabled = false
                 textInputLayout.isEnabled = false
+                saveObject()
             }
         }
 
@@ -153,6 +165,19 @@ class ReceiveFragment : Fragment() {
         assets.add(Asset_Short("BNB",R.drawable.astr_bnb_symbol))
 
         return assets
+    }
+
+    fun saveObject() {
+        val receivedTranInstance = ReceivedTran(
+            0,
+            amount_value.text.toString().toFloat(),
+            1,
+            assetText.text.toString(),
+            "",
+            "",
+            "generated"
+        )
+        viewModel?.saveReceivedTran(receivedTranInstance)
     }
 
     private fun createQR(){

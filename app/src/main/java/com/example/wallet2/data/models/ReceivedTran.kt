@@ -14,12 +14,18 @@ data class ReceivedTran(
     val amount: Float,
 
     @ColumnInfo(name = "origin")
-    val userIdOrigin: String,
+    val userIdOrigin: Int,
 
-    @ColumnInfo(name = "hash")
-    val hash: String,
+    @ColumnInfo(name = "asset")
+    val asset: String,
 
     @ColumnInfo(name = "createdAt")
-    val createdAt: String
+    val createdAt: String,
+
+    @ColumnInfo(name = "nameQr")
+    val nameQr: String,
+
+    @ColumnInfo(name = "status")
+    val status: String
 
 )
