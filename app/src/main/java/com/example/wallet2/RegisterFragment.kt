@@ -87,6 +87,25 @@ class RegisterFragment : Fragment() {
         }
 
         registerBtn.setOnClickListener {
+
+            if(email.text.trim().toString().isEmpty()){
+                email.error = "Email Required"
+                return@setOnClickListener
+            }else if(password.text.trim().toString().isEmpty()){
+                password.error = "Password Required"
+                return@setOnClickListener
+            }else if(username.text.trim().toString().isEmpty()){
+                username.error = "Username Required"
+                return@setOnClickListener
+            }else if(fullname.text.trim().toString().isEmpty()){
+                fullname.error = "Fullname Required"
+                return@setOnClickListener
+            }else if(seed.text.trim().toString().isEmpty()){
+                seed.error = "Seed Required"
+                return@setOnClickListener
+            }
+
+
             //saveData()
             if (!email.text.trim().toString().isNullOrEmpty() && !password.text.trim().toString().isNullOrEmpty()) {
                 createUser(email.text.trim().toString(), password.text.trim().toString())
@@ -98,8 +117,6 @@ class RegisterFragment : Fragment() {
                 val transaction = fragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_container, logInFragment)
                 transaction.commit()
-            }else if (email == null || password == null){
-                Toast.makeText(requireContext(), "Mising fields", Toast.LENGTH_LONG).show()
             }
 
         }
