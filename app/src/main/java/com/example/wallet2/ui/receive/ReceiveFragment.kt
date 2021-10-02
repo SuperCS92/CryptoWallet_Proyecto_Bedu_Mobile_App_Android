@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.Asset_Short
@@ -18,12 +19,15 @@ import com.example.wallet2.R
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.*
 import com.example.wallet2.data.models.ReceivedTran
-import com.example.wallet2.ui.dashboard.ReceivedTranViewModel
+import com.example.wallet2.ui.receive.ReceivedTranViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

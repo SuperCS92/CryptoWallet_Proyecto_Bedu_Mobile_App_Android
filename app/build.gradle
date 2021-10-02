@@ -98,4 +98,5 @@ dependencies {
 
     // Tests
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
+    androidTestImplementation "com.google.truth:truth:1.1"
 }

@@ -1,4 +1,4 @@
-package com.example.wallet2.ui.dashboard
+package com.example.wallet2.ui.receive
 
 import androidx.lifecycle.ViewModel
 import com.example.wallet2.data.ReceivedTranDb
@@ -7,8 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-
-class ReceivedTranViewModel:ViewModel() {
+class ReceivedTranViewModel: ViewModel() {
 
 
     protected val compositeDisposable = CompositeDisposable()
