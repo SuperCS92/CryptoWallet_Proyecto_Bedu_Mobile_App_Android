@@ -99,9 +99,11 @@ class DashboardFragment : Fragment() {
 
         recyclerContacts = view.findViewById(R.id.recyclerContacts)
 
+        viewModel.getAssets()
         setUpRecyclerView()
 
-        balance.text = "$" + getTotalBalance(getContacts()).toString()
+        //balance.text = "$" + getTotalBalance(getContacts()).toString()
+        balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
         usernameAppbar.text = preferences.getString(USERNAME, "")
         emailAppbar.text = preferences.getString(EMAIL, "")
 
@@ -127,6 +129,7 @@ class DashboardFragment : Fragment() {
         }
 
         activity_button.setOnClickListener {
+            viewModel.getActivities()
             setUpRecyclerView_Activity()
         }
 
@@ -218,6 +221,7 @@ class DashboardFragment : Fragment() {
         recyclerContacts.setHasFixedSize(true)
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
+
         //seteando el Adapter
         mAdapter_activity = RecyclerAdapter_AssetActivity( context, viewModel.activities.value!!)
         //asignando el Adapter al RecyclerView

@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.userDb
+import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
