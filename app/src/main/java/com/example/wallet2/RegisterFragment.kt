@@ -92,14 +92,14 @@ class RegisterFragment : Fragment() {
             createUser(email.text.trim().toString(), password.text.trim().toString())
             Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
 
-            /*
+
             val logInFragment = LoginFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, logInFragment)
             transaction.commit()
-             */
+
         }
 
 

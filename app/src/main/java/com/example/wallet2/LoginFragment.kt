@@ -172,6 +172,7 @@ class LoginFragment : Fragment() {
             }
     }
 
+
     private fun log(): Boolean {
 
         var flag = false
@@ -191,7 +192,7 @@ class LoginFragment : Fragment() {
                 if (query != null || !query.equals(null)){
                     flag = true
                 }
-                saveValues(query.username, query.email, flag)
+                //saveValues(query.username)
             }
         }
         Thread.sleep(1500)
@@ -227,18 +228,16 @@ class LoginFragment : Fragment() {
     }
 
     /*
-    private fun saveValues(username: String, email: String) {
+    private fun saveValues(username: String) {
 
         preferences.edit()
-            .putString(USERNAME, username)
-            .putString(EMAIL, email)
-            .putBoolean(IS_LOGGED, flag)
+            .putString("USERNAME", username)
             .apply()
     }
 
     private fun setValues() {
-        preferences.getString(USERNAME, "")
-        preferences.getString(EMAIL, "")
+        preferences.getString("USERNAME", "")
     }
-    */
+     */
+
 }
