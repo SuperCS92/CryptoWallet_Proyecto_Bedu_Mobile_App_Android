@@ -1,11 +1,15 @@
 package com.example.wallet2.ui.receive
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.wallet2.data.ReceivedTranDb
 import com.example.wallet2.data.models.ReceivedTran
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class ReceivedTranViewModel: ViewModel() {
 
@@ -42,6 +46,10 @@ class ReceivedTranViewModel: ViewModel() {
             })?.let {
                 compositeDisposable.add(it)
             }
+    }
+
+    fun getByIdReceive(id: Int){
+        dataBaseInstance?.receivedTranDao()?.getReceivedTranById(id)
     }
 
 

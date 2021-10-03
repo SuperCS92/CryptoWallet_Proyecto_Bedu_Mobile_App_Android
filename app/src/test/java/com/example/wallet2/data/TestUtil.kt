@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.data
 import com.example.wallet2.data.models.ReceivedTran
 
 object TestUtil {

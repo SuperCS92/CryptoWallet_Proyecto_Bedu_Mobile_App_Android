@@ -25,6 +25,7 @@ abstract class ReceivedTranDb: RoomDatabase() {
                     DB_NAME_RTRAN
                 )
                     .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 // return instance
