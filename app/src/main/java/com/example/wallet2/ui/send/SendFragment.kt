@@ -1,6 +1,8 @@
 package com.example.wallet2.ui.send
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -8,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -18,6 +21,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.wallet2.*
@@ -45,6 +51,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
+import java.lang.Error
 import java.lang.NumberFormatException
 
 // TODO: Rename parameter arguments, choose names that match
@@ -70,6 +77,9 @@ class SendFragment : Fragment() {
     private var _amount: Double = 0.0
     private var _address: String = ""
     private var _total: Double = 0.0
+
+    // Notifications Channel ID
+    val CHANNEL_SEND = "TRANSACTIONS"
 
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var assetText: AutoCompleteTextView
@@ -173,6 +183,11 @@ class SendFragment : Fragment() {
         val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
         (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
+        // NOTIFICATIONS
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setNotificationChannel()
+        }
+
         qrscan_button.setOnClickListener{
             val builder = AlertDialog.Builder(requireActivity())
             builder.setTitle("Import data from a QR code")
@@ -269,61 +284,81 @@ class SendFragment : Fragment() {
 
         //Logic to convert value entered in amount text field from cripto to fiat and viceversa
         amount_textField.setEndIconOnClickListener{
-            var crypto = assetText.text.toString()
-            var amount = amount_value.text.toString().toDouble()
-            var amount_converted = 0.0
+            try {
+                var crypto = assetText.text.toString()
+                var amount = amount_value.text.toString().toDouble()
+                var amount_converted = 0.0
 
 
-                when(amount_currency) {
+                when (amount_currency) {
 
-                true -> when (crypto) {
-                    "BTC" -> { amount_converted = itemsprice[0] * amount
-                               error = false}
-                    "ETH" -> { amount_converted = itemsprice[1] * amount
-                               error = false}
-                    "BNB" -> { amount_converted = itemsprice[2] * amount
-                               error = false}
-                    else-> {amount_textField.error = getString(R.string.astr_amount_error)
-                            error = true}
+                    true -> when (crypto) {
+                        "BTC" -> {
+                            amount_converted = itemsprice[0] * amount
+                            error = false
+                        }
+                        "ETH" -> {
+                            amount_converted = itemsprice[1] * amount
+                            error = false
+                        }
+                        "BNB" -> {
+                            amount_converted = itemsprice[2] * amount
+                            error = false
+                        }
+                        else -> {
+                            amount_textField.error = getString(R.string.astr_amount_error)
+                            error = true
+                        }
+                    }
+
+                    false -> when (crypto) {
+                        "BTC" -> {
+                            amount_converted = amount / itemsprice[0]
+                            error = false
+                        }
+                        "ETH" -> {
+                            amount_converted = amount / itemsprice[1]
+                            error = false
+                        }
+                        "BNB" -> {
+                            amount_converted = amount / itemsprice[2]
+                            error = false
+                        }
+                        else -> {
+                            amount_textField.error = getString(R.string.astr_amount_error)
+                            error = true
+                        }
+                    }
+
                 }
 
-                false -> when (crypto) {
-                    "BTC" -> { amount_converted =  amount / itemsprice[0]
-                                error = false}
-                    "ETH" ->  { amount_converted =  amount / itemsprice[1]
-                                error = false}
-                    "BNB" ->  { amount_converted =  amount / itemsprice[2]
-                                error = false}
-                    else-> {amount_textField.error = getString(R.string.astr_amount_error)
-                            error = true}
-                }
-
-            }
-
-            if (!error) {
-                amount_textField.error = null
+                if (!error) {
+                    amount_textField.error = null
 
                     if (amount_currency) {
-                    amount_textField.prefixText = "$"
-                    amount_textField.suffixText = null
-                } else {
-                    amount_textField.prefixText = null
-                    amount_textField.suffixText = crypto
+                        amount_textField.prefixText = "$"
+                        amount_textField.suffixText = null
+                    } else {
+                        amount_textField.prefixText = null
+                        amount_textField.suffixText = crypto
+                    }
+
+                    amount_currency = !amount_currency
+
+                    if (!amount_currency) {
+                        var text = amount_value.text.toString() + crypto
+                        amount_textField.helperText = text
+                    } else {
+                        var text = "$" + amount_value.text.toString()
+                        amount_textField.helperText = text
+                    }
+
+                    amount_value.setText(amount_converted.toString())
                 }
-
-                amount_currency = !amount_currency
-
-                if (!amount_currency) {
-                    var text = amount_value.text.toString() + crypto
-                    amount_textField.helperText = text
-                } else {
-                    var text = "$" + amount_value.text.toString()
-                    amount_textField.helperText = text
-                }
-
-                amount_value.setText(amount_converted.toString())
+            }catch (e:Exception){
+                Toast.makeText(requireContext(), "Please select an Asset and " +
+                        "type an Amount to get the conversion", Toast.LENGTH_LONG).show()
             }
-
         }
 
         // Cancel button redirects to dashboardFragment
@@ -414,14 +449,73 @@ class SendFragment : Fragment() {
         // Accept transaction
         builder.setPositiveButton("Send", { dialogInterface: DialogInterface, i: Int ->
             //saveTransfer()
-            loadingTransactionMessage()
             goToDashboard()
+            loadingTransactionMessage()
+            progressNotification()
         })
         // Cancel transaction
         builder.setNegativeButton("Cancel", { dialogInterface: DialogInterface, i: Int ->
             Toast.makeText(requireContext(), "Transfer was canceled", Toast.LENGTH_LONG).show()
         })
         builder.show()
+    }
+
+    private fun setNotificationChannel() {
+        val name = getString(R.string.channel_courses)
+        val descriptionText = getString(R.string.courses_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_SEND, name, importance).apply {
+            description = descriptionText
+        }
+
+        val notificationManager: NotificationManager =
+            activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun progressNotification() {
+        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_SEND)
+            .setContentTitle(getString(R.string.transactions_title))
+            .setContentText(getString(R.string.transaction_description))
+            .setSmallIcon(R.drawable.ic_monetization)
+
+        val max = 20
+        var progress = 0
+        var percentage = 0
+        val handler = Handler()
+
+        with(NotificationManagerCompat.from(requireContext())) {
+            builder.setProgress(max, progress, true)
+            notify(34, builder.build())
+
+            Thread(Runnable {
+                while (progress < max) {
+                    progress += 1
+
+                    try {
+                        Thread.sleep(500)
+                    } catch (e: InterruptedException) {
+                        //e.printStackTrace()
+                    }
+                        handler.post(Runnable {
+                            if (progress == max){
+                                builder.setContentText("Download complete.")
+                                builder.setProgress(0,0,false)
+                            }else{
+                                // Calculate the percentage comple
+                                percentage = (progress*100)/max
+                                builder.setContentText("$percentage% complete")
+                                builder.setProgress(max,progress,true)
+                            }
+                            notify(34, builder.build())
+                        })
+                    }
+
+            }).start()
+
+
+        }
     }
 
     fun saveTransfer() {
@@ -438,7 +532,7 @@ class SendFragment : Fragment() {
 
     fun loadingTransactionMessage(){
         val progressDialog = ProgressDialog(requireActivity())
-        progressDialog.setMessage("Processing...")
+        progressDialog.setMessage("Processing transaction...")
         progressDialog.setCancelable(false)
         progressDialog.show()
         Handler().postDelayed({progressDialog.dismiss()},3000)
@@ -497,6 +591,11 @@ class SendFragment : Fragment() {
                             amount_value.setText(output[0])
                             assetText.setText(output[1])
                             address_value.setText(output[2])
+                            when (output[0]){
+                                "BTC" -> {address_value.setText("bc1"+output[2])}
+                                "ETH" -> {address_value.setText("0x"+output[2])}
+                                else -> {address_value.setText("0x"+output[2])}
+                            }
                             Toast.makeText(requireContext(),"Data import was successful", Toast.LENGTH_SHORT).show()
                         } else{
                             Toast.makeText(requireContext(), "QR not valid", Toast.LENGTH_LONG).show()
@@ -523,7 +622,11 @@ class SendFragment : Fragment() {
                         if (output.size==3) {
                             amount_value.setText(output[0])
                             assetText.setText(output[1])
-                            address_value.setText(output[2])
+                            when (output[0]){
+                                "BTC" -> {address_value.setText("bc1"+output[2])}
+                                "ETH" -> {address_value.setText("0x"+output[2])}
+                                else -> {address_value.setText("0x"+output[2])}
+                            }
                             Toast.makeText(requireContext(), "Scan was successful", Toast.LENGTH_LONG).show()
                         } else {
                             Toast.makeText(requireContext(), "QR not valid", Toast.LENGTH_LONG).show()

@@ -124,4 +124,9 @@
     <string name="qr_description">Notifications related to qr generation</string>
     <string name="qr_generator_body">¡Se ha generado un codigo QR exitosamente!</string>
 
+    <!-- Progress Transactions notifications -->
+    <string name="transactions_title">Encrypting transaction</string>
+    <string name="transaction_description">Sending...</string>
+    <string name="transaction_completed">Transfer completed successfully</string>
+
 </resources>
