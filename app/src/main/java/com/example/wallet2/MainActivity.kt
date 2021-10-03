@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
         startHandler()
-        sesionStarted()
+        sessionStarted()
 
     }
 
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun sesionStarted(){
+    private fun sessionStarted(){
         if(isLogged()){
             goToDashboard()
         }
