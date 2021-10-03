@@ -2,7 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -14,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.wallet2"
-        minSdkVersion 22
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -39,6 +41,7 @@ android {
 
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def room_version = "2.2.6"
     //Room dependencies
@@ -46,7 +49,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
-    //Firebase
+    //-----------Firebase--------//
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
@@ -56,6 +59,9 @@ dependencies {
     // Also declare the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.firebase:firebase-analytics-ktx' // Opcional, pero la agregaremos
+    implementation 'com.google.firebase:firebase-crashlytics-ktx' // Dependencia de crashlytics
+
+    //-----------End Firebase--------//
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"

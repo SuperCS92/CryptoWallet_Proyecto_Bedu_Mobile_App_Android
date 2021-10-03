@@ -12,16 +12,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.userDb
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -51,6 +49,8 @@ class LoginFragment : Fragment() {
     private lateinit var password_text: EditText
     private lateinit var password_layout: TextInputLayout
     private lateinit var signUpBtn: TextView
+    private lateinit var progress_bar: ProgressBar
+
     private lateinit var preferences: SharedPreferences
 
     // TODO: Rename and change types of parameters
@@ -79,12 +79,15 @@ class LoginFragment : Fragment() {
 
         //Firebase
         auth = FirebaseAuth.getInstance()
+        val crashlytics = FirebaseCrashlytics.getInstance()
+
 
         next_button = view.findViewById(R.id.next_button)
         password_text = view.findViewById(R.id.password_edit_text)
         email = view.findViewById(R.id.email)
         password_layout = view.findViewById(R.id.password_text_input)
         signUpBtn = view.findViewById(R.id.signUpText)
+        progress_bar = view.findViewById(R.id.progress)
 
         signUpBtn.setOnClickListener {
             val registerFragment = RegisterFragment()
@@ -101,8 +104,9 @@ class LoginFragment : Fragment() {
             if (!isPasswordValid(password_text.text)) {
                 password_layout.error = getString(R.string.astr_error_password)
             } else {
-                signInUser(email.text.trim().toString(), password_text.text.trim().toString())
+                crashlytics.setCustomKey("email", email.text.trim().toString())
 
+                signInUser(email.text.trim().toString(), password_text.text.trim().toString())
                 //val init = log()
                 //Toast.makeText(requireContext(), "Welcome", Toast.LENGTH_LONG).show()
 
@@ -199,10 +203,6 @@ class LoginFragment : Fragment() {
         return flag
     }
 
-    /*
-       In reality, this will have more complex logic including, but not limited to, actual
-       authentication of the username and password.
-    */
     private fun isPasswordValid(text: Editable?): Boolean {
         return text != null && text.length >= 1
     }

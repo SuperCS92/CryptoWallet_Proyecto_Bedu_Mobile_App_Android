@@ -1,23 +1,38 @@
 package com.example.wallet2
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.graphics.drawable.toBitmap
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.exp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.data.UserViewModel
 import com.example.wallet2.data.models.User
 import com.example.wallet2.data.userDb
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -32,6 +47,11 @@ private const val ARG_PARAM2 = "param2"
  */
 class RegisterFragment : Fragment() {
 
+    //El id de nuestro canal a registrar
+    val CHANNEL_CURSOS = "CURSOS"
+    val CHANNEL_OTHERS = "OTROS"
+    val GRUPO_SIMPLE = "GRUPO_SIMPLE"
+
     private lateinit var auth: FirebaseAuth
 
     private var viewModel: UserViewModel? = null
@@ -39,6 +59,9 @@ class RegisterFragment : Fragment() {
     private lateinit var logInBtn: TextView
     private lateinit var registerBtn: Button
     private lateinit var generateSeedBtn: Button
+
+    private lateinit var email_layout: TextInputLayout
+    private lateinit var progress_bar: ProgressBar
 
     private lateinit var fullname: EditText
     private lateinit var email: EditText
@@ -71,12 +94,15 @@ class RegisterFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         var dataBaseInstance = userDb.getDatabasenIstance(requireContext())
         viewModel?.setInstanceOfDb(dataBaseInstance)
+        val crashlytics = FirebaseCrashlytics.getInstance()
 
         fullname = view.findViewById(R.id.fullname)
         email = view.findViewById(R.id.email)
         username = view.findViewById(R.id.username)
         password = view.findViewById(R.id.password)
         seed = view.findViewById(R.id.seedphrase)
+        email_layout = view.findViewById(R.id.textInputLayoutEmail)
+        progress_bar = view.findViewById(R.id.progress)
 
         logInBtn = view.findViewById(R.id.loginText)
         registerBtn = view.findViewById(R.id.buttonSignUp)
@@ -88,8 +114,10 @@ class RegisterFragment : Fragment() {
 
         registerBtn.setOnClickListener {
 
+            crashlytics.setCustomKey("register", "Button Sign In")
+
             if(email.text.trim().toString().isEmpty()){
-                email.error = "Email Required"
+                email_layout.error = "Email Required"
                 return@setOnClickListener
             }else if(password.text.trim().toString().isEmpty()){
                 password.error = "Password Required"
@@ -106,16 +134,26 @@ class RegisterFragment : Fragment() {
             }
 
 
-            //saveData()
+
             if (!email.text.trim().toString().isNullOrEmpty() && !password.text.trim().toString().isNullOrEmpty()) {
+
+                progress_bar.visibility = View.VISIBLE
+
                 createUser(email.text.trim().toString(), password.text.trim().toString())
+                saveData()
                 Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
+
+                CoroutineScope(Dispatchers.IO).launch{
+                    (activity as MainActivity)?.customNotification()
+                }
 
                 val logInFragment = LoginFragment()
 
                 val fragmentManager = parentFragmentManager
                 val transaction = fragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_container, logInFragment)
+
+                progress_bar.visibility = View.GONE
                 transaction.commit()
             }
 
@@ -129,6 +167,13 @@ class RegisterFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, logInFragment)
             transaction.commit()
+        }
+
+        email.setOnKeyListener { _, _, _ ->
+            if (isEmailValid(email.text)) {
+                email_layout.error = null //Clear the error
+            }
+            false
         }
 
 
@@ -170,15 +215,22 @@ class RegisterFragment : Fragment() {
     }
 
     private fun generateSeed(): String{
-        var seed:String = ""
-
-        seed = "This is a seed test"
-
-        return seed
+        //var seed:String = ""
+        //seed = "This is a seed test"
+        val length = 15
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 
+    private fun isEmailValid(text: Editable?): Boolean {
+        return text != null && text.length >= 1
+    }
 
     companion object {
+        //el nombre de la acción a ejecutar por el botón en la notificación
+        const val ACTION_SEND = "SEND"
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

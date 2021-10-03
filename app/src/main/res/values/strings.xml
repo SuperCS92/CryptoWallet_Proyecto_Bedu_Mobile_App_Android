@@ -90,6 +90,20 @@
     <string name="astr_show_false"> Hide</string>
 
 
+    <!-- CANAL CURSOS -->
+    <string name="channel_courses">Cursos</string>
+    <string name="courses_description">Notificaciones acerca de cursos impartidos</string>
+
+    <!-- CANAL OTROS -->
+    <string name="channel_others">Diversos</string>
+    <string name="others_description">Otras notificaciones</string>
+
+    <!-- textos para la push simple -->
+    <string name="simple_title">Astronaut</string>
+    <string name="simple_body">¡Este es un ejemplo de notificacion!</string>
+
+
+
     <!--    Appbar options-->
     <string name="open_drawer">Abrir</string>
     <string name="close_drawer">Cerrar</string>
