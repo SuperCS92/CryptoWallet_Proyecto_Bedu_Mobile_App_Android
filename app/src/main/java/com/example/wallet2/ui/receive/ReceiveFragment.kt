@@ -1,5 +1,7 @@
 package com.example.wallet2.ui.receive
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -39,6 +41,10 @@ import android.provider.MediaStore
 import androidx.core.content.ContextCompat.getSystemService
 
 import android.graphics.BitmapFactory
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 
 
@@ -52,6 +58,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ReceiveFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+const val CHANNEL_RECEIVE = "CHANNER_RECEIVE"
 class ReceiveFragment : Fragment() {
 
     val items= listOf("BTC", "ETH", "BNB")
@@ -77,6 +84,9 @@ class ReceiveFragment : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setNoticationChannelQR()
         }
     }
 
@@ -133,6 +143,7 @@ class ReceiveFragment : Fragment() {
                 amount_value.isEnabled = false
                 textInputLayout.isEnabled = false
                 saveObject()
+                QrGeneratedNotification()
             }
         }
 
@@ -283,6 +294,38 @@ class ReceiveFragment : Fragment() {
     fun getCurrentDateTime(): Date {
         // Method to obtain date at the moment of creating a transaction
         return Calendar.getInstance().time
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    // Method to register notifications related to QR generator
+    private fun setNoticationChannelQR() {
+        val name = getString(R.string.qr_notifications)
+        val descriptionText = getString(R.string.qr_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_RECEIVE, name, importance).apply {
+            description = descriptionText
+        }
+
+        val notificationManager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun QrGeneratedNotification(){
+        // Method to notify the user that has generated a new qr code
+        var notification = NotificationCompat.Builder(requireContext(), CHANNEL_RECEIVE)
+            .setSmallIcon(R.drawable.astr_logo)
+            .setColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
+            .setContentTitle(getString(R.string.simple_title))
+            .setContentText(getString(R.string.qr_generator_body))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        NotificationManagerCompat.from(requireContext()).run {
+            // ids para saber que notificacion es
+            notify(20, notification)
+        }
     }
 
 }
