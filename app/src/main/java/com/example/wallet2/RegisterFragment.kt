@@ -1,12 +1,7 @@
 package com.example.wallet2
 
 import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -15,13 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.graphics.drawable.toBitmap
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.math.exp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.data.UserViewModel
@@ -46,11 +35,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class RegisterFragment : Fragment() {
-
-    //El id de nuestro canal a registrar
-    val CHANNEL_CURSOS = "CURSOS"
-    val CHANNEL_OTHERS = "OTROS"
-    val GRUPO_SIMPLE = "GRUPO_SIMPLE"
 
     private lateinit var auth: FirebaseAuth
 
@@ -92,7 +76,7 @@ class RegisterFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
 
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        var dataBaseInstance = userDb.getDatabasenIstance(requireContext())
+        val dataBaseInstance = userDb.getDatabasenIstance(requireContext())
         viewModel?.setInstanceOfDb(dataBaseInstance)
         val crashlytics = FirebaseCrashlytics.getInstance()
 
@@ -116,45 +100,48 @@ class RegisterFragment : Fragment() {
 
             crashlytics.setCustomKey("register", "Button Sign In")
 
-            if(email.text.trim().toString().isEmpty()){
-                email_layout.error = "Email Required"
-                return@setOnClickListener
-            }else if(password.text.trim().toString().isEmpty()){
-                password.error = "Password Required"
-                return@setOnClickListener
-            }else if(username.text.trim().toString().isEmpty()){
-                username.error = "Username Required"
-                return@setOnClickListener
-            }else if(fullname.text.trim().toString().isEmpty()){
-                fullname.error = "Fullname Required"
-                return@setOnClickListener
-            }else if(seed.text.trim().toString().isEmpty()){
-                seed.error = "Seed Required"
-                return@setOnClickListener
-            }
-
-
-
-            if (!email.text.trim().toString().isNullOrEmpty() && !password.text.trim().toString().isNullOrEmpty()) {
-
-                progress_bar.visibility = View.VISIBLE
-
-                createUser(email.text.trim().toString(), password.text.trim().toString())
-                saveData()
-                Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
-
-                CoroutineScope(Dispatchers.IO).launch{
-                    (activity as MainActivity)?.customNotification()
+            when {
+                email.text.trim().toString().isEmpty() -> {
+                    email_layout.error = "Email Required"
+                    return@setOnClickListener
                 }
+                password.text.trim().toString().isEmpty() -> {
+                    password.error = "Password Required"
+                    return@setOnClickListener
+                }
+                username.text.trim().toString().isEmpty() -> {
+                    username.error = "Username Required"
+                    return@setOnClickListener
+                }
+                fullname.text.trim().toString().isEmpty() -> {
+                    fullname.error = "Fullname Required"
+                    return@setOnClickListener
+                }
+                seed.text.trim().toString().isEmpty() -> {
+                    seed.error = "Seed Required"
+                    return@setOnClickListener
+                }
+                !email.text.trim().toString().isEmpty() && !password.text.trim().toString().isEmpty() -> {
 
-                val logInFragment = LoginFragment()
+                    progress_bar.visibility = View.VISIBLE
 
-                val fragmentManager = parentFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, logInFragment)
+                    createUser(email.text.trim().toString(), password.text.trim().toString())
+                    saveData()
+                    Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
 
-                progress_bar.visibility = View.GONE
-                transaction.commit()
+                    CoroutineScope(Dispatchers.IO).launch{
+                        (activity as MainActivity).customNotification()
+                    }
+
+                    val logInFragment = LoginFragment()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragment_container, logInFragment)
+
+                    progress_bar.visibility = View.GONE
+                    transaction.commit()
+                }
             }
 
         }
@@ -186,7 +173,7 @@ class RegisterFragment : Fragment() {
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
                 Log.d(TAG, "signInWithEmail:success")
-                val user = auth.currentUser
+                //val user = auth.currentUser
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -198,17 +185,17 @@ class RegisterFragment : Fragment() {
     }
 
     private fun saveData() {
-        var name = fullname.text.trim().toString()
-        var correo = email.text.trim().toString()
-        var usuario = username.text.trim().toString()
-        var pass = password.text.trim().toString()
-        var seed = seed.text.trim().toString()
+        val name = fullname.text.trim().toString()
+        val correo = email.text.trim().toString()
+        val usuario = username.text.trim().toString()
+        val pass = password.text.trim().toString()
+        val seed = seed.text.trim().toString()
 
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(seed)) {
             Toast.makeText(requireContext(), "Please enter valid details", Toast.LENGTH_LONG).show()
         } else {
 
-            var person = User(0, fullname = name, email = correo, username = usuario, password = pass, seed = seed)
+            val person = User(0, fullname = name, email = correo, username = usuario, password = pass, seed = seed)
             viewModel?.saveDataIntoDb(person)
             Toast.makeText(requireContext(), "Usuario Registrado", Toast.LENGTH_LONG).show()
         }
@@ -229,8 +216,6 @@ class RegisterFragment : Fragment() {
     }
 
     companion object {
-        //el nombre de la acción a ejecutar por el botón en la notificación
-        const val ACTION_SEND = "SEND"
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
