@@ -34,7 +34,8 @@ class ReceivedTranDbTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeReceivedTranAndReadInList() {
+    fun writeReceivedTranAndReadInListFromDB() {
+        // Test to verify create instance in BD
         val rtran: ReceivedTran = TestUtil.createReceivedTran(3)
         receivedTranDao.insertReceivedTran(rtran)
         val byID = receivedTranDao.getReceivedTranById(3)

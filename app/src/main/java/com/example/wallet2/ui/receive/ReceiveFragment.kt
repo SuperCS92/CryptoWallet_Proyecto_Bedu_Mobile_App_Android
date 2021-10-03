@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.Asset_Short
@@ -19,21 +18,22 @@ import com.example.wallet2.R
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.*
 import com.example.wallet2.data.models.ReceivedTran
-import com.example.wallet2.ui.receive.ReceivedTranViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.provider.MediaStore
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -134,6 +134,10 @@ class ReceiveFragment : Fragment() {
             downloadQR()
         }
 
+        share_button.setOnClickListener{
+            shareImage()
+        }
+
         // Inflate the layout for this fragment
         return view
     }
@@ -190,6 +194,23 @@ class ReceiveFragment : Fragment() {
         viewModel?.saveDataIntoDb(receivedTranInstance)
     }
 
+    // Method to share image to applications
+    fun shareImage() {
+        val drawable = qrImage.drawable as BitmapDrawable
+        val bitmap = drawable.bitmap as Bitmap
+        val bitmapPath = MediaStore.Images.Media.insertImage(context?.contentResolver, bitmap, "title", null) as String
+
+        val uri = Uri.parse(bitmapPath)
+
+        val intent = Intent(Intent.ACTION_SEND)
+        // type of intent
+        intent.type = "image/png"
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        intent.putExtra(Intent.EXTRA_TEXT, "Transaction")
+        startActivity(Intent.createChooser(intent, "share"))
+    }
+
+
     fun createQR(amount: String, asset:String): Boolean {
         val text = amount + '\n' + asset + '\n' + "DesarrolloMovil@bedu.org"
         if (text.isNotBlank()){
@@ -229,11 +250,13 @@ class ReceiveFragment : Fragment() {
     }
 
     fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        // Method to convert date in string so it could be saved in DB as String
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)
     }
 
     fun getCurrentDateTime(): Date {
+        // Method to obtain date at the moment of creating a transaction
         return Calendar.getInstance().time
     }
 
