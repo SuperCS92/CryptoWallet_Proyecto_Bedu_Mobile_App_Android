@@ -1,5 +1,8 @@
 package com.example.wallet2.ui.receive
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -33,6 +36,10 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.content.ContextCompat.getSystemService
+
+import android.graphics.BitmapFactory
+import androidx.core.content.ContextCompat
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -138,6 +145,10 @@ class ReceiveFragment : Fragment() {
             shareImage()
         }
 
+        copy_button.setOnClickListener{
+            getClipboard(requireContext())
+        }
+
         // Inflate the layout for this fragment
         return view
     }
@@ -207,8 +218,22 @@ class ReceiveFragment : Fragment() {
         intent.type = "image/png"
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         intent.putExtra(Intent.EXTRA_TEXT, "Transaction")
-        startActivity(Intent.createChooser(intent, "share"))
+        startActivity(Intent.createChooser(intent, "Share to"))
     }
+
+    // function to copy filename
+    fun getClipboard(context: Context) {
+        val drawable = qrImage.drawable as BitmapDrawable
+        val bitmap = drawable.bitmap as Bitmap
+        val bitmapPath = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "title", null) as String
+        val uri = Uri.parse(bitmapPath)
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("simple text", "QR_wallet.jpg")
+//        val clip: ClipData = ClipData.newUri(context.contentResolver, "image", uri)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(context, "Filename copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
+
 
 
     fun createQR(amount: String, asset:String): Boolean {
