@@ -339,10 +339,6 @@ class SendFragment : Fragment() {
                 _address = address_value.text.toString()
                 if (validateInformation(_asset, _amount, _address)) {
                     openConfirmationDialog(_asset, _amount, _address)
-                    CoroutineScope(Dispatchers.IO).launch{
-                        delay(3_000)
-                        (activity as MainActivity).simpleNotification("Envío hecho", "La transacción se ha hecho con éxito", 21)
-                    }
                 } else {
                     Toast.makeText(requireContext(), "Please enter all required information.\n" +
                             "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()
@@ -446,7 +442,10 @@ class SendFragment : Fragment() {
         progressDialog.setCancelable(false)
         progressDialog.show()
         Handler().postDelayed({progressDialog.dismiss()},3000)
-        Toast.makeText(requireContext(), "Transfer was successful", Toast.LENGTH_LONG).show()
+        CoroutineScope(Dispatchers.IO).launch{
+            (activity as MainActivity).simpleNotification("Envío hecho", "La transacción se ha hecho con éxito", 21)
+        }
+        //Toast.makeText(requireContext(), "Transfer was successful", Toast.LENGTH_LONG).show()
     }
 
     // Scanner settings
