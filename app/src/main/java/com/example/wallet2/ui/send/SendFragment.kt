@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.ui.send
 
 import android.app.Activity
 import android.app.ProgressDialog
@@ -20,11 +20,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import com.example.wallet2.*
+import com.example.wallet2.SpinnerAdapter
+import com.example.wallet2.data.ReceivedTranDb
+import com.example.wallet2.data.SendDb
+import com.example.wallet2.data.models.ReceivedTran
+import com.example.wallet2.data.models.SendTran
+import com.example.wallet2.databinding.FragmentSendBinding
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.dashboard.DashboardFragment
+import com.example.wallet2.ui.receive.ReceivedTranViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.NotFoundException
@@ -51,6 +62,12 @@ class SendFragment : Fragment() {
     val items= listOf("BTC", "ETH", "BNB")
     val itemsprice= listOf(39249.40, 2681.89, 330.14)
 
+    // To get the data
+    //private var viewModel: SendViewModel?= null
+    private lateinit var _asset: String
+    private var _amount: Double = 0.0
+    private lateinit var _address: String
+    private var _total: Double = 0.0
 
     private lateinit var textInputLayout: TextInputLayout
     private lateinit var assetText: AutoCompleteTextView
@@ -98,6 +115,10 @@ class SendFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_send, container, false)
 
+        /*viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
+        var dataBaseInstance = SendDb.getInstance(requireContext())
+        viewModel?.setInstanceOfDb(dataBaseInstance)*/
+
         drawerLayout = view.findViewById(R.id.drawer_layout)
         val toolbar: Toolbar = view.findViewById(R.id.app_bar) as Toolbar
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
@@ -110,6 +131,8 @@ class SendFragment : Fragment() {
         usernameAppbar.text = preferences.getString(USERNAME, "")
         emailAppbar.text = preferences.getString(EMAIL, "")
 
+        val mAuth = FirebaseAuth.getInstance()
+
         navigation_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_seed -> { val SeedPhraseFragment = SeedPhraseFragment()
@@ -120,19 +143,16 @@ class SendFragment : Fragment() {
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
                     transaction.commit()
                 }
-                /*
-                R.id.log_out -> {
-                    preferences.edit()
-                        .putBoolean(IS_LOGGED, false)
-                        .apply()
-                    val loginFragment = LoginFragment()
+
+                R.id.logout -> {
+                    mAuth!!.signOut()
+
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-                    transaction.setCustomAnimations(R.animator.slide_up, 0, 0, R.animator.slide_down)
-                    transaction.replace(R.id.fragment_container, loginFragment)
+                    transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
+                    transaction.replace(R.id.fragment_container, LoginFragment())
                     transaction.commit()
                 }
-                 */
             }
             true
         }
@@ -191,7 +211,7 @@ class SendFragment : Fragment() {
                                         "BNB" ->   amount_converted =  amount / itemsprice[2]
                                     }
 
-                                    val _total = amount_converted.plus(fee)
+                                    _total = amount_converted.plus(fee)
                                     total.text = _total.toString()
                                 }
 
@@ -304,7 +324,7 @@ class SendFragment : Fragment() {
 
         }
 
-        //Cancel button redirects to dashboardFragment
+        // Cancel button redirects to dashboardFragment
         cance_button.setOnClickListener {
             val dashboardFragment = DashboardFragment()
 
@@ -315,18 +335,21 @@ class SendFragment : Fragment() {
             transaction.commit()
         }
 
+        // Next button confirm the transaction and redirects to dashboardFragment
         next_button.setOnClickListener {
 
             if(assetText.text.isNotEmpty() && amount_value.text.isNotEmpty() && address_value.text.isNotEmpty()) {
-                val _asset = assetText.text.toString()
-                val _amount = amount_value.text.toString().toDouble()
-                val _address = address_value.text.toString()
+                _asset = assetText.text.toString()
+                _amount = amount_value.text.toString().toDouble()
+                _address = address_value.text.toString()
+                //saveTransfer()
 
                 openConfirmationDialog(_asset, _amount, _address)
             }
         }
 
         // Inflate the layout for this fragment
+        //return binding.root
         return view
     }
 
@@ -371,6 +394,18 @@ class SendFragment : Fragment() {
 
     fun openConfirmationDialog(asset:String, amount: Double, address: String){
        val confirmationDialog = ConfirmationDialog(asset, amount, address).show(parentFragmentManager, "Confirmation Dialog")
+    }
+
+    fun saveTransfer() {
+        val transfer = SendTran(
+            assetType = _asset,
+            totalAmount = _amount,
+            emailAddress = _address,
+            feeValue = 0.00034f,
+            totalTransfer = 400f
+        )
+
+        //viewModel?.insertTransfer(transfer)
     }
 
     // Scanner settings
