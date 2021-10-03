@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.example.wallet2.RegisterFragment.Companion.ACTION_SEND
 import com.example.wallet2.MainActivity.Companion.ACTION_RECEIVED
 
 class NotificationReceiver: BroadcastReceiver() {

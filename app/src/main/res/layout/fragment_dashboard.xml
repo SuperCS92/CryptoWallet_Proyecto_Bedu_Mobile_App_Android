@@ -161,13 +161,16 @@
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:elevation="10dp"
+            android:paddingLeft="15dp"
+            android:elevation="0dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
+            app:iconPadding="0dp"
             app:cornerRadius="32dp"
-            app:icon="@drawable/astr_send_icon"
+            app:iconSize="36dp"
+            app:icon="@drawable/ic_send"
             app:iconGravity="textEnd" />
 
         <TextView
@@ -195,14 +198,18 @@
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:elevation="10dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="5dp"
+            android:elevation="0dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
-            app:cornerRadius="32dp"
-            app:icon="@drawable/astr_receive_icon"
             app:iconGravity="textEnd"
+            app:iconPadding="0dp"
+            app:cornerRadius="32dp"
+            app:icon="@drawable/ic_receive"
+            app:iconSize="36dp"
             />
         <TextView
             android:id="@+id/text_receive"
@@ -264,6 +271,7 @@
         app:menu="@menu/drawer_menu"
         app:itemTextColor="@color/darkgrey"
         app:itemIconTint="@color/darkgrey"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>
