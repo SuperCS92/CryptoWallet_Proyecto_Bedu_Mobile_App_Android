@@ -20,18 +20,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.example.wallet2.*
 import com.example.wallet2.SpinnerAdapter
-import com.example.wallet2.data.ReceivedTranDb
-import com.example.wallet2.data.SendDb
-import com.example.wallet2.data.models.ReceivedTran
 import com.example.wallet2.data.models.SendTran
-import com.example.wallet2.databinding.FragmentSendBinding
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.dashboard.DashboardFragment
-import com.example.wallet2.ui.receive.ReceivedTranViewModel
 import com.example.wallet2.ui.user.EMAIL
 import com.example.wallet2.ui.user.LoginFragment
 import com.example.wallet2.ui.user.PREF_NAME
@@ -48,6 +41,7 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.integration.android.IntentIntegrator
 import java.io.FileNotFoundException
 import java.io.InputStream
+import java.lang.NumberFormatException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,9 +62,9 @@ class SendFragment : Fragment() {
 
     // To get the data
     //private var viewModel: SendViewModel?= null
-    private lateinit var _asset: String
+    private var _asset: String = ""
     private var _amount: Double = 0.0
-    private lateinit var _address: String
+    private var _address: String = ""
     private var _total: Double = 0.0
 
     private lateinit var textInputLayout: TextInputLayout
@@ -330,25 +324,24 @@ class SendFragment : Fragment() {
 
         // Cancel button redirects to dashboardFragment
         cance_button.setOnClickListener {
-            val dashboardFragment = DashboardFragment()
-
-            val fragmentManager = parentFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
-            transaction.replace(R.id.fragment_container, dashboardFragment)
-            transaction.commit()
+            goToDashboard()
         }
 
         // Next button confirm the transaction and redirects to dashboardFragment
         next_button.setOnClickListener {
-
-            if(assetText.text.isNotEmpty() && amount_value.text.isNotEmpty() && address_value.text.isNotEmpty()) {
+            try {
                 _asset = assetText.text.toString()
                 _amount = amount_value.text.toString().toDouble()
                 _address = address_value.text.toString()
-                //saveTransfer()
-
-                openConfirmationDialog(_asset, _amount, _address)
+                if (validateInformation(_asset, _amount, _address)) {
+                    openConfirmationDialog(_asset, _amount, _address)
+                } else {
+                    Toast.makeText(requireContext(), "Please enter all required information.\n" +
+                            "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()
+                }
+            } catch (e: NumberFormatException) {
+                Toast.makeText(requireContext(), "Please enter all required information.\n" +
+                            "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -384,6 +377,19 @@ class SendFragment : Fragment() {
             }
     }
 
+    fun validateInformation(asset: String, amount: Double, address: String): Boolean {
+        return asset.isNotEmpty() && amount.toString().isNotEmpty() && address.isNotEmpty()
+    }
+
+    private fun goToDashboard(){
+        val dashboardFragment = DashboardFragment()
+
+        val fragmentManager = parentFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
+        transaction.replace(R.id.fragment_container, dashboardFragment)
+        transaction.commit()
+    }
 
     //generamos datos dummy con este método
     private fun getAssets_Short(): MutableList<Asset_Short>{
@@ -397,7 +403,21 @@ class SendFragment : Fragment() {
     }
 
     fun openConfirmationDialog(asset:String, amount: Double, address: String){
-       val confirmationDialog = ConfirmationDialog(asset, amount, address).show(parentFragmentManager, "Confirmation Dialog")
+        // val confirmationDialog = ConfirmationDialog(asset, amount, address).show(parentFragmentManager, "Confirmation Dialog")
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle("Transfer details:")
+        builder.setMessage("Sending $amount $asset to $address. Are you sure?")
+        // Accept transaction
+        builder.setPositiveButton("Send", { dialogInterface: DialogInterface, i: Int ->
+            //saveTransfer()
+            loadingTransactionMessage()
+            goToDashboard()
+        })
+        // Cancel transaction
+        builder.setNegativeButton("Cancel", { dialogInterface: DialogInterface, i: Int ->
+            Toast.makeText(requireContext(), "Transfer was canceled", Toast.LENGTH_LONG).show()
+        })
+        builder.show()
     }
 
     fun saveTransfer() {
@@ -410,6 +430,15 @@ class SendFragment : Fragment() {
         )
 
         //viewModel?.insertTransfer(transfer)
+    }
+
+    fun loadingTransactionMessage(){
+        val progressDialog = ProgressDialog(requireActivity())
+        progressDialog.setMessage("Processing...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        Handler().postDelayed({progressDialog.dismiss()},3000)
+        Toast.makeText(requireContext(), "Transfer was successful", Toast.LENGTH_LONG).show()
     }
 
     // Scanner settings
@@ -457,10 +486,14 @@ class SendFragment : Fragment() {
                         val result = reader.decode(bBitmap)
                         val output: List<String> = result.getText().split("\n")
                         // We write the scan results in the text fields
-                        amount_value.setText(output[0])
-                        assetText.setText(output[1])
-                        address_value.setText(output[2])
-                        Toast.makeText(requireContext(), "Data import was successful", Toast.LENGTH_SHORT).show()
+                        if (output.size==3) {
+                            amount_value.setText(output[0])
+                            assetText.setText(output[1])
+                            address_value.setText(output[2])
+                            Toast.makeText(requireContext(),"Data import was successful", Toast.LENGTH_SHORT).show()
+                        } else{
+                            Toast.makeText(requireContext(), "QR not valid", Toast.LENGTH_LONG).show()
+                        }
                     } catch (e: NotFoundException) {
                         Log.e("TAG", "decode exception", e)
                         Toast.makeText(requireContext(), "Data import was not successful", Toast.LENGTH_SHORT).show()
@@ -477,13 +510,17 @@ class SendFragment : Fragment() {
                     if (result.contents == null) {
                         Toast.makeText(requireContext(), "Scan was canceled", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(requireContext(), "Scan was successful", Toast.LENGTH_LONG).show()
                         // We write the scan results in the text fields
                         val resultado = result.contents
                         val output: List<String> = resultado.split("\n")
-                        amount_value.setText(output[0])
-                        assetText.setText(output[1])
-                        address_value.setText(output[2])
+                        if (output.size==3) {
+                            amount_value.setText(output[0])
+                            assetText.setText(output[1])
+                            address_value.setText(output[2])
+                            Toast.makeText(requireContext(), "Scan was successful", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(requireContext(), "QR not valid", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }else{
                     super.onActivityResult(requestCode, resultCode, data)
