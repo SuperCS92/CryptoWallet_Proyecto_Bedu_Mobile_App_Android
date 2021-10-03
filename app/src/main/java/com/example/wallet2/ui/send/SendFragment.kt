@@ -39,6 +39,10 @@ import com.google.zxing.NotFoundException
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.integration.android.IntentIntegrator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.lang.NumberFormatException
@@ -335,6 +339,10 @@ class SendFragment : Fragment() {
                 _address = address_value.text.toString()
                 if (validateInformation(_asset, _amount, _address)) {
                     openConfirmationDialog(_asset, _amount, _address)
+                    CoroutineScope(Dispatchers.IO).launch{
+                        delay(3_000)
+                        (activity as MainActivity).simpleNotification("Envío hecho", "La transacción se ha hecho con éxito", 21)
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Please enter all required information.\n" +
                             "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()

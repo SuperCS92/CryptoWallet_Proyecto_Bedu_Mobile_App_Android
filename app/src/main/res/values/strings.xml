@@ -90,15 +90,15 @@
     <string name="astr_show_false"> Hide</string>
 
 
-    <!-- CANAL CURSOS -->
-    <string name="channel_courses">Cursos</string>
-    <string name="courses_description">Notificaciones acerca de cursos impartidos</string>
+    <!-- USERS CHANNEL -->
+    <string name="channel_courses">Usuarios</string>
+    <string name="courses_description">Notificaciones acerca de informacón del usuario</string>
 
     <!-- CANAL OTROS -->
     <string name="channel_others">Diversos</string>
     <string name="others_description">Otras notificaciones</string>
 
-    <!-- textos para la push simple -->
+    <!-- Simple notifications -->
     <string name="simple_title">Astronaut</string>
     <string name="simple_body">¡Este es un ejemplo de notificacion!</string>
 

@@ -21,15 +21,14 @@ import com.example.wallet2.ui.user.PREF_NAME
 
 class MainActivity : AppCompatActivity() {
 
-    //El id de nuestro canal a registrar
-    val CHANNEL_CURSOS = "CURSOS"
-    val CHANNEL_OTHERS = "OTROS"
+    val CHANNEL_USUARIOS = "USUARIOS"
+    val CHANNEL_ANUNCIOS = "ANUNCIOS"
 
     val GRUPO_SIMPLE = "GRUPO_SIMPLE"
 
 
     companion object{
-        //el nombre de la acción a ejecutar por el botón en la notificación
+
         const val ACTION_RECEIVED = "action_received"
     }
 
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         //goToDashboard()
 
-        //Para android Oreo en adelante, s obligatorio registrar el canal de notificación
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setNotificationChannel()
             setOthersChannel()
@@ -118,32 +116,31 @@ class MainActivity : AppCompatActivity() {
         return preferences.getBoolean(IS_LOGGED, false)
     }
 
-    fun simpleNotification() {
+    fun simpleNotification(Message_title: String,Message_text: String, Channel: Int) {
 
-        var builder = NotificationCompat.Builder(this, CHANNEL_OTHERS)
-            .setSmallIcon(R.drawable.ic_astronauta) //seteamos el ícono de la push notification
-            .setColor(getColor(R.color.secondaryColor)) //definimos el color del ícono y el título de la notificación
-            .setContentTitle(getString(R.string.simple_title)) //seteamos el título de la notificación
-            .setContentText(getString(R.string.simple_body)) //seteamos el cuerpo de la notificación
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT) //Ponemos una prioridad por defecto
+        var builder = NotificationCompat.Builder(this, CHANNEL_ANUNCIOS)
+            .setSmallIcon(R.drawable.astr_logo)
+            .setColor(getColor(R.color.primaryColor))
+            .setContentTitle(Message_title)
+            .setContentText(Message_text)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setGroup(GRUPO_SIMPLE)
         with(NotificationManagerCompat.from(this)) {
-            notify(20, builder.build())
+            notify(Channel, builder.build())
         }
     }
 
     fun customNotification(){
 
-        //obtenemos los layouts por medio de RemoteViews
         val notificationLayout = RemoteViews(packageName, R.layout.notification_custom)
         val notificationLayoutExpanded = RemoteViews(packageName, R.layout.notification_custom_expanded)
 
 
-        var notification = NotificationCompat.Builder(this, CHANNEL_OTHERS)
-            .setSmallIcon(R.drawable.ic_astronauta)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle()) //este estilo define que es personalizable
-            .setCustomContentView(notificationLayout) //contenido en modo colapsado
-            .setCustomBigContentView(notificationLayoutExpanded) //contenido en modo expandido
+        var notification = NotificationCompat.Builder(this, CHANNEL_ANUNCIOS)
+            .setSmallIcon(R.drawable.astr_logo)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(notificationLayout)
+            .setCustomBigContentView(notificationLayoutExpanded)
             .build()
 
         with(NotificationManagerCompat.from(this)) {
@@ -156,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         val name = getString(R.string.channel_courses)
         val descriptionText = getString(R.string.courses_description)
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(CHANNEL_CURSOS, name, importance).apply {
+        val channel = NotificationChannel(CHANNEL_USUARIOS, name, importance).apply {
             description = descriptionText
         }
 
@@ -168,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setOthersChannel(){
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(CHANNEL_OTHERS, getString(R.string.channel_others), importance).apply {
+        val channel = NotificationChannel(CHANNEL_ANUNCIOS, getString(R.string.channel_others), importance).apply {
             description = getString(R.string.others_description)
         }
 
