@@ -1,10 +1,9 @@
-package com.example.wallet2.data
+package com.example.wallet2.ui.user
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wallet2.data.models.User
+import com.example.wallet2.data.userDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +14,7 @@ class UserViewModel:ViewModel() {
 
     protected val compositeDisposable = CompositeDisposable()
 
-    private var dataBaseInstance: userDb ?= null
+    private var dataBaseInstance: userDb?= null
 
     var personsList = MutableLiveData<List<User>>()
 

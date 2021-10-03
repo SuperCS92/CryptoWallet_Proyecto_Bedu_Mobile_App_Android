@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.ui.user
 
 import android.app.Activity
 import android.content.ContentValues.TAG
@@ -13,7 +13,8 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.wallet2.data.UserViewModel
+import com.example.wallet2.MainActivity
+import com.example.wallet2.R
 import com.example.wallet2.data.models.User
 import com.example.wallet2.data.userDb
 import com.google.android.material.textfield.TextInputLayout

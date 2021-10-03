@@ -32,6 +32,10 @@ import com.example.wallet2.databinding.FragmentSendBinding
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.example.wallet2.ui.receive.ReceivedTranViewModel
+import com.example.wallet2.ui.user.EMAIL
+import com.example.wallet2.ui.user.LoginFragment
+import com.example.wallet2.ui.user.PREF_NAME
+import com.example.wallet2.ui.user.USERNAME
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout

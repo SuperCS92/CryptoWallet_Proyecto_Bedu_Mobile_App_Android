@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.wallet2.ui.dashboard.DashboardFragment
+import com.example.wallet2.ui.user.IS_LOGGED
+import com.example.wallet2.ui.user.LoginFragment
+import com.example.wallet2.ui.user.PREF_NAME
 
 
 class MainActivity : AppCompatActivity() {

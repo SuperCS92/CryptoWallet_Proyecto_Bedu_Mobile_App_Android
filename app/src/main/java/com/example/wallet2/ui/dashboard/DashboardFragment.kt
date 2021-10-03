@@ -20,6 +20,7 @@ import com.example.wallet2.*
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.receive.ReceiveFragment
 import com.example.wallet2.ui.send.SendFragment
+import com.example.wallet2.ui.user.LoginFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
