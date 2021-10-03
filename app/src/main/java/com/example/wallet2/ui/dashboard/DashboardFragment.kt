@@ -215,9 +215,9 @@ class DashboardFragment : Fragment() {
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
         //seteando el Adapter
-        //mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
+        mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
         //asignando el Adapter al RecyclerView
-        //recyclerContacts.adapter = mAdapter
+        recyclerContacts.adapter = mAdapter
     }
 
     //configuramos lo necesario para desplegar el RecyclerView
