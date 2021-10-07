@@ -4,8 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.wallet2.utils.Constants.Companion.BSC_TESTNET_URL
 import com.example.wallet2.utils.Constants.Companion.PRIVATE_KEY
+import org.bitcoinj.params.TestNet3Params
+import org.bitcoinj.script.Script
+import org.bitcoinj.wallet.Wallet
 import org.web3j.crypto.Credentials
 import org.web3j.crypto.ECKeyPair
+import org.web3j.crypto.MnemonicUtils
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -23,7 +27,6 @@ object Web3Instance {
     }
 
     val transactionReceipt: MutableLiveData<TransactionReceipt> = MutableLiveData()
-
 
     @Throws(Exception::class)
     suspend fun transfer(toAddress:String, value: BigDecimal)  {
@@ -66,5 +69,16 @@ object Web3Instance {
 
         return ethgetbalance.balance
     }
+
+   private fun generateSeed(): String{
+
+        val params = TestNet3Params.get()
+        val wallet = Wallet.createDeterministic(params, Script.ScriptType.P2PKH)
+        val seed = wallet.keyChainSeed
+
+        return seed.mnemonicCode.toString()
+    }
+
+
 
 }

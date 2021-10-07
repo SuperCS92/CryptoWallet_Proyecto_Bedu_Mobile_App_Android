@@ -110,6 +110,7 @@ class DashboardFragment : Fragment() {
         setUpRecyclerView()
 
         //balance.text = "$" + getTotalBalance(getContacts()).toString()
+        balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
         //usernameAppbar.text = preferences.getString(USERNAME, "")
         emailAppbar.text = user?.email.toString()
 
