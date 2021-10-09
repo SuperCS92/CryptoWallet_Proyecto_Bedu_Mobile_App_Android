@@ -7,9 +7,7 @@ import com.example.wallet2.utils.Constants.Companion.PRIVATE_KEY
 import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.script.Script
 import org.bitcoinj.wallet.Wallet
-import org.web3j.crypto.Credentials
-import org.web3j.crypto.ECKeyPair
-import org.web3j.crypto.MnemonicUtils
+import org.web3j.crypto.*
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -29,7 +27,7 @@ object Web3Instance {
     val transactionReceipt: MutableLiveData<TransactionReceipt> = MutableLiveData()
 
     @Throws(Exception::class)
-    suspend fun transfer(toAddress:String, value: BigDecimal)  {
+    suspend fun transfer(mnemonic: String,toAddress:String, value: BigDecimal)  {
         Log.d("Response", "Web3Instance ")
 
         try {
@@ -37,7 +35,7 @@ object Web3Instance {
 
             var tx = Transfer.sendFunds(
                 ethWeb3Client,
-                getCredentials(),
+                getCredentials(mnemonic),
                 toAddress,
                 value,
                 Convert.Unit.ETHER
@@ -49,16 +47,6 @@ object Web3Instance {
         } catch (e: Exception) {
             Log.d("tx:", e.toString())
         }
-    }
-
-    fun getCredentials(): Credentials {
-
-        return Credentials
-            .create(PRIVATE_KEY)
-    }
-
-    fun getEckeyPair(): ECKeyPair {
-        return getCredentials().ecKeyPair
     }
 
     suspend fun getBalance(addr:String): BigInteger {
@@ -77,6 +65,25 @@ object Web3Instance {
         val seed = wallet.keyChainSeed
 
         return seed.mnemonicCode.toString()
+    }
+
+    private fun getCredentials(mnemonic:String, password:String=""):Credentials{
+
+        val seed = MnemonicUtils.generateSeed(mnemonic, password)
+        val masterKeypair = Bip32ECKeyPair.generateKeyPair(seed)
+        val path = intArrayOf(44 or Bip32ECKeyPair.HARDENED_BIT, 60 or Bip32ECKeyPair.HARDENED_BIT, 0 or Bip32ECKeyPair.HARDENED_BIT, 0, 0)
+        val childKeypair = Bip32ECKeyPair.deriveKeyPair(masterKeypair, path)
+        val credentials: Credentials = Credentials.create(childKeypair)
+
+        return credentials
+    }
+
+    private fun getAddress(mnemonic:String, password:String=""):String{
+        val credentials = getCredentials(mnemonic,password)
+
+        val addr = Keys.toChecksumAddress(credentials.address)
+
+        return addr
     }
 
 
