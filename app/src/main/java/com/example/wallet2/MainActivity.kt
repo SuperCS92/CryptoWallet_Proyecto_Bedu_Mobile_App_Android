@@ -13,6 +13,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.example.wallet2.ui.user.IS_LOGGED
 import com.example.wallet2.ui.user.LoginFragment
@@ -20,6 +25,8 @@ import com.example.wallet2.ui.user.PREF_NAME
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     val CHANNEL_USUARIOS = "USUARIOS"
     val CHANNEL_ANUNCIOS = "ANUNCIOS"
@@ -60,11 +67,18 @@ class MainActivity : AppCompatActivity() {
             preferences.edit()
                 .putBoolean(IS_LOGGED, false)
                 .apply()
-            val loginFragment = LoginFragment()
+            /*val loginFragment = LoginFragment()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, loginFragment)
-                .commit()
+                .commit()*/
+            val host: NavHostFragment = supportFragmentManager
+                .findFragmentById(R.id.fragment_container) as NavHostFragment? ?: return@Runnable
+
+            // Set up Action Bar
+            val navController = host.navController
+
+            appBarConfiguration = AppBarConfiguration(navController.graph)
         }
         startHandler()
         sessionStarted()
@@ -175,6 +189,10 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.loginFragment).navigateUp(appBarConfiguration)
+    }
 
     // Overwrite this method in order to get the context of each fragment (used in QR scanner)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

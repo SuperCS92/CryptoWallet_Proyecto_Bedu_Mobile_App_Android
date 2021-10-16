@@ -209,7 +209,7 @@ class Repository {
             )
     }
 
-    suspend fun transfer(toAddress:String, value: BigDecimal){
+    /*suspend fun transfer(toAddress:String, value: BigDecimal){
         Log.d("Response", "Repository ")
         Web3Instance.transfer(toAddress, value)
     }
@@ -219,7 +219,7 @@ class Repository {
         var addr = credential.address
 
         return addr
-    }
+    }*/
 
     suspend fun getBalance(address: String): BigInteger {
         return Web3Instance.getBalance(address)
