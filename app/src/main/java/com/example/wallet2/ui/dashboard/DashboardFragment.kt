@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.*
@@ -157,11 +158,12 @@ class DashboardFragment : Fragment() {
                 R.id.logout -> {
                     mAuth!!.signOut()
 
-                    val fragmentManager = parentFragmentManager
+                    /*val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, LoginFragment())
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_dashboardFragmentDest_to_loginFragment, null)
                 }
             }
             true

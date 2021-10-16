@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_receiveFragment"
             app:destination="@id/receiveFragment" />
+        <action
+            android:id="@+id/action_dashboardFragmentDest_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/receiveFragment"
@@ -54,5 +57,8 @@
         <action
             android:id="@+id/action_sendFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragmentDest" />
+        <action
+            android:id="@+id/action_sendFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 </navigation>
