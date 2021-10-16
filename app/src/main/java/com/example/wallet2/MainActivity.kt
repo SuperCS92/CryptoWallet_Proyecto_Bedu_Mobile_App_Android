@@ -13,14 +13,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.example.wallet2.ui.user.IS_LOGGED
-import com.example.wallet2.ui.user.LoginFragment
 import com.example.wallet2.ui.user.PREF_NAME
+import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,6 +50,15 @@ class MainActivity : AppCompatActivity() {
             setNotificationChannel()
             setOthersChannel()
         }
+        val mAuth = FirebaseAuth.getInstance()
+        //Navigation
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragment_container) as NavHostFragment? ?: return
+
+        // Set up Action Bar
+        val navController = host.navController
+
+        appBarConfiguration = AppBarConfiguration(navController.graph)
 
         preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         handler = Handler()
@@ -70,14 +76,9 @@ class MainActivity : AppCompatActivity() {
                 .beginTransaction()
                 .replace(R.id.fragment_container, loginFragment)
                 .commit()*/
-            //Navigation
-            val host: NavHostFragment = supportFragmentManager
-                .findFragmentById(R.id.fragment_container) as NavHostFragment? ?: return@Runnable
 
-            // Set up Action Bar
-            val navController = host.navController
-
-            appBarConfiguration = AppBarConfiguration(navController.graph)
+            mAuth!!.signOut()
+            navController.navigate(R.id.action_dashboardFragmentDest_to_loginFragment, null)
         }
 
         startHandler()
