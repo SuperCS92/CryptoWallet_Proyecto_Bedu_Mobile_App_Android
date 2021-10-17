@@ -61,8 +61,10 @@
         <action
             android:id="@+id/action_dashboardFragmentDest_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@animator/slide_down"
-            app:exitAnim="@animator/slide_down"/>
+            app:enterAnim="@animator/enter_from_left"
+            app:exitAnim="@animator/exit_to_right"
+            app:popEnterAnim="@animator/enter_from_right"
+            app:popExitAnim="@animator/exit_to_left"/>
         <action
             android:id="@+id/action_dashboardFragmentDest_to_assetFragment"
             app:destination="@id/assetFragment"
@@ -129,6 +131,10 @@
         <action
             android:id="@+id/action_assetFragment_to_transactionFragment"
             app:destination="@id/transactionFragment" />
+        <argument
+            android:name="positionSelected"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"

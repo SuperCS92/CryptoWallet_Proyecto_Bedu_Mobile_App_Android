@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.ui.dashboard.DashboardFragment
+import com.example.wallet2.ui.dashboard.DashboardFragmentDirections
 
 
 class RecyclerAdapter(
@@ -51,10 +52,9 @@ class RecyclerAdapter(
 
         init {
             itemView.setOnClickListener {
-                /*val position: Int = adapterPosition
+                val position: Int = adapterPosition
 
-
-                val assetfragment = AssetFragment(position)
+                /*val assetfragment = AssetFragment(position)
 
                 val fragmentManager = (itemView.context as FragmentActivity).supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
@@ -63,7 +63,9 @@ class RecyclerAdapter(
                 fragmentManager.popBackStack()
                 transaction.replace(R.id.fragment_container, assetfragment)
                 transaction.commit()*/
-                Navigation.findNavController(it).navigate(R.id.action_dashboardFragmentDest_to_assetFragment, null)
+                val action = DashboardFragmentDirections.actionDashboardFragmentDestToAssetFragment(position)
+                Navigation.findNavController(it).navigate(action)
+                //Navigation.findNavController(it).navigate(R.id.action_dashboardFragmentDest_to_assetFragment, null)
             }
         }
 
