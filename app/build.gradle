@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -42,6 +43,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.firebase:firebase-auth-ktx:20.0.4'
 
     def room_version = "2.2.6"
     //Room dependencies
@@ -93,10 +95,17 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
 
+    //Bitcoin
+    implementation 'org.bitcoinj:bitcoinj-core:0.15.10'
+    
     //Web3j
-    implementation ('org.web3j:core:4.6.0-android')
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
+    implementation ('org.web3j:core:4.6.0-android'){
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    }
+
+    //Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Zxing QR Reader and Writer

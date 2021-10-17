@@ -500,7 +500,7 @@ class SendFragment : Fragment() {
                     }
                         handler.post(Runnable {
                             if (progress == max){
-                                builder.setContentText("Download complete.")
+                                builder.setContentText("Transaction completed successfully")
                                 builder.setProgress(0,0,false)
                             }else{
                                 // Calculate the percentage comple

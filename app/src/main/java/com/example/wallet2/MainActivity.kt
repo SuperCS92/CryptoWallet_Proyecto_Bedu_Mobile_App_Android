@@ -13,13 +13,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.wallet2.ui.dashboard.DashboardFragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import com.example.wallet2.ui.user.IS_LOGGED
-import com.example.wallet2.ui.user.LoginFragment
 import com.example.wallet2.ui.user.PREF_NAME
+import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     val CHANNEL_USUARIOS = "USUARIOS"
     val CHANNEL_ANUNCIOS = "ANUNCIOS"
@@ -42,12 +45,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //goToDashboard()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setNotificationChannel()
             setOthersChannel()
         }
+        val mAuth = FirebaseAuth.getInstance()
+        //Navigation
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragment_container) as NavHostFragment? ?: return
+
+        // Set up Action Bar
+        val navController = host.navController
+
+        appBarConfiguration = AppBarConfiguration(navController.graph)
 
         preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         handler = Handler()
@@ -60,14 +71,18 @@ class MainActivity : AppCompatActivity() {
             preferences.edit()
                 .putBoolean(IS_LOGGED, false)
                 .apply()
-            val loginFragment = LoginFragment()
+            /*val loginFragment = LoginFragment()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_container, loginFragment)
-                .commit()
+                .commit()*/
+
+            mAuth!!.signOut()
+            navController.navigate(R.id.action_dashboardFragmentDest_to_loginFragment, null)
         }
+
         startHandler()
-        sessionStarted()
+        //sessionStarted()
 
     }
 
@@ -86,33 +101,15 @@ class MainActivity : AppCompatActivity() {
         handler!!.postDelayed(r!!, (20 * 60 * 1000).toLong()) //for 20 minutes
     }
 
-    private fun goToLogin() {
-        val loginFragment = LoginFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, loginFragment)
-            .commit()
-    }
-
-    private fun goToDashboard() {
-        val dashboardFragment = DashboardFragment()
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, dashboardFragment)
-            .commit()
-    }
-
-    private fun sessionStarted(){
+    /*private fun sessionStarted(){
         if(isLogged()){
-            goToDashboard()
+            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
+        } else {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment, null)
         }
-        else{
-            goToLogin()
-        }
-    }
+    }*/
 
-    private fun isLogged(): Boolean {
+    fun isLogged(): Boolean {
         return preferences.getBoolean(IS_LOGGED, false)
     }
 
@@ -174,7 +171,6 @@ class MainActivity : AppCompatActivity() {
 
         notificationManager.createNotificationChannel(channel)
     }
-
 
     // Overwrite this method in order to get the context of each fragment (used in QR scanner)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

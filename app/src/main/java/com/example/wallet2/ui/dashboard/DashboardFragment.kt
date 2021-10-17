@@ -7,20 +7,21 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import com.example.wallet2.ui.user.PREF_NAME
+import com.example.wallet2.ui.user.USERNAME
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.*
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.receive.ReceiveFragment
 import com.example.wallet2.ui.send.SendFragment
-import com.example.wallet2.ui.user.LoginFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -71,7 +72,7 @@ class DashboardFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        //preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -110,7 +111,8 @@ class DashboardFragment : Fragment() {
         setUpRecyclerView()
 
         //balance.text = "$" + getTotalBalance(getContacts()).toString()
-        //usernameAppbar.text = preferences.getString(USERNAME, "")
+        balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
+        usernameAppbar.text = preferences.getString(USERNAME, "")
         emailAppbar.text = user?.email.toString()
 
         send_button.setOnClickListener {
@@ -156,11 +158,12 @@ class DashboardFragment : Fragment() {
                 R.id.logout -> {
                     mAuth!!.signOut()
 
-                    val fragmentManager = parentFragmentManager
+                    /*val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, LoginFragment())
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_dashboardFragmentDest_to_loginFragment, null)
                 }
             }
             true

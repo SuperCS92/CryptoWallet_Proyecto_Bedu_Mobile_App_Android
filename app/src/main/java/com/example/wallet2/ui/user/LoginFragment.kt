@@ -14,6 +14,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
+import com.example.wallet2.MainActivity
 import com.example.wallet2.R
 import com.example.wallet2.data.userDb
 import com.example.wallet2.ui.dashboard.DashboardFragment
@@ -148,6 +151,7 @@ class LoginFragment : Fragment() {
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, dashboardFragment)
             transaction.commit()
+//            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
         }
     }
 
@@ -165,6 +169,7 @@ class LoginFragment : Fragment() {
                     val transaction = fragmentManager.beginTransaction()
                     transaction.replace(R.id.fragment_container, dashboardFragment)
                     transaction.commit()
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
