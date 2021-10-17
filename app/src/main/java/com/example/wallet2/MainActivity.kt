@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.wallet2.ui.user.IS_LOGGED
@@ -172,11 +173,19 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    // Overwrite this method in order to get the context of each fragment (used in QR scanner)
+    // Overwrite this method in order to get the context of each fragment (used in QR scanner camera)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        for (fragment in supportFragmentManager.fragments) {
+        /*for (fragment in supportFragmentManager.fragments) {
             fragment.onActivityResult(requestCode, resultCode, data)
+        }*/
+        // New method to read fragments context in Navigation
+        val navHostFragment = supportFragmentManager.fragments.first() as? NavHostFragment
+        if (navHostFragment != null) {
+            val childFragments = navHostFragment?.childFragmentManager?.fragments
+            childFragments.forEach { fragment ->
+                fragment.onActivityResult(requestCode, resultCode, data)
+            }
         }
     }
 }

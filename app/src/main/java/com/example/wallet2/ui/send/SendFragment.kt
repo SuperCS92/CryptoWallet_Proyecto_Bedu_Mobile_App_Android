@@ -640,7 +640,6 @@ class SendFragment : Fragment() {
                         }
                     }
                 }else{
-                    Toast.makeText(requireContext(), "Impossible to read QR", Toast.LENGTH_LONG).show()
                     super.onActivityResult(requestCode, resultCode, data)
                 }
             }
