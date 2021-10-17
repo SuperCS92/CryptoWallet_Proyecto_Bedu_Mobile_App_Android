@@ -11,10 +11,20 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragmentDest" />
+            app:destination="@id/dashboardFragmentDest"
+            app:enterAnim="@animator/enter_from_right"
+            app:exitAnim="@animator/exit_to_left"
+            app:popEnterAnim="@animator/enter_from_left"
+            app:popExitAnim="@animator/exit_to_right"
+            />
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@animator/enter_from_right"
+            app:exitAnim="@animator/exit_to_left"
+            app:popEnterAnim="@animator/enter_from_left"
+            app:popExitAnim="@animator/exit_to_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -23,7 +33,11 @@
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@animator/enter_from_left"
+            app:exitAnim="@animator/exit_to_right"
+            app:popEnterAnim="@animator/enter_from_right"
+            app:popExitAnim="@animator/exit_to_left"/>
     </fragment>
     <fragment
         android:id="@+id/dashboardFragmentDest"
@@ -32,16 +46,31 @@
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_sendFragment"
-            app:destination="@id/sendFragment" />
+            app:destination="@id/sendFragment"
+            app:enterAnim="@animator/enter_from_right"
+            app:exitAnim="@animator/exit_to_left"
+            app:popEnterAnim="@animator/enter_from_left"
+            app:popExitAnim="@animator/exit_to_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_receiveFragment"
-            app:destination="@id/receiveFragment" />
+            app:destination="@id/receiveFragment"
+            app:enterAnim="@animator/enter_from_right"
+            app:exitAnim="@animator/exit_to_left"
+            app:popEnterAnim="@animator/enter_from_left"
+            app:popExitAnim="@animator/exit_to_right"/>
         <action
             android:id="@+id/action_dashboardFragmentDest_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@animator/slide_down"
+            app:exitAnim="@animator/slide_down"/>
         <action
             android:id="@+id/action_dashboardFragmentDest_to_assetFragment"
-            app:destination="@id/assetFragment" />
+            app:destination="@id/assetFragment"
+            app:enterAnim="@animator/enter_from_right"
+            app:exitAnim="@animator/exit_to_left"
+            app:popEnterAnim="@animator/enter_from_left"
+            app:popExitAnim="@animator/exit_to_right"
+            />
         <action
             android:id="@+id/action_dashboardFragmentDest_to_transactionFragment"
             app:destination="@id/transactionFragment" />
@@ -56,7 +85,11 @@
         tools:layout="@layout/fragment_receive">
         <action
             android:id="@+id/action_receiveFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragmentDest" />
+            app:destination="@id/dashboardFragmentDest"
+            app:enterAnim="@animator/enter_from_left"
+            app:exitAnim="@animator/exit_to_right"
+            app:popEnterAnim="@animator/enter_from_right"
+            app:popExitAnim="@animator/exit_to_left"/>
     </fragment>
     <fragment
         android:id="@+id/sendFragment"
@@ -65,13 +98,21 @@
         tools:layout="@layout/fragment_send">
         <action
             android:id="@+id/action_sendFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragmentDest" />
+            app:destination="@id/dashboardFragmentDest"
+            app:enterAnim="@animator/enter_from_left"
+            app:exitAnim="@animator/exit_to_right"
+            app:popEnterAnim="@animator/enter_from_right"
+            app:popExitAnim="@animator/exit_to_left"/>
         <action
             android:id="@+id/action_sendFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@animator/enter_from_left"
+            app:exitAnim="@animator/exit_to_right"
+            app:popEnterAnim="@animator/enter_from_right"
+            app:popExitAnim="@animator/exit_to_left"/>
         <action
             android:id="@+id/action_sendFragment_to_seedPhraseFragment"
-            app:destination="@id/seedPhraseFragment" />
+            app:destination="@id/seedPhraseFragment"/>
     </fragment>
     <fragment
         android:id="@+id/assetFragment"
@@ -80,7 +121,14 @@
         tools:layout="@layout/fragment_asset">
         <action
             android:id="@+id/action_assetFragment_to_dashboardFragmentDest"
-            app:destination="@id/dashboardFragmentDest" />
+            app:destination="@id/dashboardFragmentDest"
+            app:enterAnim="@animator/enter_from_left"
+            app:exitAnim="@animator/exit_to_right"
+            app:popEnterAnim="@animator/enter_from_right"
+            app:popExitAnim="@animator/exit_to_left"/>
+        <action
+            android:id="@+id/action_assetFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"
@@ -98,6 +146,6 @@
         tools:layout="@layout/fragment_seed_phrase">
         <action
             android:id="@+id/action_seedPhraseFragment_to_dashboardFragmentDest"
-            app:destination="@id/dashboardFragmentDest" />
+            app:destination="@id/dashboardFragmentDest"/>
     </fragment>
 </navigation>
