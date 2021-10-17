@@ -39,6 +39,15 @@
         <action
             android:id="@+id/action_dashboardFragmentDest_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_dashboardFragmentDest_to_assetFragment"
+            app:destination="@id/assetFragment" />
+        <action
+            android:id="@+id/action_dashboardFragmentDest_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
+        <action
+            android:id="@+id/action_dashboardFragmentDest_to_seedPhraseFragment"
+            app:destination="@id/seedPhraseFragment" />
     </fragment>
     <fragment
         android:id="@+id/receiveFragment"
@@ -60,5 +69,35 @@
         <action
             android:id="@+id/action_sendFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_sendFragment_to_seedPhraseFragment"
+            app:destination="@id/seedPhraseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/assetFragment"
+        android:name="com.example.wallet2.AssetFragment"
+        android:label="AssetFragment"
+        tools:layout="@layout/fragment_asset">
+        <action
+            android:id="@+id/action_assetFragment_to_dashboardFragmentDest"
+            app:destination="@id/dashboardFragmentDest" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionFragment"
+        android:name="com.example.wallet2.TransactionFragment"
+        android:label="TransactionFragment"
+        tools:layout="@layout/fragment_transaction">
+        <action
+            android:id="@+id/action_transactionFragment_to_dashboardFragmentDest"
+            app:destination="@id/dashboardFragmentDest" />
+    </fragment>
+    <fragment
+        android:id="@+id/seedPhraseFragment"
+        android:name="com.example.wallet2.ui.SeedPhraseFragment"
+        android:label="SeedPhraseFragment"
+        tools:layout="@layout/fragment_seed_phrase">
+        <action
+            android:id="@+id/action_seedPhraseFragment_to_dashboardFragmentDest"
+            app:destination="@id/dashboardFragmentDest" />
     </fragment>
 </navigation>

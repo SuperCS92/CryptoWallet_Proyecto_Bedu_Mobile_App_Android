@@ -26,6 +26,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.wallet2.*
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.models.SendTran
@@ -147,23 +148,25 @@ class SendFragment : Fragment() {
 
         navigation_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_seed -> { val SeedPhraseFragment = SeedPhraseFragment()
-
+                R.id.nav_seed -> {
+                    /*val SeedPhraseFragment = SeedPhraseFragment()
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_sendFragment_to_seedPhraseFragment, null)
                 }
 
                 R.id.logout -> {
                     mAuth!!.signOut()
 
-                    val fragmentManager = parentFragmentManager
+                    /*val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, LoginFragment())
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_sendFragment_to_loginFragment, null)
                 }
             }
             true
@@ -363,7 +366,8 @@ class SendFragment : Fragment() {
 
         // Cancel button redirects to dashboardFragment
         cance_button.setOnClickListener {
-            goToDashboard()
+            //goToDashboard()
+            findNavController().navigate(R.id.action_sendFragment_to_dashboardFragment, null)
         }
 
         // Next button confirm the transaction and redirects to dashboardFragment
@@ -376,7 +380,7 @@ class SendFragment : Fragment() {
                     openConfirmationDialog(_asset, _amount, _address)
                     CoroutineScope(Dispatchers.IO).launch{
                         delay(3_000)
-                        (activity as MainActivity).simpleNotification("Envío hecho", "La transacción se ha hecho con éxito", 21)
+                        (activity as MainActivity).simpleNotification("Transaction completed", "The transaction was successful", 21)
                     }
                 } else {
                     Toast.makeText(requireContext(), "Please enter all required information.\n" +
@@ -424,7 +428,7 @@ class SendFragment : Fragment() {
         return asset.isNotEmpty() && amount.toString().isNotEmpty() && address.isNotEmpty()
     }
 
-    private fun goToDashboard(){
+    /*private fun goToDashboard(){
         val dashboardFragment = DashboardFragment()
 
         val fragmentManager = parentFragmentManager
@@ -432,7 +436,7 @@ class SendFragment : Fragment() {
         transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
         transaction.replace(R.id.fragment_container, dashboardFragment)
         transaction.commit()
-    }
+    }*/
 
     //generamos datos dummy con este método
     private fun getAssets_Short(): MutableList<Asset_Short>{
@@ -453,9 +457,11 @@ class SendFragment : Fragment() {
         // Accept transaction
         builder.setPositiveButton("Send", { dialogInterface: DialogInterface, i: Int ->
             //saveTransfer()
-            goToDashboard()
             loadingTransactionMessage()
-            progressNotification()
+            //progressNotification()        // Crash problems in some Android versions
+
+            //goToDashboard()
+            findNavController().navigate(R.id.action_sendFragment_to_dashboardFragment, null)
         })
         // Cancel transaction
         builder.setNegativeButton("Cancel", { dialogInterface: DialogInterface, i: Int ->
@@ -544,6 +550,7 @@ class SendFragment : Fragment() {
 
     // Scanner settings
     private fun setUpQRCode(){
+        //Toast.makeText(requireContext(), "Option not available", Toast.LENGTH_SHORT).show()
         IntentIntegrator(requireActivity())
             .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE) // Selecting the type of code to scan
             .setTorchEnabled(false) // Flash enabled / disabled
@@ -633,6 +640,7 @@ class SendFragment : Fragment() {
                         }
                     }
                 }else{
+                    Toast.makeText(requireContext(), "Impossible to read QR", Toast.LENGTH_LONG).show()
                     super.onActivityResult(requestCode, resultCode, data)
                 }
             }

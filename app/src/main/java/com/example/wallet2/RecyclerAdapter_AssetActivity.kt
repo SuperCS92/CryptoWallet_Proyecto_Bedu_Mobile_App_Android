@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import java.util.logging.Handler
 
@@ -74,13 +75,15 @@ class RecyclerAdapter_AssetActivity(
                 showLoading()
                 android.os.Handler().postDelayed({hideLoading()},3000)
 
-
+/*
                 val transactionFragment = TransactionFragment(position)
 
                 val fragmentManager = (itemView.context as FragmentActivity).supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_container, transactionFragment)
-                transaction.commit()
+                transaction.commit()*/
+                Navigation.findNavController(it).navigate(R.id.action_dashboardFragmentDest_to_transactionFragment, null)
+
             }
         }
 

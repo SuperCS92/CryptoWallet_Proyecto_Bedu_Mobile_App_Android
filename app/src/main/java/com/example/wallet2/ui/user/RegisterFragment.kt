@@ -13,6 +13,7 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.wallet2.MainActivity
 import com.example.wallet2.R
 import com.example.wallet2.data.models.User
@@ -134,14 +135,15 @@ class RegisterFragment : Fragment() {
                         (activity as MainActivity).customNotification()
                     }
 
-                    val logInFragment = LoginFragment()
+                    /*val logInFragment = LoginFragment()
 
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-                    transaction.replace(R.id.fragment_container, logInFragment)
+                    transaction.replace(R.id.fragment_container, logInFragment)*/
 
                     progress_bar.visibility = View.GONE
-                    transaction.commit()
+                    //transaction.commit()
+                    findNavController().navigate(R.id.action_registerFragment_to_loginFragment, null)
                 }
             }
 
@@ -149,12 +151,13 @@ class RegisterFragment : Fragment() {
 
 
         logInBtn.setOnClickListener {
-            val logInFragment = LoginFragment()
+            /*val logInFragment = LoginFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, logInFragment)
-            transaction.commit()
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment, null)
         }
 
         email.setOnKeyListener { _, _, _ ->
