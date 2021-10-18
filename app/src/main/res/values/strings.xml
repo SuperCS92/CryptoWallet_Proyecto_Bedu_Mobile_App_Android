@@ -127,5 +127,6 @@
     <string name="transactions_title">Encrypting transaction</string>
     <string name="transaction_description">Sending...</string>
     <string name="transaction_completed">Transfer completed successfully</string>
+    <string name="sign_in_google">Sign In with Google</string>
 
 </resources>
