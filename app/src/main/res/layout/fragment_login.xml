@@ -82,7 +82,6 @@
                 android:id="@+id/next_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/primaryColor"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:elevation="12dp"
@@ -90,26 +89,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/sign_in_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@android:color/white"
-                android:drawableRight="@drawable/ic_google"
-                android:elevation="12dp"
-                android:text="Iniciar con Google"
-                android:textColor="@color/darkgrey"
-                app:cornerRadius="10dp" />
-
-
-        </RelativeLayout>
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="60dp"
@@ -121,14 +100,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/forgotpass_button"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:backgroundTint="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="@string/astr_forgotpass"/>
 
         <TextView
