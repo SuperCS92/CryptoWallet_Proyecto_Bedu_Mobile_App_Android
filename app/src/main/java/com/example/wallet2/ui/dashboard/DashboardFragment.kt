@@ -116,24 +116,26 @@ class DashboardFragment : Fragment() {
         emailAppbar.text = user?.email.toString()
 
         send_button.setOnClickListener {
-            val sendFragment = SendFragment()
+            /*val sendFragment = SendFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, sendFragment)
-            transaction.commit()
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_dashboardFragment_to_sendFragment, null)
         }
 
 
         receive_button.setOnClickListener {
-            val receiveFragment = ReceiveFragment()
+            /*val receiveFragment = ReceiveFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, receiveFragment)
-            transaction.commit()
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_dashboardFragment_to_receiveFragment, null)
         }
 
         activity_button.setOnClickListener {
@@ -147,13 +149,14 @@ class DashboardFragment : Fragment() {
 
         navigation_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_seed -> { val SeedPhraseFragment = SeedPhraseFragment()
-
+                R.id.nav_seed -> {
+                    /*val SeedPhraseFragment = SeedPhraseFragment()
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_dashboardFragmentDest_to_seedPhraseFragment, null)
                 }
                 R.id.logout -> {
                     mAuth!!.signOut()

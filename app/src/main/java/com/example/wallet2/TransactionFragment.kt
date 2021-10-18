@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionInflater
 import com.example.wallet2.ui.dashboard.DashboardFragment
 
@@ -18,7 +19,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [TransactionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TransactionFragment(val position: Int) : Fragment() {
+class TransactionFragment(val position: Int = 0) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -44,13 +45,14 @@ class TransactionFragment(val position: Int) : Fragment() {
         val view = inflater.inflate(R.layout.fragment_transaction, container, false)
         toolbar = view.findViewById(R.id.app_bar)
         toolbar.setNavigationOnClickListener {
-            val dashboardFragment = DashboardFragment()
+            /*val dashboardFragment = DashboardFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, dashboardFragment)
-            transaction.commit() }
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_transactionFragment_to_dashboardFragmentDest, null)}
 
         //toolbar
        // (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))

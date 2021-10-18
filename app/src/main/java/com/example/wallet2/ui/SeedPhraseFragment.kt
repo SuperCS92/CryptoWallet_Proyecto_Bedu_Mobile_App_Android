@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.findNavController
 import com.example.wallet2.R
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.google.android.material.button.MaterialButton
@@ -55,13 +56,14 @@ class SeedPhraseFragment : Fragment() {
         copy_button = view.findViewById(R.id.copy)
 
         toolbar.setNavigationOnClickListener {
-            val dashboardFragment = DashboardFragment()
+            /*val dashboardFragment = DashboardFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, dashboardFragment)
-            transaction.commit() }
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_seedPhraseFragment_to_dashboardFragmentDest, null)}
 
         show_button.setOnClickListener {
             if (show_boolean) {

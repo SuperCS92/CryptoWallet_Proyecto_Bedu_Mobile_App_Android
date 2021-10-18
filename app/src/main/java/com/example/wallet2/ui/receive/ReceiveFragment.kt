@@ -46,6 +46,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -121,13 +122,14 @@ class ReceiveFragment : Fragment() {
         //(activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
         toolbar = view.findViewById(R.id.app_bar)
         toolbar.setNavigationOnClickListener {
-            val dashboardFragment = DashboardFragment()
+            /*val dashboardFragment = DashboardFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
             transaction.replace(R.id.fragment_container, dashboardFragment)
-            transaction.commit() }
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_receiveFragment_to_dashboardFragment, null)}
 
         // Generate QR Code
         qrgenerate_button.setOnClickListener{

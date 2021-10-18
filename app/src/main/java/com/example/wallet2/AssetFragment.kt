@@ -7,6 +7,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.ui.dashboard.DashboardFragment
@@ -21,7 +24,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AssetFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AssetFragment(val position: Int) : Fragment() {
+class AssetFragment(var position: Int = 0) : Fragment() {
 
     private lateinit var toolbar: Toolbar
     private lateinit var balance: TextView
@@ -40,6 +43,10 @@ class AssetFragment(val position: Int) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        // Safe args to get position
+        val safeArgs: AssetFragmentArgs by navArgs()
+        position = safeArgs.positionSelected
 
         asset = getAsset(position, getContacts())
         activities = filterActivities(assets, asset.symbol)
@@ -71,12 +78,13 @@ class AssetFragment(val position: Int) : Fragment() {
         toolbar = view.findViewById(R.id.app_bar)
 
         toolbar.setNavigationOnClickListener {
-            val dashboardFragment = DashboardFragment()
+            /*val dashboardFragment = DashboardFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, dashboardFragment)
-            transaction.commit() }
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_assetFragment_to_dashboardFragmentDest, null)}
 
         recyclerContacts.setHasFixedSize(true)
         //nuestro layout va a ser de una sola columna

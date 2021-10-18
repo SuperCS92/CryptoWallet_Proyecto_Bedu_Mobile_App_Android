@@ -26,6 +26,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.wallet2.*
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.models.SendTran
@@ -147,23 +148,25 @@ class SendFragment : Fragment() {
 
         navigation_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_seed -> { val SeedPhraseFragment = SeedPhraseFragment()
-
+                R.id.nav_seed -> {
+                    /*val SeedPhraseFragment = SeedPhraseFragment()
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, SeedPhraseFragment)
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_sendFragment_to_seedPhraseFragment, null)
                 }
 
                 R.id.logout -> {
                     mAuth!!.signOut()
 
-                    val fragmentManager = parentFragmentManager
+                    /*val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left, R.animator.enter_from_left, R.animator.exit_to_right)
                     transaction.replace(R.id.fragment_container, LoginFragment())
-                    transaction.commit()
+                    transaction.commit()*/
+                    findNavController().navigate(R.id.action_sendFragment_to_loginFragment, null)
                 }
             }
             true
@@ -204,78 +207,78 @@ class SendFragment : Fragment() {
         }
 
         amount_value.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-                if (keyCode >=7 && keyCode <= 16 && event.action == KeyEvent.ACTION_UP) {
-                    val textamount = amount_value.text
+            if (keyCode >=7 && keyCode <= 16 && event.action == KeyEvent.ACTION_UP) {
+                val textamount = amount_value.text
 
-                            if(textamount.isNotEmpty()) {
-                                val amount = textamount.toString().toDouble()
-                                val fee: Double = 0.00034
+                if(textamount.isNotEmpty()) {
+                    val amount = textamount.toString().toDouble()
+                    val fee: Double = 0.00034
 
-                                if(amount_currency) {
-                                    val _total = amount.plus(fee)
-                                    total.text = _total.toString()
-                                }
-                                else{
-                                    var crypto = assetText.text.toString()
-                                    var amount_converted : Double = 0.0
+                    if(amount_currency) {
+                        val _total = amount.plus(fee)
+                        total.text = _total.toString()
+                    }
+                    else{
+                        var crypto = assetText.text.toString()
+                        var amount_converted : Double = 0.0
 
-                                    //We need to convert it from fiat to cripto
-                                    when(crypto){
-                                        "BTC" ->  amount_converted =  amount / itemsprice[0]
+                        //We need to convert it from fiat to cripto
+                        when(crypto){
+                            "BTC" ->  amount_converted =  amount / itemsprice[0]
 
-                                        "ETH" ->   amount_converted =  amount / itemsprice[1]
+                            "ETH" ->   amount_converted =  amount / itemsprice[1]
 
-                                        "BNB" ->   amount_converted =  amount / itemsprice[2]
-                                    }
+                            "BNB" ->   amount_converted =  amount / itemsprice[2]
+                        }
 
-                                    _total = amount_converted.plus(fee)
-                                    total.text = _total.toString()
-                                }
+                        _total = amount_converted.plus(fee)
+                        total.text = _total.toString()
+                    }
 
 
-                                return@OnKeyListener true
-                            }
-
-                    false
+                    return@OnKeyListener true
                 }
+
                 false
+            }
+            false
         })
 
         address_value.setOnFocusChangeListener { v, hasFocus ->
 
-                if(hasFocus) {
-                    address_textField.helperText = "Paste the address and double check it's correct"
+            if(hasFocus) {
+                address_textField.helperText = "Paste the address and double check it's correct"
 
-                } else {
+            } else {
 
-                    val textamount = address_value.text
+                val textamount = address_value.text
 
-                    if (textamount.isNotEmpty() && textamount.length > 2) {
+                if (textamount.isNotEmpty() && textamount.length > 2) {
 
-                        val address = textamount.toString()
-                        val crypto = assetText.text.toString()
+                    val address = textamount.toString()
+                    val crypto = assetText.text.toString()
 
-                        if (crypto == "BTC") {
+                    if (crypto == "BTC") {
 
-                            when {
-                                address.startsWith("1") -> address_textField.helperText =
-                                    "P2PKH address entered"
-                                address.startsWith("3") -> address_textField.helperText =
-                                    "P2SH address entered"
-                                address.startsWith("bc1") -> address_textField.helperText =
-                                    "Bech32 address entered"
-                                else -> address_textField.error = "This address should begin 1, 3 or bc1"
-                            }
-
-                        } else {
-                            if (address.startsWith("0x")) address_textField.helperText =
-                                "hex address entered"
-                            else address_textField.error = "This address should begin 0x"
-
+                        when {
+                            address.startsWith("1") -> address_textField.helperText =
+                                "P2PKH address entered"
+                            address.startsWith("3") -> address_textField.helperText =
+                                "P2SH address entered"
+                            address.startsWith("bc1") -> address_textField.helperText =
+                                "Bech32 address entered"
+                            else -> address_textField.error = "This address should begin 1, 3 or bc1"
                         }
+
+                    } else {
+                        if (address.startsWith("0x")) address_textField.helperText =
+                            "hex address entered"
+                        else address_textField.error = "This address should begin 0x"
+
                     }
-                    else address_textField.error = "Address too short or empty"
                 }
+                else address_textField.error = "Address too short or empty"
+            }
         }
 
 
@@ -363,7 +366,8 @@ class SendFragment : Fragment() {
 
         // Cancel button redirects to dashboardFragment
         cance_button.setOnClickListener {
-            goToDashboard()
+            //goToDashboard()
+            findNavController().navigate(R.id.action_sendFragment_to_dashboardFragment, null)
         }
 
         // Next button confirm the transaction and redirects to dashboardFragment
@@ -374,13 +378,17 @@ class SendFragment : Fragment() {
                 _address = address_value.text.toString()
                 if (validateInformation(_asset, _amount, _address)) {
                     openConfirmationDialog(_asset, _amount, _address)
+                    CoroutineScope(Dispatchers.IO).launch{
+                        delay(3_000)
+                        (activity as MainActivity).simpleNotification("Transaction completed", "The transaction was successful", 21)
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Please enter all required information.\n" +
                             "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()
                 }
             } catch (e: NumberFormatException) {
                 Toast.makeText(requireContext(), "Please enter all required information.\n" +
-                            "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()
+                        "Asset / Amount / Address field is empty", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -420,15 +428,14 @@ class SendFragment : Fragment() {
         return asset.isNotEmpty() && amount.toString().isNotEmpty() && address.isNotEmpty()
     }
 
-    private fun goToDashboard(){
+    /*private fun goToDashboard(){
         val dashboardFragment = DashboardFragment()
-
         val fragmentManager = parentFragmentManager
         val transaction = fragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right)
         transaction.replace(R.id.fragment_container, dashboardFragment)
         transaction.commit()
-    }
+    }*/
 
     //generamos datos dummy con este método
     private fun getAssets_Short(): MutableList<Asset_Short>{
@@ -449,9 +456,11 @@ class SendFragment : Fragment() {
         // Accept transaction
         builder.setPositiveButton("Send", { dialogInterface: DialogInterface, i: Int ->
             //saveTransfer()
-            goToDashboard()
             loadingTransactionMessage()
-            progressNotification()
+            //progressNotification()        // Crash problems in some Android versions
+
+            //goToDashboard()
+            findNavController().navigate(R.id.action_sendFragment_to_dashboardFragment, null)
         })
         // Cancel transaction
         builder.setNegativeButton("Cancel", { dialogInterface: DialogInterface, i: Int ->
@@ -498,19 +507,19 @@ class SendFragment : Fragment() {
                     } catch (e: InterruptedException) {
                         //e.printStackTrace()
                     }
-                        handler.post(Runnable {
-                            if (progress == max){
-                                builder.setContentText("Transaction completed successfully")
-                                builder.setProgress(0,0,false)
-                            }else{
-                                // Calculate the percentage comple
-                                percentage = (progress*100)/max
-                                builder.setContentText("$percentage% complete")
-                                builder.setProgress(max,progress,true)
-                            }
-                            notify(34, builder.build())
-                        })
-                    }
+                    handler.post(Runnable {
+                        if (progress == max){
+                            builder.setContentText("Transaction completed successfully")
+                            builder.setProgress(0,0,false)
+                        }else{
+                            // Calculate the percentage comple
+                            percentage = (progress*100)/max
+                            builder.setContentText("$percentage% complete")
+                            builder.setProgress(max,progress,true)
+                        }
+                        notify(34, builder.build())
+                    })
+                }
 
             }).start()
 
@@ -536,14 +545,11 @@ class SendFragment : Fragment() {
         progressDialog.setCancelable(false)
         progressDialog.show()
         Handler().postDelayed({progressDialog.dismiss()},3000)
-        CoroutineScope(Dispatchers.IO).launch{
-            (activity as MainActivity).simpleNotification("Envío hecho", "La transacción se ha hecho con éxito", 21)
-        }
-        //Toast.makeText(requireContext(), "Transfer was successful", Toast.LENGTH_LONG).show()
     }
 
     // Scanner settings
     private fun setUpQRCode(){
+        //Toast.makeText(requireContext(), "Option not available", Toast.LENGTH_SHORT).show()
         IntentIntegrator(requireActivity())
             .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE) // Selecting the type of code to scan
             .setTorchEnabled(false) // Flash enabled / disabled

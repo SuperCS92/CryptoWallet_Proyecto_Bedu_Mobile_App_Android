@@ -93,12 +93,13 @@ class LoginFragment : Fragment() {
         progress_bar = view.findViewById(R.id.progress)
 
         signUpBtn.setOnClickListener {
-            val registerFragment = RegisterFragment()
+            /*val registerFragment = RegisterFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, registerFragment)
-            transaction.commit()
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment, null)
         }
 
         next_button.setOnClickListener {
@@ -145,13 +146,13 @@ class LoginFragment : Fragment() {
 
         val currentUser = auth.currentUser
         if(currentUser != null){
-            val dashboardFragment = DashboardFragment()
+            /*val dashboardFragment = DashboardFragment()
 
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, dashboardFragment)
-            transaction.commit()
-//            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
+            transaction.commit()*/
+            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
         }
     }
 
@@ -163,12 +164,12 @@ class LoginFragment : Fragment() {
                     Log.d(TAG, "signInWithEmail:success")
                     //val user = auth.currentUser
 
-                    val dashboardFragment = DashboardFragment()
+                    /*val dashboardFragment = DashboardFragment()
 
                     val fragmentManager = parentFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.replace(R.id.fragment_container, dashboardFragment)
-                    transaction.commit()
+                    transaction.commit()*/
                     findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
                 } else {
                     // If sign in fails, display a message to the user.
