@@ -3,6 +3,7 @@ package com.example.wallet2.ui.user
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -20,9 +21,16 @@ import com.example.wallet2.MainActivity
 import com.example.wallet2.R
 import com.example.wallet2.data.userDb
 import com.example.wallet2.ui.dashboard.DashboardFragment
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -44,10 +52,12 @@ const val IS_LOGGED = "IS_LOGGED"
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     private var viewModel: UserViewModel? = null
 
     private lateinit var next_button: Button
+    private lateinit var google_button: Button
     private lateinit var email: EditText
     private lateinit var password_text: EditText
     private lateinit var password_layout: TextInputLayout
@@ -82,10 +92,17 @@ class LoginFragment : Fragment() {
 
         //Firebase
         auth = FirebaseAuth.getInstance()
+        // Configure Google Sign In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient((context as Activity?)!!, gso)
         val crashlytics = FirebaseCrashlytics.getInstance()
 
 
         next_button = view.findViewById(R.id.next_button)
+        google_button = view.findViewById(R.id.sign_in_btn)
         password_text = view.findViewById(R.id.password_edit_text)
         email = view.findViewById(R.id.email)
         password_layout = view.findViewById(R.id.password_text_input)
@@ -100,6 +117,12 @@ class LoginFragment : Fragment() {
             transaction.replace(R.id.fragment_container, registerFragment)
             transaction.commit()
         }
+
+        google_button.setOnClickListener {
+            signin()
+        }
+
+
 
         next_button.setOnClickListener {
 
@@ -212,7 +235,56 @@ class LoginFragment : Fragment() {
         return text != null && text.length >= 1
     }
 
+    private fun signin(){
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    // Funciones nuevas
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e)
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener((context as Activity?)!!) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+                    val dashboardFragment = DashboardFragment()
+
+                    val fragmentManager = parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragment_container, dashboardFragment)
+                    transaction.commit()
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment, null)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                }
+            }
+    }
+
+
+
     companion object {
+
+        private const val RC_SIGN_IN = 120
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
