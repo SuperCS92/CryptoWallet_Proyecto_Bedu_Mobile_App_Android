@@ -1,4 +1,4 @@
-package com.example.wallet2
+package com.example.wallet2.ui.asset
 
 import android.os.Bundle
 import android.view.*
@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wallet2.*
 import com.example.wallet2.ui.dashboard.DashboardFragment
 
 // TODO: Rename parameter arguments, choose names that match

@@ -10,6 +10,9 @@ interface CryptoTransferDao {
     @Insert
     fun insertCryptoTransfer(cryptoTransfer: CryptoTransfer)
 
+    @Query("SELECT * FROM crypto_transfers")
+    fun getCryptoTransfers(): LiveData<List<CryptoTransfer>>
+
 //    @Update
 //    fun updateReceivedTran(receivedTran: ReceivedTran): Completable
 //

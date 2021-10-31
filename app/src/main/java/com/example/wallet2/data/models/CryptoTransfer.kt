@@ -10,20 +10,20 @@ data class CryptoTransfer(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
+    @ColumnInfo(name = "type")
+    val type: String?,
+
     @ColumnInfo(name = "amount")
     val amount: String?,
 
-    @ColumnInfo(name = "origin")
-    val userIdOrigin: Int,
+    @ColumnInfo(name = "from_to_user")
+    val userFromTo: String,
 
     @ColumnInfo(name = "asset")
     val asset: String,
 
     @ColumnInfo(name = "createdAt")
     val createdAt: String,
-
-    @ColumnInfo(name = "nameQr")
-    val nameQr: String,
 
     @ColumnInfo(name = "status")
     val status: String

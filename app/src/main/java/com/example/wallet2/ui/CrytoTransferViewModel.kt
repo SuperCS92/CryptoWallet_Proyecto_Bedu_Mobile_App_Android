@@ -1,4 +1,4 @@
-package com.example.wallet2.ui.receive
+package com.example.wallet2.ui
 
 import android.util.Log
 import java.text.SimpleDateFormat
@@ -43,11 +43,11 @@ class CrytoTransferViewModel(private val cryptoTransferRepository: CryptoTransfe
             val date = getCurrentDateTime()
             val dateInString = date.toString("yyyy/MM/dd HH:mm:ss")
             val cryptoWallet = CryptoTransfer(
+                type = "Receive",
                 amount = amount.toString(),
                 asset = asset.toString(),
-                userIdOrigin = 0,
+                userFromTo = "None",
                 createdAt = dateInString,
-                nameQr = "",
                 status = "generated",
                 id = 0
             )

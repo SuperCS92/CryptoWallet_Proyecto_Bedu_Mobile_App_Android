@@ -118,7 +118,7 @@
     </fragment>
     <fragment
         android:id="@+id/assetFragment"
-        android:name="com.example.wallet2.AssetFragment"
+        android:name="com.example.wallet2.ui.asset.AssetFragment"
         android:label="AssetFragment"
         tools:layout="@layout/fragment_asset">
         <action

@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <variable
+            name="cryptotransfer"
+            type="com.example.wallet2.data.models.CryptoTransfer" />
+
+        <variable
+            name="viewModel"
+            type="com.example.wallet2.ui.asset.AssetViewModel" />
+    </data>
+<com.google.android.material.card.MaterialCardView
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:layout_margin="4dp"
@@ -44,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Nombre bato"
+                android:text="@{cryptotransfer.type}"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 />
@@ -53,7 +63,7 @@
                 android:id="@+id/price_fiat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ya fue"
+                android:text="@{cryptotransfer.userFromTo}"
                 />
         </LinearLayout>
 
@@ -68,7 +78,7 @@
                 android:id="@+id/asset_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:text="Ya fue"
+                android:text='@{cryptotransfer.amount + " " + cryptotransfer.amount}'
                 android:textSize="16sp"
                 android:textStyle="bold"
                 />
@@ -77,8 +87,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:layout_marginTop="8dp"
-                android:text="Ya fue"
+                android:text="@{cryptotransfer.createdAt}"
                 />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
+</layout>

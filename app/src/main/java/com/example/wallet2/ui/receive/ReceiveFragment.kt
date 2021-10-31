@@ -10,26 +10,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.Asset_Short
 import com.example.wallet2.R
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.*
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import android.content.Intent
@@ -42,10 +34,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.wallet2.CryptoTransfersApplication
 import com.example.wallet2.databinding.FragmentReceiveBinding
+import com.example.wallet2.ui.CrytoTransferViewModel
 
 
 // TODO: Rename parameter arguments, choose names that match
