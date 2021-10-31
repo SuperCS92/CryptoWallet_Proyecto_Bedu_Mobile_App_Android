@@ -16,13 +16,11 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.wallet2.ui.dashboard.DashboardFragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.wallet2.Asset_Short
 import com.example.wallet2.R
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.*
-import com.example.wallet2.data.models.ReceivedTran
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.zxing.BarcodeFormat
@@ -38,15 +36,16 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.core.content.ContextCompat.getSystemService
 
-import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.example.wallet2.CryptoTransfersApplication
+import com.example.wallet2.databinding.FragmentReceiveBinding
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -61,6 +60,8 @@ private const val ARG_PARAM2 = "param2"
  */
 const val CHANNEL_RECEIVE = "CHANNER_RECEIVE"
 class ReceiveFragment : Fragment() {
+    private lateinit var viewModel: CrytoTransferViewModel
+    private lateinit var binding: FragmentReceiveBinding
 
     val items= listOf("BTC", "ETH", "BNB")
 
@@ -68,12 +69,12 @@ class ReceiveFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var toolbar: Toolbar
-    private lateinit var amount_value: EditText
-    private lateinit var qrImage: ImageView
-    private lateinit var assetText: AutoCompleteTextView
+//    private lateinit var toolbar: Toolbar
+//    private lateinit var amount_value: EditText
+//    private lateinit var qrImage: ImageView
+//    private lateinit var assetText: AutoCompleteTextView
 
-    private var viewModel: ReceivedTranViewModel? = null
+//    private var viewModel: CrytoTransferViewModel? = null
 
     private val width = 1000
     private val height = 1000
@@ -95,33 +96,44 @@ class ReceiveFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_receive, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_receive,
+            container,
+            false
+        )
+
+        viewModel = CrytoTransferViewModel(
+            (requireContext().applicationContext as CryptoTransfersApplication).cryptoTransactionRepository
+        )
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
 //        val receivedTranRepository = ReceivedTranRepository(ReceivedTranDb.getDatabase(requireContext()).receivedTranDao())
-//        viewModel = ReceivedTranViewModel(receivedTranRepository)
+//        viewModel = CrytoTransferViewModel(receivedTranRepository)
 
-        viewModel = ViewModelProviders.of(this).get(ReceivedTranViewModel::class.java)
-        var dataBaseInstance = ReceivedTranDb.getDatabase(requireContext())
-        viewModel?.setInstanceOfDb(dataBaseInstance)
+//        viewModel = ViewModelProviders.of(this).get(CrytoTransferViewModel::class.java)
+//        var dataBaseInstance = ReceivedTranDb.getDatabase(requireContext())
+//        viewModel?.setInstanceOfDb(dataBaseInstance)
 
 
-        val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_transaction)
-        assetText = view.findViewById(R.id.assetText_transaction)
-        val qrgenerate_button = view.findViewById<MaterialButton>(R.id.qrGenerateBtn)
-        val copy_button = view.findViewById<MaterialButton>(R.id.astr_transaction_copy_btn)
-        val share_button = view.findViewById<MaterialButton>(R.id.astr_transaction_share_btn)
-        val download_button = view.findViewById<MaterialButton>(R.id.astr_transaction_download_btn)
-        amount_value = view.findViewById(R.id.amountToSend_value)
-        qrImage = view.findViewById(R.id.imageView2)
+//        val textInputLayout = view.findViewById<TextInputLayout>(R.id.asset_transaction)
+//        assetText = view.findViewById(R.id.assetText_transaction)
+//        val qrgenerate_button = view.findViewById<MaterialButton>(R.id.qrGenerateBtn)
+//        val copy_button = view.findViewById<MaterialButton>(R.id.astr_transaction_copy_btn)
+//        val share_button = view.findViewById<MaterialButton>(R.id.astr_transaction_share_btn)
+//        val download_button = view.findViewById<MaterialButton>(R.id.astr_transaction_download_btn)
+//        amount_value = view.findViewById(R.id.amountToSend_value)
+//        qrImage = view.findViewById(R.id.imageView2)
 
 
         val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
-        (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        (binding.assetTransaction.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         //toolbar
         //(activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
-        toolbar = view.findViewById(R.id.app_bar)
-        toolbar.setNavigationOnClickListener {
+//        toolbar = view.findViewById(R.id.app_bar)
+        binding.appBar.setNavigationOnClickListener {
             /*val dashboardFragment = DashboardFragment()
 
             val fragmentManager = parentFragmentManager
@@ -132,38 +144,39 @@ class ReceiveFragment : Fragment() {
             findNavController().navigate(R.id.action_receiveFragment_to_dashboardFragment, null)}
 
         // Generate QR Code
-        qrgenerate_button.setOnClickListener{
-            if(amount_value.text.toString().isEmpty() || assetText.text.toString().isEmpty()) {
+        binding.qrGenerateBtn.setOnClickListener{
+            if(binding.amountToSendValue.text.toString().isEmpty() || binding.assetTextTransaction.text.toString().isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter all required information.\n" +
                         "Amount / Asset field is empty", Toast.LENGTH_LONG).show()
             }else{
-                createQR(amount_value.text.toString(), assetText.text.toString())
-                qrgenerate_button.isVisible = false
-                copy_button.isVisible = true
-                share_button.isVisible = true
-                download_button.isVisible = true
-                amount_value.isEnabled = false
-                textInputLayout.isEnabled = false
-                saveObject()
+                createQR(binding.amountToSendValue.text.toString(), binding.assetTextTransaction.text.toString())
+                binding.qrGenerateBtn.isVisible = false
+                binding.astrTransactionCopyBtn.isVisible = true
+                binding.astrTransactionShareBtn.isVisible = true
+                binding.astrTransactionDownloadBtn.isVisible = true
+                binding.amountToSendValue.isEnabled = false
+                binding.assetTextTransaction.isEnabled = false
+//                saveObject()
+                viewModel.newCryptoTransfer()
                 QrGeneratedNotification()
             }
         }
 
         // Download the QR Code
-        download_button.setOnClickListener{
+        binding.astrTransactionDownloadBtn.setOnClickListener{
             downloadQR()
         }
 
-        share_button.setOnClickListener{
+        binding.astrTransactionShareBtn.setOnClickListener{
             shareImage()
         }
 
-        copy_button.setOnClickListener{
+        binding.astrTransactionCopyBtn.setOnClickListener{
             getClipboard(requireContext())
         }
 
         // Inflate the layout for this fragment
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -203,24 +216,24 @@ class ReceiveFragment : Fragment() {
     }
 
     fun saveObject() {
-        val date = getCurrentDateTime()
-        val dateInString = date.toString("yyyy/MM/dd HH:mm:ss")
-        val receivedTranInstance = ReceivedTran(
-            0,
-            amount_value.text.toString().toFloat(),
-            1,
-            assetText.text.toString(),
-            dateInString,
-            "",
-            "generated"
-        )
+//        val date = getCurrentDateTime()
+//        val dateInString = date.toString("yyyy/MM/dd HH:mm:ss")
+//        val receivedTranInstance = ReceivedTran(
+//            0,
+//            amount_value.text.toString().toFloat(),
+//            1,
+//            assetText.text.toString(),
+//            dateInString,
+//            "",
+//            "generated"
+//        )
 //        viewModel?.saveReceivedTran(receivedTranInstance)
-        viewModel?.saveDataIntoDb(receivedTranInstance)
+//        viewModel?.saveDataIntoDb(receivedTranInstance)
     }
 
     // Method to share image to applications
     fun shareImage() {
-        val drawable = qrImage.drawable as BitmapDrawable
+        val drawable = binding.imageView2.drawable as BitmapDrawable
         val bitmap = drawable.bitmap as Bitmap
         val bitmapPath = MediaStore.Images.Media.insertImage(context?.contentResolver, bitmap, "title", null) as String
 
@@ -236,7 +249,7 @@ class ReceiveFragment : Fragment() {
 
     // function to copy filename
     fun getClipboard(context: Context) {
-        val drawable = qrImage.drawable as BitmapDrawable
+        val drawable = binding.imageView2.drawable as BitmapDrawable
         val bitmap = drawable.bitmap as Bitmap
         val bitmapPath = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "title", null) as String
         val uri = Uri.parse(bitmapPath)
@@ -260,7 +273,7 @@ class ReceiveFragment : Fragment() {
                         bitmap.setPixel(x, y, if(bitMatrix[x, y]) Color.BLACK else Color.WHITE)
                     }
                 }
-                qrImage.setImageBitmap(bitmap)
+                binding.imageView2.setImageBitmap(bitmap)
                 Toast.makeText(requireContext(), "QR code has been created successfully", Toast.LENGTH_LONG).show()
                 return true
             } catch (e: WriterException) {
@@ -285,17 +298,6 @@ class ReceiveFragment : Fragment() {
             e.printStackTrace()
             Toast.makeText(requireContext(), "Error saving the image in gallery", Toast.LENGTH_LONG).show()
         }
-    }
-
-    fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
-        // Method to convert date in string so it could be saved in DB as String
-        val formatter = SimpleDateFormat(format, locale)
-        return formatter.format(this)
-    }
-
-    fun getCurrentDateTime(): Date {
-        // Method to obtain date at the moment of creating a transaction
-        return Calendar.getInstance().time
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

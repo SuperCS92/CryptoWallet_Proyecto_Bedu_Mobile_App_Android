@@ -27,16 +27,17 @@
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/activity_main.xml" value="0.13020833333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/activity_splash.xml" value="0.176" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/asset_item_short.xml" value="0.4" />
-        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_asset.xml" value="0.13020833333333334" />
+        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_asset.xml" value="0.264" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_dashboard.xml" value="0.2" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_login.xml" value="0.13020833333333334" />
-        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_receive.xml" value="0.13020833333333334" />
+        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_receive.xml" value="0.264" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_send.xml" value="0.13020833333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/fragment_transaction.xml" value="0.13020833333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/item_activity.xml" value="0.264" />
-        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/item_asset.xml" value="0.152" />
+        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/item_asset.xml" value="0.264" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/list_item.xml" value="0.4" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/nav_header.xml" value="0.1" />
+        <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/notification_custom.xml" value="0.11302083333333333" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/layout/progress_dialog.xml" value="0.1322463768115942" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/menu/astr_toolbar_menu.xml" value="0.13020833333333334" />
         <entry key="..\:/DevMob/ProyectoFinal/CryptoWallet_Proyecto_Bedu_Mobile_App_Android/app/src/main/res/menu/drawer_menu.xml" value="0.264" />

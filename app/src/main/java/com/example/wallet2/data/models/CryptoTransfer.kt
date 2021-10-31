@@ -5,13 +5,13 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "received_trs", indices = [Index(value = ["id"], unique = true)])
-data class ReceivedTran(
+@Entity(tableName = "crypto_transfers", indices = [Index(value = ["id"], unique = true)])
+data class CryptoTransfer(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
     @ColumnInfo(name = "amount")
-    val amount: Float,
+    val amount: String?,
 
     @ColumnInfo(name = "origin")
     val userIdOrigin: Int,

@@ -11,7 +11,7 @@ plugins {
 android {
     compileSdkVersion 30
     buildFeatures{
-        viewBinding = true
+        dataBinding true
     }
     buildToolsVersion "30.0.3"
 
