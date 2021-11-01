@@ -18,12 +18,28 @@ class CrytoTransferViewModel(private val cryptoTransferRepository: CryptoTransfe
     var amount: String? = null
     var asset: String? = null
 
+    var amountSend: String? = null
+    var assetSend: String? = null
+    var emailSend: String? = null
+
     fun setAmount(s: CharSequence, start:Int, before: Int, count:Int){
         amount = s.toString()
     }
 
     fun setAsset(s: CharSequence, start:Int, before: Int, count:Int){
         asset = s.toString()
+    }
+
+    fun setAmountSend(s: CharSequence, start:Int, before: Int, count:Int){
+        amountSend = s.toString()
+    }
+
+    fun setAssetSend(s: CharSequence, start:Int, before: Int, count:Int){
+        assetSend = s.toString()
+    }
+
+    fun setEmailSend(s: CharSequence, start:Int, before: Int, count:Int){
+        emailSend = s.toString()
     }
 
     fun getCurrentDateTime(): Date {
@@ -38,8 +54,6 @@ class CrytoTransferViewModel(private val cryptoTransferRepository: CryptoTransfe
 
     fun newCryptoTransfer() = viewModelScope.launch{
         if ( !amount.isNullOrBlank() && !asset.isNullOrBlank()){
-            Log.d("amount", amount.toString())
-            Log.d("asset", asset.toString())
             val date = getCurrentDateTime()
             val dateInString = date.toString("yyyy/MM/dd HH:mm:ss")
             val cryptoWallet = CryptoTransfer(
@@ -47,6 +61,28 @@ class CrytoTransferViewModel(private val cryptoTransferRepository: CryptoTransfe
                 amount = amount.toString(),
                 asset = asset.toString(),
                 userFromTo = "None",
+                createdAt = dateInString,
+                status = "generated",
+                id = 0
+            )
+
+            cryptoTransferRepository.addCryptoTransfer(cryptoWallet)
+//
+            _cryptoTransferDone.value = true
+        }
+    }
+
+    fun newCryptoTransferSend() = viewModelScope.launch{
+        if ( !amountSend.isNullOrBlank() && !assetSend.isNullOrBlank()){
+            Log.d("amount", amountSend.toString())
+            Log.d("asset", assetSend.toString())
+            val date = getCurrentDateTime()
+            val dateInString = date.toString("yyyy/MM/dd HH:mm:ss")
+            val cryptoWallet = CryptoTransfer(
+                type = "Transfer",
+                amount = amountSend.toString(),
+                asset = assetSend.toString(),
+                userFromTo = emailSend.toString(),
                 createdAt = dateInString,
                 status = "generated",
                 id = 0

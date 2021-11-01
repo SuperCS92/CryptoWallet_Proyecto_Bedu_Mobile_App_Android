@@ -24,12 +24,16 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.wallet2.*
 import com.example.wallet2.SpinnerAdapter
 import com.example.wallet2.data.models.SendTran
+import com.example.wallet2.databinding.FragmentReceiveBinding
+import com.example.wallet2.databinding.FragmentSendBinding
+import com.example.wallet2.ui.CrytoTransferViewModel
 import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.example.wallet2.ui.user.EMAIL
@@ -66,7 +70,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SendFragment : Fragment() {
-
+    private lateinit var viewModel: CrytoTransferViewModel
+    private lateinit var binding: FragmentSendBinding
     //private lateinit var binding: FragmentSendBinding
 
     val items= listOf("BTC", "ETH", "BNB")
@@ -82,20 +87,20 @@ class SendFragment : Fragment() {
     // Notifications Channel ID
     val CHANNEL_SEND = "TRANSACTIONS"
 
-    private lateinit var textInputLayout: TextInputLayout
-    private lateinit var assetText: AutoCompleteTextView
-    private lateinit var amount_textField: TextInputLayout
-    private lateinit var amount_value: EditText
-    private lateinit var address_textField: TextInputLayout
-    private lateinit var address_value: EditText
-    private lateinit var total : TextView
-    private lateinit var cance_button: MaterialButton
-    private lateinit var next_button: MaterialButton
-    private lateinit var qrscan_button: MaterialButton
-
+//    private lateinit var textInputLayout: TextInputLayout
+//    private lateinit var assetText: AutoCompleteTextView
+//    private lateinit var amount_textField: TextInputLayout
+//    private lateinit var amount_value: EditText
+//    private lateinit var address_textField: TextInputLayout
+//    private lateinit var address_value: EditText
+//    private lateinit var total : TextView
+//    private lateinit var cance_button: MaterialButton
+//    private lateinit var next_button: MaterialButton
+//    private lateinit var qrscan_button: MaterialButton
+//
     private lateinit var header: View
-    private lateinit var navigation_view: NavigationView
-    private lateinit var drawerLayout: DrawerLayout
+//    private lateinit var navigation_view: NavigationView
+//    private lateinit var drawerLayout: DrawerLayout
     private lateinit var usernameAppbar: TextView
     private lateinit var emailAppbar: TextView
     private lateinit var preferences: SharedPreferences
@@ -126,27 +131,43 @@ class SendFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_send, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_send,
+            container,
+            false
+        )
+
+        viewModel = CrytoTransferViewModel(
+            (requireContext().applicationContext as CryptoTransfersApplication).cryptoTransactionRepository
+        )
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+//        val view = inflater.inflate(R.layout.fragment_send, container, false)
 
         /*viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
         var dataBaseInstance = SendDb.getInstance(requireContext())
         viewModel?.setInstanceOfDb(dataBaseInstance)*/
 
-        drawerLayout = view.findViewById(R.id.drawer_layout)
-        val toolbar: Toolbar = view.findViewById(R.id.app_bar) as Toolbar
-        (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
-        ActionBarDrawerToggle(view.context as Activity?,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
-        navigation_view = view.findViewById(R.id.nav_view)
-        header = navigation_view.getHeaderView(0)
+//        drawerLayout = view.findViewById(R.id.drawer_layout)
+//        val toolbar: Toolbar = view.findViewById(R.id.app_bar) as Toolbar
+        (activity as AppCompatActivity?)!!.setSupportActionBar(binding.appBar)
+        ActionBarDrawerToggle(view?.context as Activity?,binding.drawerLayout, binding.appBar, R.string.open_drawer, R.string.close_drawer)
+//        navigation_view = view.findViewById(R.id.nav_view)
+        header = binding.navView.getHeaderView(0)
         usernameAppbar = header.findViewById(R.id.userNameAppbar)
         emailAppbar = header.findViewById(R.id.emailAppbar)
+//
+//        usernameAppbar.text = preferences.getString(USERNAME, "")
+//        emailAppbar.text = preferences.getString(EMAIL, "")
 
-        usernameAppbar.text = preferences.getString(USERNAME, "")
-        emailAppbar.text = preferences.getString(EMAIL, "")
 
         val mAuth = FirebaseAuth.getInstance()
 
-        navigation_view.setNavigationItemSelectedListener { item ->
+        emailAppbar.text = mAuth.currentUser?.email.toString()
+
+
+        binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_seed -> {
                     /*val SeedPhraseFragment = SeedPhraseFragment()
@@ -172,26 +193,26 @@ class SendFragment : Fragment() {
             true
         }
 
-        textInputLayout = view.findViewById(R.id.asset_send)
-        assetText = view.findViewById(R.id.assetText)
-        amount_value = view.findViewById(R.id.amount_value)            //--------EdiText
-        amount_textField = view.findViewById(R.id.amount_textField)
-        address_textField = view.findViewById(R.id.address_input_Layout)
-        address_value = view.findViewById(R.id.address_editText)
-        total = view.findViewById(R.id.textView11)                     //---------TextView
-        cance_button = view.findViewById(R.id.button2)
-        next_button = view.findViewById(R.id.button5)
-        qrscan_button = view.findViewById(R.id.qrScanBtn)
+//        textInputLayout = view.findViewById(R.id.asset_send)
+//        assetText = view.findViewById(R.id.assetText)
+//        amount_value = view.findViewById(R.id.amount_value)            //--------EdiText
+//        amount_textField = view.findViewById(R.id.amount_textField)
+//        address_textField = view.findViewById(R.id.address_input_Layout)
+//        address_value = view.findViewById(R.id.address_editText)
+//        total = view.findViewById(R.id.textView11)                     //---------TextView
+//        cance_button = view.findViewById(R.id.button2)
+//        next_button = view.findViewById(R.id.button5)
+//        qrscan_button = view.findViewById(R.id.qrScanBtn)
 
         val adapter = SpinnerAdapter(requireContext(), items,getAssets_Short())
-        (textInputLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        (binding.assetSend.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         // NOTIFICATIONS
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setNotificationChannel()
         }
 
-        qrscan_button.setOnClickListener{
+        binding.qrScanBtn.setOnClickListener{
             val builder = AlertDialog.Builder(requireActivity())
             builder.setTitle("Import data from a QR code")
             builder.setMessage("Choose an option to scan the QR code")
@@ -206,37 +227,38 @@ class SendFragment : Fragment() {
             builder.show()
         }
 
-        amount_value.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        binding.amountValue.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode >=7 && keyCode <= 16 && event.action == KeyEvent.ACTION_UP) {
-                val textamount = amount_value.text
+                val textamount = binding.amountValue.text
 
-                if(textamount.isNotEmpty()) {
-                    val amount = textamount.toString().toDouble()
-                    val fee: Double = 0.00034
+                if (textamount != null) {
+                    if(textamount.isNotEmpty()) {
+                        val amount = textamount.toString().toDouble()
+                        val fee: Double = 0.00034
 
-                    if(amount_currency) {
-                        val _total = amount.plus(fee)
-                        total.text = _total.toString()
-                    }
-                    else{
-                        var crypto = assetText.text.toString()
-                        var amount_converted : Double = 0.0
+                        if(amount_currency) {
+                            val _total = amount.plus(fee)
+                            binding.textView11.text = _total.toString()
+                        } else{
+                            var crypto = binding.assetText.text.toString()
+                            var amount_converted : Double = 0.0
 
-                        //We need to convert it from fiat to cripto
-                        when(crypto){
-                            "BTC" ->  amount_converted =  amount / itemsprice[0]
+                            //We need to convert it from fiat to cripto
+                            when(crypto){
+                                "BTC" ->  amount_converted =  amount / itemsprice[0]
 
-                            "ETH" ->   amount_converted =  amount / itemsprice[1]
+                                "ETH" ->   amount_converted =  amount / itemsprice[1]
 
-                            "BNB" ->   amount_converted =  amount / itemsprice[2]
+                                "BNB" ->   amount_converted =  amount / itemsprice[2]
+                            }
+
+                            _total = amount_converted.plus(fee)
+                            binding.textView11.text = _total.toString()
                         }
 
-                        _total = amount_converted.plus(fee)
-                        total.text = _total.toString()
+
+                        return@OnKeyListener true
                     }
-
-
-                    return@OnKeyListener true
                 }
 
                 false
@@ -244,40 +266,41 @@ class SendFragment : Fragment() {
             false
         })
 
-        address_value.setOnFocusChangeListener { v, hasFocus ->
+        binding.addressEditText.setOnFocusChangeListener { v, hasFocus ->
 
             if(hasFocus) {
-                address_textField.helperText = "Paste the address and double check it's correct"
+                binding.addressInputLayout.helperText = "Paste the address and double check it's correct"
 
             } else {
 
-                val textamount = address_value.text
+                val textamount = binding.addressEditText.text
 
-                if (textamount.isNotEmpty() && textamount.length > 2) {
+                if (textamount != null) {
+                    if (textamount.isNotEmpty() && textamount.length > 2) {
 
-                    val address = textamount.toString()
-                    val crypto = assetText.text.toString()
+                        val address = textamount.toString()
+                        val crypto = binding.assetText.text.toString()
 
-                    if (crypto == "BTC") {
+                        if (crypto == "BTC") {
 
-                        when {
-                            address.startsWith("1") -> address_textField.helperText =
-                                "P2PKH address entered"
-                            address.startsWith("3") -> address_textField.helperText =
-                                "P2SH address entered"
-                            address.startsWith("bc1") -> address_textField.helperText =
-                                "Bech32 address entered"
-                            else -> address_textField.error = "This address should begin 1, 3 or bc1"
+                            when {
+                                address.startsWith("1") -> binding.addressInputLayout.helperText =
+                                    "P2PKH address entered"
+                                address.startsWith("3") -> binding.addressInputLayout.helperText =
+                                    "P2SH address entered"
+                                address.startsWith("bc1") -> binding.addressInputLayout.helperText =
+                                    "Bech32 address entered"
+                                else -> binding.addressInputLayout.error = "This address should begin 1, 3 or bc1"
+                            }
+
+                        } else {
+                            if (address.startsWith("0x")) binding.addressInputLayout.helperText =
+                                "hex address entered"
+                            else binding.addressInputLayout.error = "This address should begin 0x"
+
                         }
-
-                    } else {
-                        if (address.startsWith("0x")) address_textField.helperText =
-                            "hex address entered"
-                        else address_textField.error = "This address should begin 0x"
-
-                    }
+                    } else binding.addressInputLayout.error = "Address too short or empty"
                 }
-                else address_textField.error = "Address too short or empty"
             }
         }
 
@@ -286,10 +309,10 @@ class SendFragment : Fragment() {
 //        (activity as AppCompatActivity).setSupportActionBar(view.findViewById(R.id.app_bar))
 
         //Logic to convert value entered in amount text field from cripto to fiat and viceversa
-        amount_textField.setEndIconOnClickListener{
+        binding.amountTextField.setEndIconOnClickListener{
             try {
-                var crypto = assetText.text.toString()
-                var amount = amount_value.text.toString().toDouble()
+                var crypto = binding.assetText.text.toString()
+                var amount = binding.amountValue.text.toString().toDouble()
                 var amount_converted = 0.0
 
 
@@ -309,7 +332,7 @@ class SendFragment : Fragment() {
                             error = false
                         }
                         else -> {
-                            amount_textField.error = getString(R.string.astr_amount_error)
+                            binding.amountTextField.error = getString(R.string.astr_amount_error)
                             error = true
                         }
                     }
@@ -328,7 +351,7 @@ class SendFragment : Fragment() {
                             error = false
                         }
                         else -> {
-                            amount_textField.error = getString(R.string.astr_amount_error)
+                            binding.amountTextField.error = getString(R.string.astr_amount_error)
                             error = true
                         }
                     }
@@ -336,27 +359,27 @@ class SendFragment : Fragment() {
                 }
 
                 if (!error) {
-                    amount_textField.error = null
+                    binding.amountTextField.error = null
 
                     if (amount_currency) {
-                        amount_textField.prefixText = "$"
-                        amount_textField.suffixText = null
+                        binding.amountTextField.prefixText = "$"
+                        binding.amountTextField.suffixText = null
                     } else {
-                        amount_textField.prefixText = null
-                        amount_textField.suffixText = crypto
+                        binding.amountTextField.prefixText = null
+                        binding.amountTextField.suffixText = crypto
                     }
 
                     amount_currency = !amount_currency
 
                     if (!amount_currency) {
-                        var text = amount_value.text.toString() + crypto
-                        amount_textField.helperText = text
+                        var text = binding.amountValue.text.toString() + crypto
+                        binding.amountTextField.helperText = text
                     } else {
-                        var text = "$" + amount_value.text.toString()
-                        amount_textField.helperText = text
+                        var text = "$" + binding.amountValue.text.toString()
+                        binding.amountTextField.helperText = text
                     }
 
-                    amount_value.setText(amount_converted.toString())
+                    binding.amountValue.setText(amount_converted.toString())
                 }
             }catch (e:Exception){
                 Toast.makeText(requireContext(), "Please select an Asset and " +
@@ -365,18 +388,19 @@ class SendFragment : Fragment() {
         }
 
         // Cancel button redirects to dashboardFragment
-        cance_button.setOnClickListener {
+        binding.button2.setOnClickListener {
             //goToDashboard()
             findNavController().navigate(R.id.action_sendFragment_to_dashboardFragment, null)
         }
 
         // Next button confirm the transaction and redirects to dashboardFragment
-        next_button.setOnClickListener {
+        binding.button5.setOnClickListener {
             try {
-                _asset = assetText.text.toString()
-                _amount = amount_value.text.toString().toDouble()
-                _address = address_value.text.toString()
+                _asset = binding.assetText.text.toString()
+                _amount = binding.amountValue.text.toString().toDouble()
+                _address = binding.addressEditText.text.toString()
                 if (validateInformation(_asset, _amount, _address)) {
+                    viewModel.newCryptoTransferSend()
                     openConfirmationDialog(_asset, _amount, _address)
                     CoroutineScope(Dispatchers.IO).launch{
                         delay(3_000)
@@ -394,7 +418,7 @@ class SendFragment : Fragment() {
 
         // Inflate the layout for this fragment
         //return binding.root
-        return view
+        return binding.root
     }
 
 
@@ -594,13 +618,13 @@ class SendFragment : Fragment() {
                         val output: List<String> = result.getText().split("\n")
                         // We write the scan results in the text fields
                         if (output.size==3) {
-                            amount_value.setText(output[0])
-                            assetText.setText(output[1])
-                            address_value.setText(output[2])
+                            binding.amountValue.setText(output[0])
+                            binding.assetText.setText(output[1])
+                            binding.addressEditText.setText(output[2])
                             when (output[0]){
-                                "BTC" -> {address_value.setText("bc1"+output[2])}
-                                "ETH" -> {address_value.setText("0x"+output[2])}
-                                else -> {address_value.setText("0x"+output[2])}
+                                "BTC" -> {binding.addressEditText.setText("bc1"+output[2])}
+                                "ETH" -> {binding.addressEditText.setText("0x"+output[2])}
+                                else -> {binding.addressEditText.setText("0x"+output[2])}
                             }
                             Toast.makeText(requireContext(),"Data import was successful", Toast.LENGTH_SHORT).show()
                         } else{
@@ -626,12 +650,12 @@ class SendFragment : Fragment() {
                         val resultado = result.contents
                         val output: List<String> = resultado.split("\n")
                         if (output.size==3) {
-                            amount_value.setText(output[0])
-                            assetText.setText(output[1])
+                            binding.amountValue.setText(output[0])
+                            binding.assetText.setText(output[1])
                             when (output[0]){
-                                "BTC" -> {address_value.setText("bc1"+output[2])}
-                                "ETH" -> {address_value.setText("0x"+output[2])}
-                                else -> {address_value.setText("0x"+output[2])}
+                                "BTC" -> {binding.addressEditText.setText("bc1"+output[2])}
+                                "ETH" -> {binding.addressEditText.setText("0x"+output[2])}
+                                else -> {binding.addressEditText.setText("0x"+output[2])}
                             }
                             Toast.makeText(requireContext(), "Scan was successful", Toast.LENGTH_LONG).show()
                         } else {

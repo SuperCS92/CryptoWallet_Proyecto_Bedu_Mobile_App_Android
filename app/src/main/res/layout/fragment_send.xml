@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.wallet2.ui.CrytoTransferViewModel"
+            />
+    </data>
 
-<androidx.drawerlayout.widget.DrawerLayout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -232,6 +239,8 @@
             android:id="@+id/assetText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.assetSend}"
+            android:onTextChanged="@{viewModel::setAssetSend}"
             android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -267,6 +276,8 @@
             android:id="@+id/amount_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.amountSend}"
+            android:onTextChanged="@{viewModel::setAmountSend}"
             android:inputType="numberDecimal"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -288,7 +299,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/address_editText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.emailSend}"
+            android:onTextChanged="@{viewModel::setEmailSend}"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -417,3 +430,4 @@
         tools:ignore="MissingConstraints" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
+</layout>
