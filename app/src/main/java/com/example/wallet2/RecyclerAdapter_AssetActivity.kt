@@ -121,13 +121,11 @@ class RecyclerAdapter_AssetActivity(
     ListAdapter<CryptoTransfer, RecyclerAdapter_AssetActivity.ViewHolder>(CryptoTransferDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        Log.d("onCreateViewHolder", "Recycler")
         return ViewHolder.from(parent)
     }
 
     //Aquí atamos el ViewHolder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d("Hey aqui empieza", "mensage onBindViewHolder")
         val item = getItem(position)
         holder.bind(viewModel, item)
     }
@@ -155,7 +153,6 @@ class RecyclerAdapter_AssetActivity(
 
         //"atando" los datos a las Views
         fun bind(viewModel: AssetViewModel, item: CryptoTransfer){
-            Log.d("myitem", item.toString())
             binding.viewModel = viewModel
             binding.cryptotransfer = item
             binding.executePendingBindings()

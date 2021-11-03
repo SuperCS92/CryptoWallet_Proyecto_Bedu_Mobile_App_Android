@@ -311,7 +311,8 @@ override fun onActivityCreated(savedInstanceState: Bundle?) {
 
 }
 
-    private fun setupCryptoTransferList(){
+    private fun setupCryptoTransferList() {
+        var totalAmount = 0f
         if(viewModel!=null){
             adapter = RecyclerAdapter_AssetActivity(viewModel)
             binding.recyclerContactsAssetFrg.adapter = adapter
@@ -319,9 +320,12 @@ override fun onActivityCreated(savedInstanceState: Bundle?) {
             viewModel.cryptoTransferList.observe(viewLifecycleOwner, Observer {
                 it?.let {
                     adapter.submitList(it)
+                    for(item in it){
+                        totalAmount += item.amount?.toFloat()!!
+                    }
+                    binding.balanceAssetFragment.text = "$${totalAmount.toString()}"
                 }
             })
-
         }
     }
 
