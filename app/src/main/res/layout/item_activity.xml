@@ -78,7 +78,7 @@
                 android:id="@+id/asset_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:text='@{cryptotransfer.amount + " " + cryptotransfer.amount}'
+                android:text='@{cryptotransfer.amount + " " + cryptotransfer.asset}'
                 android:textSize="16sp"
                 android:textStyle="bold"
                 />

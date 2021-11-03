@@ -19,7 +19,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.*
+import com.example.wallet2.databinding.FragmentAssetBinding
 import com.example.wallet2.ui.SeedPhraseFragment
+import com.example.wallet2.ui.asset.AssetViewModel
 import com.example.wallet2.ui.receive.ReceiveFragment
 import com.example.wallet2.ui.send.SendFragment
 import com.google.android.material.navigation.NavigationView
@@ -48,13 +50,16 @@ class DashboardFragment : Fragment() {
 
     private lateinit var recyclerContacts: RecyclerView
     private lateinit var mAdapter : RecyclerAdapter
-    private lateinit var mAdapter_activity: RecyclerAdapter_AssetActivity
 
     private lateinit var usernameAppbar: TextView
     private lateinit var emailAppbar: TextView
     private lateinit var preferences: SharedPreferences
 
     private val viewModel = DashboardViewModel()
+
+    private lateinit var viewModelAsset: AssetViewModel
+    private lateinit var mAdapter_activity: RecyclerAdapter_AssetActivity
+    private lateinit var binding: DashboardFragment
 
 
     // TODO: Rename and change types of parameters
@@ -109,6 +114,10 @@ class DashboardFragment : Fragment() {
 
         viewModel.getAssets()
         setUpRecyclerView()
+
+        viewModelAsset = AssetViewModel(
+            (requireContext().applicationContext as CryptoTransfersApplication).cryptoTransactionRepository
+        )
 
         //balance.text = "$" + getTotalBalance(getContacts()).toString()
         balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
@@ -228,14 +237,15 @@ class DashboardFragment : Fragment() {
 
     //configuramos lo necesario para desplegar el RecyclerView
     private fun setUpRecyclerView_Activity(){
-        recyclerContacts.setHasFixedSize(true)
-        //nuestro layout va a ser de una sola columna
-        recyclerContacts.layoutManager = LinearLayoutManager(context)
-
-        //seteando el Adapter
-        mAdapter_activity = RecyclerAdapter_AssetActivity( context, viewModel.activities.value!!)
-        //asignando el Adapter al RecyclerView
-        recyclerContacts.adapter = mAdapter_activity
+        findNavController().navigate(R.id.action_dashboardFragmentDest_to_assetFragment, null)
+//        recyclerContacts.setHasFixedSize(true)
+//        //nuestro layout va a ser de una sola columna
+//        recyclerContacts.layoutManager = LinearLayoutManager(context)
+//
+//        //seteando el Adapter
+//        mAdapter_activity = RecyclerAdapter_AssetActivity( viewModelAsset)
+//        //asignando el Adapter al RecyclerView
+//        recyclerContacts.adapter = mAdapter_activity
     }
 
     //generamos datos dummy con este método
