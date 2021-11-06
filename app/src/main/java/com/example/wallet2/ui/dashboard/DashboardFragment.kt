@@ -237,15 +237,26 @@ class DashboardFragment : Fragment() {
 
     //configuramos lo necesario para desplegar el RecyclerView
     private fun setUpRecyclerView_Activity(){
-        findNavController().navigate(R.id.action_dashboardFragmentDest_to_assetFragment, null)
-//        recyclerContacts.setHasFixedSize(true)
-//        //nuestro layout va a ser de una sola columna
+        var totalAmount = 0f
+//        findNavController().navigate(R.id.action_dashboardFragmentDest_to_assetFragment, null)
+        recyclerContacts.setHasFixedSize(true)
+        //nuestro layout va a ser de una sola columna
 //        recyclerContacts.layoutManager = LinearLayoutManager(context)
-//
-//        //seteando el Adapter
-//        mAdapter_activity = RecyclerAdapter_AssetActivity( viewModelAsset)
-//        //asignando el Adapter al RecyclerView
-//        recyclerContacts.adapter = mAdapter_activity
+
+        //seteando el Adapter
+        if(viewModel!=null) {
+            mAdapter_activity = RecyclerAdapter_AssetActivity(viewModelAsset)
+            //asignando el Adapter al RecyclerView
+            recyclerContacts.adapter = mAdapter_activity
+            viewModelAsset.cryptoTransferList.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    mAdapter_activity.submitList(it)
+                    for (item in it) {
+                        totalAmount += item.amount?.toFloat()!!
+                    }
+                }
+            })
+        }
     }
 
     //generamos datos dummy con este método
