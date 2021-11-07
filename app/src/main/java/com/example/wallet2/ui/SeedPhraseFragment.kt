@@ -1,6 +1,7 @@
 package com.example.wallet2.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,13 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.example.wallet2.R
+import com.example.wallet2.data.userDb
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +30,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SeedPhraseFragment : Fragment() {
+
+    private lateinit var auth: FirebaseAuth
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -55,6 +64,23 @@ class SeedPhraseFragment : Fragment() {
         show_button = view.findViewById(R.id.show)
         copy_button = view.findViewById(R.id.copy)
 
+        val user = FirebaseAuth.getInstance().currentUser
+        val email_t = user?.email.toString()
+        var seed  = ""
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val dataBaseInstance = userDb.getDatabasenIstance(requireContext())
+            val query = dataBaseInstance.personDataDao().getSeed(email_t)
+            //setValues()
+            //saveValues(query.username, query.email)
+            if (query != null || !query.equals(null)){
+                Log.e("TAG", "Query: " + query.seed)
+                seed = query.seed
+            }
+            //saveValues(query.username)
+        }
+
         toolbar.setNavigationOnClickListener {
             /*val dashboardFragment = DashboardFragment()
 
@@ -66,8 +92,9 @@ class SeedPhraseFragment : Fragment() {
             findNavController().navigate(R.id.action_seedPhraseFragment_to_dashboardFragmentDest, null)}
 
         show_button.setOnClickListener {
+
             if (show_boolean) {
-                seed_text.setText(R.string.astr_seed_show)
+                seed_text.setText(seed)
                 show_button.setText(R.string.astr_show_false)
                 show_boolean = !show_boolean
             }

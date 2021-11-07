@@ -15,6 +15,9 @@ interface UserDao {
     @Query("SELECT * FROM user_table WHERE username = :user and password = :pass")
     fun getUser(user: String, pass: String): User
 
+    @Query("SELECT * FROM user_table WHERE email = :email")
+    fun getSeed(email: String): User
+
     @Query("SELECT * FROM user_table ORDER BY username DESC LIMIT 20")
     fun getLast20Users(): List<User>
 
