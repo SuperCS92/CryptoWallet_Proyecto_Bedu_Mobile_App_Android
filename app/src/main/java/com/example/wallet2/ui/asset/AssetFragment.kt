@@ -175,26 +175,15 @@
 
 package com.example.wallet2.ui.asset
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Button
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.*
-import com.example.wallet2.Repository.CryptoTransferRepository
 import com.example.wallet2.data.models.CryptoTransfer
 import com.example.wallet2.databinding.FragmentAssetBinding
-import com.example.wallet2.ui.dashboard.DashboardFragment
 import androidx.lifecycle.Observer
 import com.example.wallet2.ui.dashboard.DashboardViewModel
 
@@ -279,6 +268,15 @@ class AssetFragment(var position: Int = 0) : Fragment() {
         //toolbar.setNavigationOnClickListener {
 
         //    findNavController().navigate(R.id.action_transactionFragment_to_dashboardFragmentDest, null)}
+        binding.appBar.setNavigationOnClickListener {
+//            /*val dashboardFragment = DashboardFragment()
+//
+//            val fragmentManager = parentFragmentManager
+//            val transaction = fragmentManager.beginTransaction()
+//            transaction.replace(R.id.fragment_container, dashboardFragment)
+//            transaction.commit()*/
+            findNavController().navigate(R.id.action_assetFragment_to_dashboardFragmentDest, null)
+        }
 
         return binding.root
 
@@ -296,14 +294,6 @@ class AssetFragment(var position: Int = 0) : Fragment() {
 //        recyclerContacts = view.findViewById(R.id.recyclerContacts_assetFrg)
 //        toolbar = view.findViewById(R.id.app_bar)
 //
-//        toolbar.setNavigationOnClickListener {
-//            /*val dashboardFragment = DashboardFragment()
-//
-//            val fragmentManager = parentFragmentManager
-//            val transaction = fragmentManager.beginTransaction()
-//            transaction.replace(R.id.fragment_container, dashboardFragment)
-//            transaction.commit()*/
-//            findNavController().navigate(R.id.action_assetFragment_to_dashboardFragmentDest, null)}
 //
 //        recyclerContacts.setHasFixedSize(true)
 //        //nuestro layout va a ser de una sola columna
