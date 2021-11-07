@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
@@ -20,11 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wallet2.*
-import com.example.wallet2.databinding.FragmentAssetBinding
-import com.example.wallet2.ui.SeedPhraseFragment
 import com.example.wallet2.ui.asset.AssetViewModel
-import com.example.wallet2.ui.receive.ReceiveFragment
-import com.example.wallet2.ui.send.SendFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -231,14 +226,9 @@ class DashboardFragment : Fragment() {
         var totalBTC = 0f
         var totalETH = 0f
         var totalBNB = 0f
+        var assets_value: MutableList<AssetValue>
         val assets: MutableList<Asset> = viewModel.getContacts()
         recyclerContacts.setHasFixedSize(true)
-        //nuestro layout va a ser de una sola columna
-        recyclerContacts.layoutManager = LinearLayoutManager(context)
-        //seteando el Adapter
-        mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
-        //asignando el Adapter al RecyclerView
-        recyclerContacts.adapter = mAdapter
         viewModelAsset.cryptoTransferList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 for (item in it) {
@@ -271,10 +261,22 @@ class DashboardFragment : Fragment() {
                 totalETH = (totalETH * assets[1].fiat_price).toFloat()
                 totalBNB = (totalBNB * assets[2].fiat_price).toFloat()
                 totalAmount = totalBNB + totalBTC + totalETH
-                Log.d("Amount", totalAmount.toString())
                 balance.text = "$" + totalAmount.toString()
+
+                assets_value = mutableListOf<AssetValue>(
+                    AssetValue("BTC", totalBTC, (totalBTC / assets[0].fiat_price.toFloat())),
+                    AssetValue("ETH", totalETH, (totalETH / assets[1].fiat_price.toFloat())),
+                    AssetValue("BNB", totalBNB, (totalBNB / assets[2].fiat_price.toFloat()))
+                )
+                //nuestro layout va a ser de una sola columna
+                recyclerContacts.layoutManager = LinearLayoutManager(context)
+                //seteando el Adapter¿
+                mAdapter = RecyclerAdapter(context,viewModel.assets.value!!, assets_value)
+                //asignando el Adapter al RecyclerView
+                recyclerContacts.adapter = mAdapter
             }
         })
+
     }
 
     //configuramos lo necesario para desplegar el RecyclerView

@@ -1,30 +1,26 @@
 package com.example.wallet2
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wallet2.ui.dashboard.DashboardFragment
 import com.example.wallet2.ui.dashboard.DashboardFragmentDirections
 
 
 class RecyclerAdapter(
     var context: Context?,
-    var assets: MutableList<Asset>): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+    var assets: MutableList<Asset>,
+    var assets_value: MutableList<AssetValue>): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     //Aquí atamos el ViewHolder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = assets.get(position)
-        holder.bind(item, context!!)
+        val asset_value = assets_value.get(position)
+        holder.bind(item, context!!, asset_value)
     }
 
 
@@ -70,11 +66,11 @@ class RecyclerAdapter(
         }
 
         //"atando" los datos a las Views
-        fun bind(asset: Asset, context: Context) {
+        fun bind(asset: Asset, context: Context, asset_value: AssetValue) {
             asset_name.text = asset.name
             price_fiat.text = "$" + asset.fiat_price.toString()
-            asset_balance.text = asset.balance.toString()
-            fiat_balance.text = "$" + asset.balance_fiat.toString()
+            asset_balance.text =  asset_value.assetConversion.toString()
+            fiat_balance.text = "$" + asset_value.assetTotal.toString()
             image.setImageResource(asset.idImage)
 
         }
