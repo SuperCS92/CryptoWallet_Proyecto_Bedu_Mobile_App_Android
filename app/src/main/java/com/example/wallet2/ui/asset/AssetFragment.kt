@@ -212,8 +212,10 @@ class AssetFragment(var position: Int = 0) : Fragment() {
     private lateinit var adapter: RecyclerAdapter_AssetActivity
     private lateinit var viewModel: AssetViewModel
     private lateinit var binding: FragmentAssetBinding
+    private lateinit var currentAsset: String
 
-//    private lateinit var toolbar: Toolbar
+    //private lateinit var toolbar: Toolbar
+    //private lateinit var filterList: ArrayList<CryptoTransfer>
 //    private lateinit var balance: TextView
 //    private lateinit var send_button: Button
 //    private lateinit var receive_button: Button
@@ -235,9 +237,15 @@ class AssetFragment(var position: Int = 0) : Fragment() {
         val safeArgs: AssetFragmentArgs by navArgs()
         position = safeArgs.positionSelected
 
+        when(position){
+            0 -> currentAsset = "BTC"
+            1 -> currentAsset = "ETH"
+            2 -> currentAsset = "BNB"
+            else -> currentAsset = ""
+        }
+
 //        asset = getAsset(position, getContacts())
 //        activities = filterActivities(assets, asset.symbol)
-
 
 
         arguments?.let {
@@ -264,7 +272,10 @@ class AssetFragment(var position: Int = 0) : Fragment() {
         binding.lifecycleOwner = this
         binding.cryptoTransferListViewModel = viewModel
 
+        //toolbar = view.findViewById(R.id.app_bar)
+        //toolbar.setNavigationOnClickListener {
 
+        //    findNavController().navigate(R.id.action_transactionFragment_to_dashboardFragmentDest, null)}
 
         return binding.root
 
@@ -314,16 +325,21 @@ override fun onActivityCreated(savedInstanceState: Bundle?) {
 
     private fun setupCryptoTransferList() {
         var totalAmount = 0f
+        var filterList: ArrayList<CryptoTransfer> = arrayListOf()
         if(viewModel!=null){
             adapter = RecyclerAdapter_AssetActivity(viewModel)
             binding.recyclerContactsAssetFrg.adapter = adapter
 
             viewModel.cryptoTransferList.observe(viewLifecycleOwner, Observer {
                 it?.let {
-                    adapter.submitList(it)
+                    //adapter.submitList(it)
+                    //Log.d("Tipo de Lista",it)
                     for(item in it){
+                        if(item.asset == currentAsset)
+                            filterList.add(item)
                         totalAmount += item.amount?.toFloat()!!
                     }
+                    adapter.submitList(filterList)
                     binding.balanceAssetFragment.text = "$${totalAmount.toString()}"
                 }
             })
