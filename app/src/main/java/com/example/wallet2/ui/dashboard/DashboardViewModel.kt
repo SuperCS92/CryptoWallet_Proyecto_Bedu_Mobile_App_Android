@@ -39,7 +39,7 @@ class DashboardViewModel: ViewModel() {
     }
 
     //generamos datos dummy con este método
-    private fun getContacts(): MutableList<Asset>{
+    fun getContacts(): MutableList<Asset>{
         var assets:MutableList<Asset> = ArrayList()
         var balance: List<Double> = listOf(0.5,3.0,7.0)
         var fiatPrice: List<Double> = listOf(61853.30,4539.70,644.87)

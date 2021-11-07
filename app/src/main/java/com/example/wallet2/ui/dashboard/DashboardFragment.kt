@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
@@ -112,15 +113,15 @@ class DashboardFragment : Fragment() {
 
         recyclerContacts = view.findViewById(R.id.recyclerContacts)
 
-        viewModel.getAssets()
-        setUpRecyclerView()
-
         viewModelAsset = AssetViewModel(
             (requireContext().applicationContext as CryptoTransfersApplication).cryptoTransactionRepository
         )
 
+        viewModel.getAssets()
+        setUpRecyclerView()
+
         //balance.text = "$" + getTotalBalance(getContacts()).toString()
-        balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
+//        balance.text = "$" + viewModel.getTotalBalance(viewModel.assets.value!!).toString()
         usernameAppbar.text = preferences.getString(USERNAME, "")
         emailAppbar.text = user?.email.toString()
 
@@ -226,6 +227,11 @@ class DashboardFragment : Fragment() {
 
     //configuramos lo necesario para desplegar el RecyclerView
     private fun setUpRecyclerView(){
+        var totalAmount = 0f
+        var totalBTC = 0f
+        var totalETH = 0f
+        var totalBNB = 0f
+        val assets: MutableList<Asset> = viewModel.getContacts()
         recyclerContacts.setHasFixedSize(true)
         //nuestro layout va a ser de una sola columna
         recyclerContacts.layoutManager = LinearLayoutManager(context)
@@ -233,6 +239,42 @@ class DashboardFragment : Fragment() {
         mAdapter = RecyclerAdapter(context,viewModel.assets.value!!)
         //asignando el Adapter al RecyclerView
         recyclerContacts.adapter = mAdapter
+        viewModelAsset.cryptoTransferList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                for (item in it) {
+                    if(item.asset == "BTC") {
+                        if(item.type == "Receive") {
+                            totalBTC += item.amount?.toFloat()!!
+                        }
+                        else{
+                            totalBTC -= item.amount?.toFloat()!!
+                        }
+                    }
+                    if(item.asset == "ETH") {
+                        if(item.type == "Receive") {
+                            totalETH += item.amount?.toFloat()!!
+                        }
+                        else{
+                            totalETH -= item.amount?.toFloat()!!
+                        }
+                    }
+                    if(item.asset == "BNB") {
+                        if(item.type == "Receive") {
+                            totalBNB += item.amount?.toFloat()!!
+                        }
+                        else{
+                            totalBNB -= item.amount?.toFloat()!!
+                        }
+                    }
+                }
+                totalBTC = (totalBTC * assets[0].fiat_price).toFloat()
+                totalETH = (totalETH * assets[1].fiat_price).toFloat()
+                totalBNB = (totalBNB * assets[2].fiat_price).toFloat()
+                totalAmount = totalBNB + totalBTC + totalETH
+                Log.d("Amount", totalAmount.toString())
+                balance.text = "$" + totalAmount.toString()
+            }
+        })
     }
 
     //configuramos lo necesario para desplegar el RecyclerView
@@ -252,7 +294,12 @@ class DashboardFragment : Fragment() {
                 it?.let {
                     mAdapter_activity.submitList(it)
                     for (item in it) {
-                        totalAmount += item.amount?.toFloat()!!
+                        if(item.type == "Receive") {
+                            totalAmount += item.amount?.toFloat()!!
+                        }
+                        else{
+                            totalAmount -= item.amount?.toFloat()!!
+                        }
                     }
                 }
             })

@@ -196,6 +196,7 @@ import com.example.wallet2.data.models.CryptoTransfer
 import com.example.wallet2.databinding.FragmentAssetBinding
 import com.example.wallet2.ui.dashboard.DashboardFragment
 import androidx.lifecycle.Observer
+import com.example.wallet2.ui.dashboard.DashboardViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -213,6 +214,8 @@ class AssetFragment(var position: Int = 0) : Fragment() {
     private lateinit var viewModel: AssetViewModel
     private lateinit var binding: FragmentAssetBinding
     private lateinit var currentAsset: String
+
+    private val viewModelDashboard = DashboardViewModel()
 
     //private lateinit var toolbar: Toolbar
     //private lateinit var filterList: ArrayList<CryptoTransfer>
@@ -335,11 +338,19 @@ override fun onActivityCreated(savedInstanceState: Bundle?) {
                     //adapter.submitList(it)
                     //Log.d("Tipo de Lista",it)
                     for(item in it){
-                        if(item.asset == currentAsset)
+                        if(item.asset == currentAsset) {
+                            if(item.type == "Receive") {
+                                totalAmount += item.amount?.toFloat()!!
+                            }
+                            else{
+                                totalAmount -= item.amount?.toFloat()!!
+                            }
                             filterList.add(item)
-                        totalAmount += item.amount?.toFloat()!!
+                        }
                     }
+                    val assets: MutableList<Asset> = viewModelDashboard.getContacts()
                     adapter.submitList(filterList)
+                    totalAmount = (totalAmount * assets[position].fiat_price).toFloat()
                     binding.balanceAssetFragment.text = "$${totalAmount.toString()}"
                 }
             })
