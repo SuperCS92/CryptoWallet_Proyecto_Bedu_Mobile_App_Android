@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.wallet2.Asset
 import com.example.wallet2.Asset_Activity
 import com.example.wallet2.R
+import kotlin.math.round
 
 class DashboardViewModel: ViewModel() {
 
@@ -40,12 +41,14 @@ class DashboardViewModel: ViewModel() {
     //generamos datos dummy con este método
     private fun getContacts(): MutableList<Asset>{
         var assets:MutableList<Asset> = ArrayList()
+        var balance: List<Double> = listOf(0.5,3.0,7.0)
+        var fiatPrice: List<Double> = listOf(61853.30,4539.70,644.87)
 
-        assets.add(Asset("Bitcoin", 0.5, 38000.0,19000.0, R.drawable.astr_btc_symbol, "BTC"))
-        assets.add(Asset("Ether", 3.0, 2000.0,6000.0, R.drawable.astr_eth_symbol, "ETH"))
+        assets.add(Asset("Bitcoin", balance[0], fiatPrice[0],round(fiatPrice[0]*balance[0]), R.drawable.astr_btc_symbol, "BTC"))
+        assets.add(Asset("Ether", balance[1], fiatPrice[1],round(fiatPrice[1]*balance[1]), R.drawable.astr_eth_symbol, "ETH"))
         //assets.add(Asset("Cardano", 500.0, 1.33,665.0, R.drawable.astr_cardano_symbol,"ADA"))
         //assets.add(Asset("Tether", 50.0, 1.0,50.0, R.drawable.astr_tether_symbol, "USDT"))
-        assets.add(Asset("Binance", 7.0, 300.0,2100.0, R.drawable.astr_bnb_symbol,"BNB"))
+        assets.add(Asset("Binance", balance[2], fiatPrice[2],round(fiatPrice[2]*balance[2]), R.drawable.astr_bnb_symbol,"BNB"))
         //assets.add(Asset("xDai", 17.0, 1.0,17.0, R.drawable.astr_xdai_symbol, "xDai"))
         //assets.add(Asset("ChainLink", 35.0, 18.35,642.25, R.drawable.astr_chainlink_symbol,"Link"))
         //assets.add(Asset("AXS", 40.5, 38.48,1558.44, R.drawable.astr_axs_symbol, "AXS"))
