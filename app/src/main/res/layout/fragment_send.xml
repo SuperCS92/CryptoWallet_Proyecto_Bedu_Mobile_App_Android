@@ -278,7 +278,7 @@
             android:layout_height="wrap_content"
             android:text="@{viewModel.amountSend}"
             android:onTextChanged="@{viewModel::setAmountSend}"
-            android:inputType="numberDecimal"/>
+            android:inputType="phone|number"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
