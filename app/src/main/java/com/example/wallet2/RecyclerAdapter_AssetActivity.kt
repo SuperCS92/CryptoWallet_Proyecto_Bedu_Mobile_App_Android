@@ -113,7 +113,9 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.wallet2.data.models.CryptoTransfer
 import com.example.wallet2.databinding.FragmentSendBinding
 import com.example.wallet2.databinding.ItemActivityBinding
+import com.example.wallet2.ui.asset.AssetFragmentDirections
 import com.example.wallet2.ui.asset.AssetViewModel
+import com.example.wallet2.ui.dashboard.DashboardFragmentDirections
 
 class RecyclerAdapter_AssetActivity(
     private val viewModel: AssetViewModel
@@ -172,6 +174,19 @@ class RecyclerAdapter_AssetActivity(
                 showLoading()
                 android.os.Handler().postDelayed({hideLoading()},3000)
 
+                val amountTransaction = item.amount
+                val assetTransaction = item.asset
+                val dateTransaction = item.createdAt
+                val action = DashboardFragmentDirections.actionDashboardFragmentDestToTransactionFragment(
+                    amountTransaction.toString(),
+                    assetTransaction,
+                    dateTransaction
+                )
+                val action2 = AssetFragmentDirections.actionAssetFragmentToTransactionFragment(
+                    amountTransaction.toString(),
+                    assetTransaction,
+                    dateTransaction
+                )
 /*
                 val transactionFragment = TransactionFragment(position)
 
@@ -180,11 +195,11 @@ class RecyclerAdapter_AssetActivity(
                 transaction.replace(R.id.fragment_container, transactionFragment)
                 transaction.commit()*/
                 if(Navigation.findNavController(it).currentDestination?.id == R.id.dashboardFragmentDest) {
-                    Navigation.findNavController(it)
-                        .navigate(R.id.action_dashboardFragmentDest_to_transactionFragment, null)
+                    //Navigation.findNavController(it).navigate(R.id.action_dashboardFragmentDest_to_transactionFragment, null)
+                    Navigation.findNavController(it).navigate(action)
                 } else if(Navigation.findNavController(it).currentDestination?.id == R.id.assetFragment){
-                    Navigation.findNavController(it)
-                        .navigate(R.id.action_assetFragment_to_transactionFragment, null)
+                    //Navigation.findNavController(it).navigate(R.id.action_assetFragment_to_transactionFragment, null)
+                    Navigation.findNavController(it).navigate(action2)
                 }
 
             }
