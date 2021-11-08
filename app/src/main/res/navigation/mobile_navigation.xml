@@ -144,6 +144,18 @@
         <action
             android:id="@+id/action_transactionFragment_to_dashboardFragmentDest"
             app:destination="@id/dashboardFragmentDest" />
+        <argument
+            android:name="amountTransaction"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="assetTransaction"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="dateTransaction"
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
     <fragment
         android:id="@+id/seedPhraseFragment"

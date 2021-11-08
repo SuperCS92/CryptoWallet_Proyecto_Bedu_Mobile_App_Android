@@ -1,12 +1,18 @@
 package com.example.wallet2
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
+import com.example.wallet2.databinding.FragmentAssetBinding
 import com.example.wallet2.ui.dashboard.DashboardFragment
+import kotlinx.android.synthetic.main.fragment_transaction.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,9 +31,25 @@ class TransactionFragment(val position: Int = 0) : Fragment() {
     private var param2: String? = null
     private lateinit var toolbar: Toolbar
 
+    private var amountTransaction = ""
+    private var assetTransaction = ""
+    private var dateTransaction = ""
+    private lateinit var amountText: TextView
+    private lateinit var amountTotal: TextView
+    private lateinit var transactionCreated: TextView
+    private lateinit var transactionSubmitted: TextView
+    private lateinit var transactionConfirmed: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        // Safe args to get new values
+        val safeArgs: TransactionFragmentArgs by navArgs()
+        amountTransaction = safeArgs.amountTransaction
+        assetTransaction = safeArgs.assetTransaction
+        dateTransaction = safeArgs.dateTransaction
+
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.explode)
 
@@ -43,6 +65,22 @@ class TransactionFragment(val position: Int = 0) : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_transaction, container, false)
+
+        amountText = view.findViewById(R.id.astr_transaction_amount_value)
+        amountTotal = view.findViewById(R.id.astr_transaction_total_value)
+        transactionCreated = view.findViewById(R.id.astr_transactionCreated)
+        transactionSubmitted = view.findViewById(R.id.astr_transactionSubmited)
+        transactionConfirmed = view.findViewById(R.id.astr_transactionConfirmed)
+
+        val finalAmount = amountTransaction + " " + assetTransaction
+        val fee = amountTransaction.toFloat()*0.0010625
+
+        amountText.text = finalAmount
+        amountTotal.text = "${amountTransaction.toFloat() + fee} " + " " + assetTransaction
+        transactionCreated.text = "Transaction created with a value of " + finalAmount + " at " + dateTransaction + "."
+        transactionSubmitted.text = "Transaction submitted with a gas fee of " + fee + " " + assetTransaction + " at " + dateTransaction + "."
+        transactionConfirmed.text = "Transaction confirmed at " + dateTransaction + "."
+
         toolbar = view.findViewById(R.id.app_bar)
         toolbar.setNavigationOnClickListener {
             /*val dashboardFragment = DashboardFragment()
